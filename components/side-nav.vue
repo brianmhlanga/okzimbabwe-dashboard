@@ -43,39 +43,8 @@ const mainMenuItems = ref([
         items: [
             { label: 'Manage Brands', icon: 'pi pi-cog',command: () => {
                     navigateTo('/shopBrands');
-                } },
-            {
-                label: 'OKmart',
-                icon: 'pi pi-tag',
-                items: [
-                    { label: 'OKmart Masvingo', icon: 'pi pi-map-marker' },
-                    { label: 'OKmart Kwekwe', icon: 'pi pi-map-marker' }
-                ]
-            },
-            {
-                label: 'Foodlovers',
-                icon: 'pi pi-apple',
-                items: [
-                    { label: 'Foodlovers Masvingo', icon: 'pi pi-map-marker' },
-                    { label: 'Foodlovers Kwekwe', icon: 'pi pi-map-marker' }
-                ]
-            },
-            {
-                label: 'OK',
-                icon: 'pi pi-tags',
-                items: [
-                    { label: 'OK Masvingo', icon: 'pi pi-map-marker' },
-                    { label: 'OK Kwekwe', icon: 'pi pi-map-marker' }
-                ]
-            },
-            {
-                label: 'Borne March\'e',
-                icon: 'pi pi-shopping-cart',
-                items: [
-                    { label: 'Borne March\'e Masvingo', icon: 'pi pi-map-marker' },
-                    { label: 'Borne March\'e Kwekwe', icon: 'pi pi-map-marker' }
-                ]
-            }
+                } }
+           
         ]
     },
     {
