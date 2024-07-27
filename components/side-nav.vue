@@ -9,20 +9,12 @@
                 </a>
             </div>
             <div class="p-10 navbar-content">
-                <PanelMenu :model="mainMenuItems" class="card">
-                    <template #item="{ item }">
-                        <a v-ripple class="flex align-items-center px-3 py-2 cursor-pointer">
-                            <span :class="[item.icon, 'text-primary']" />
-                            <span class="ml-2 fontitems">{{ item.label }}</span>
-                        </a>
-                    </template>
-                </PanelMenu>
+                <PanelMenu class=" card" :model="mainMenuItems" />
                 <div class="card text-center">
                     <div class="card-body">
-                        <i class="feather-sunrise fs-4 text-dark"></i>
-                        <h6 class="mt-4 text-dark fw-bolder">Downloading Center</h6>
-                        <p class="fs-11 my-3 text-dark">Duralux is a production ready CRM to get started up and running easily.</p>
-                        <a href="javascript:void(0);" class="btn btn-primary text-dark w-100">Download Now</a>
+                        <h6 class="mt-1 text-dark fw-bolder">Brian Mhlanga</h6>
+                        <p class="fs-11 my-3 text-dark">Super Admin</p>
+                        <a href="javascript:void(0);" class="btn btn-primary text-dark w-100">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -166,3 +158,12 @@ const mainMenuItems = ref([
 ]);
 
 </script>
+<style>
+.nxl-navigation .navbar-content {
+    padding: 10px 0;
+    position: relative;
+    border-right: 1px solid #e5e7eb;
+    height: calc(100vh - 80px);
+    overflow-y: auto !important;
+}
+</style>
