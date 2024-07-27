@@ -4,40 +4,24 @@ import { SHOPIFY_URL} from "~~/services/global.variables";
 export default defineEventHandler(async (event)=>{
     const { name,logo} = await readBody(event);
     
-    let data = {
-         name,
-         logo
-        
-    };
-    var config = {
-        method: 'POST',
-        url: `${SHOPIFY_URL}/api/shop-brands`,
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            
-        },
-        data: data
-    };
-        
-    const result = await axios(config)
-    .then(function (response) {
-        const result = response.data;
-
-        return {
-            success: true,
-            data: result
-            
-        };
-    }) .catch(async (error)=>{
-        console.log(error.errors);
-        
-      
-        return {    
-            success: false
-
-        } 
-    });
     
-    return result;
+    const body = new FormData();
+    
+    body.append('logo', logo);
+    body.append('name',name)
+   
+   
+    axios.post(`${SHOPIFY_URL}/api/shop-brands`, body, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        console.log('File uploaded successfully!');
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+      });   
+    
 });
  

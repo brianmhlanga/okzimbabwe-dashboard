@@ -9,17 +9,33 @@
                            <div class="field mb-4 col-12 md:col-6">
                                <Button @click="addLineItem = true" label="Create Shop Brand" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
                            </div>
+                           
                            <div class="field mb-4 col-12 md:col-12"> 
-                                <label for="customer_name" class="font-medium text-900">Shop Brands</label> 
+                            <DataTable :value="shop_brand_list" tableStyle="min-width: 50rem">
+                                <template #header>
+                                    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                                        <span class="text-xl text-900 font-bold">Shop brands</span>
+                                      
+                                    </div>
+                                </template>
+                                <Column field="name" header="Shop brand name">
+                                    <template #body="slotProps">
+                                        {{slotProps.data.name}}
+                                    </template>
+                                </Column>
+                                <Column header="Shop brand logo">
+                                    <template #body="slotProps">
+                                        <img :src="`${slotProps.data.logo}`"  class="w-6rem border-round" />
+                                    </template>
+                                </Column>          
+                                <Column header="Actions">
+                                    <template #body="slotProps">
+                                        <Button  icon="pi pi-pencil" severity="info" text rounded aria-label="Cancel" />
+                                        <Button  icon="pi pi-trash" severity="danger" text rounded aria-label="Cancel" />
+                                    </template>
+                                </Column>
                                 
-                            </div>
-                           <div class="field mb-4 col-12 md:col-12"> 
-                              <DataTable :value="products" showGridlines tableStyle="min-width: 50rem">
-            <Column field="code" header="Code"></Column>
-            <Column field="name" header="Name"></Column>
-            <Column field="category" header="Category"></Column>
-            <Column field="quantity" header="Quantity"></Column>
-                              </DataTable>
+                            </DataTable>
                            </div>
                           </div>                    
                    </div>
@@ -44,40 +60,51 @@
    </NuxtLayout>
 </template>
 <script setup >
-import { useToast } from "primevue/usetoast";
-   import { storeToRefs } from "pinia";
-   
-   import { ref } from 'vue';
-   import { useShopBrandsStore } from "~/stores/shopBrands";
-   
-   const shopBrandsStore = useShopBrandsStore()
-   const name = storeToRefs(shopBrandsStore).name
-   const logo = storeToRefs(shopBrandsStore).logo
-   const toast = useToast()
-   const addLineItem = ref(false)
+    import { useShopBrandsStore } from "~/stores/shopBrands";
+    import Swal from 'sweetalert2'
+    const shopBrandsStore = useShopBrandsStore()
+    const name = storeToRefs(shopBrandsStore).name
+    const logo = storeToRefs(shopBrandsStore).logo
+    const toast = useToast()
+    const shop_brand_list = ref()
+    const addLineItem = ref(false)
 
-   const handleFileUpload = (event) => {
-  const file = event.target.files[0];
-  logo.value = file;
-};
+    const handleFileUpload = (event) => {
+        logo.value = event.target.files[0];
+        console.log("new image data",logo.value);
+    };
 
-   const createShopBrand = async()=>{
-      if(logo.value){
-         console.log('h',logo.value)
-      let result = await shopBrandsStore.createShopBrand()
+    onMounted(async () => {
+        let result = await shopBrandsStore.getAllShopBrands().then((data) => {
+            console.log("dgfa",data.data.data.data.shopbrands)
+            shop_brand_list.value = data.data.data.data.shopbrands
+        })
+    
+    });
 
-       if (result.data.success) {
-           toast.add({severity:'success', summary: 'Success', detail:'Shop Brand Succesfully Created', life: 3000});
-           addLineItem.value = false
-       }
-       else {
-           toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-       }
-      }
-      else{
-         toast.add({severity:'warn', summary: 'Failed', detail:'Select Logo', life: 3000});
-      }
-   }
+    const createShopBrand = async()=>{
+        if(logo.value){
+            console.log('h',logo.value)
+        let result = await shopBrandsStore.createShopBrand()
+        console.log('my result',result)
 
+        if (result.data.success) {
+            toast.add({severity:'success', summary: 'Success', detail:'Shop Brand Succesfully Created', life: 3000});
+            addLineItem.value = false
+        }
+        else {
+            toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+        }
+        }
+        else{
+            toast.add({severity:'warn', summary: 'Failed', detail:'Select Logo', life: 3000});
+        }
+    }
+    
+    const removeShopBrand = async(shop_id)=>{
+        id.value = shop_id
+
+
+    }
  
 </script>

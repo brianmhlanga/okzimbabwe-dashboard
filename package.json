@@ -16,11 +16,11 @@
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^3.53.0",
+    "sweetalert2": "^11.12.3",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.0.1"
-    
   }
 }
