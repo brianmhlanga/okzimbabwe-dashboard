@@ -2,11 +2,7 @@
     <nav class="nxl-navigation">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="index.html" class="b-brand">
-                    <!-- ========   change your logo hear   ============ -->
-                    <img src="/images/logo-full.png" alt="" class="logo logo-lg" />
-                    <img src="/images/logo-abbr.png" alt="" class="logo logo-sm" />
-                </a>
+                <Nuxtlink to="/dashboard"><img src="/images/okshop.jpg" alt="" class="logo logo-lg"></Nuxtlink>
             </div>
             <div class="p-10 navbar-content">
                 <PanelMenu class=" card" :model="mainMenuItems" />
@@ -44,7 +40,6 @@ const mainMenuItems = ref([
             { label: 'Manage Brands', icon: 'pi pi-cog',command: () => {
                     navigateTo('/shopBrands');
                 } }
-           
         ]
     },
     {
@@ -125,7 +120,6 @@ const mainMenuItems = ref([
         ]
     }
 ]);
-
 </script>
 <style>
 .nxl-navigation .navbar-content {
@@ -134,5 +128,9 @@ const mainMenuItems = ref([
     border-right: 1px solid #e5e7eb;
     height: calc(100vh - 80px);
     overflow-y: auto !important;
+}
+img.logo.logo-lg {
+    height: auto;
+    width: 205px;
 }
 </style>
