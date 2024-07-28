@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import type getAllShopBrands from "~/server/routes/shopBrands/getAllShopBrands";
+
 
 
 export const useShopBrandsStore = defineStore('shopBrands', {
@@ -15,10 +15,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         invoiceList: [],    
     }),
     actions: {
-
         async createShopBrand() {
-            
-            
             const formData = new FormData();
             formData.append('logo', this.logo);
             formData.append('name', this.name);
@@ -29,7 +26,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 }
               })
               .then(response => {
-                console.log('File uploaded successfully!');
+                console.log('File uploaded successfully!',response);
               })
               .catch(error => {
                 console.error('Error uploading file:', error);
@@ -38,8 +35,6 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             
         },
         async getAllShopBrands() {
-            
-            
              var config = {
                 method: 'post',
                 url: '/shopBrands/getAllShopBrands',
@@ -101,11 +96,8 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
         },
         async removeShopBrand() {
-            
             const data = {
-                id: this.id, 
-               
-                
+                id: this.id,    
             },
              config = {
                 method: 'post',
@@ -134,6 +126,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
    
             return result;
         },
+        async createCategory (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/Catergories/create',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        }
 
        
     }
