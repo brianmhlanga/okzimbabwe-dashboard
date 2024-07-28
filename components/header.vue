@@ -325,7 +325,6 @@ const getCountryByIp = async () => {
 onMounted(async() => {
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    getCountryByIp();
 })
 
 </script>
