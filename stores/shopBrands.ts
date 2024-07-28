@@ -15,25 +15,44 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         invoiceList: [],    
     }),
     actions: {
-        async createShopBrand() {
+        async createShopBrand(info:any) {
+            console.log("zzzzzzzzzzzzzzzzzzzzzzz", info);
+          
+            // Prepare the FormData object
             const formData = new FormData();
-            formData.append('logo', this.logo);
-            formData.append('name', this.name);
-            console.log('fomat', formData)
-            axios.post('/shopBrands/create', formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
+            formData.append('name', info.name); // Assuming `info.name` contains the shop brand name
+            formData.append('logo', info.logo); // Assuming `info.logo` is the File object
+          
+            // Define the configuration for the axios request
+            const config = {
+              method: 'post',
+              url: '/shopBrands/create',
+              headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'multipart/form-data',
+              },
+              data: JSON.stringify(formData),
+            };
+          
+            // Make the axios request
+            const result = await axios(config)
+              .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                return {
+                  data: response.data,
+                  success: true,
+                };
               })
-              .then(response => {
-                console.log('File uploaded successfully!',response);
-              })
-              .catch(error => {
-                console.error('Error uploading file:', error);
+              .catch(function (error) {
+                console.log(error);
+                return {
+                  success: false,
+                };
               });
-   
-            
-        },
+          
+            return result;
+          },
         async getAllShopBrands() {
              var config = {
                 method: 'post',

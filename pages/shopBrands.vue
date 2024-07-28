@@ -9,13 +9,11 @@
                            <div class="field mb-4 col-12 md:col-6">
                                <Button @click="addLineItem = true" label="Create Shop Brand" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
                            </div>
-                           
                            <div class="field mb-4 col-12 md:col-12"> 
                             <DataTable :value="shop_brand_list" tableStyle="min-width: 50rem">
                                 <template #header>
                                     <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                                         <span class="text-xl text-900 font-bold">Shop brands</span>
-                                      
                                     </div>
                                 </template>
                                 <Column field="name" header="Shop brand name">
@@ -50,61 +48,73 @@
                    </div>
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
-                       <input class="form-control" type="file" id="formFile" @change="handleFileUpload">
+                       <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
                    </div>
-                   
                </div>
-               <Button @click="createShopBrand()" label="Create shop brand" icon="pi pi-plus" />
+               <Button :loading="loading" @click="createShopBrand()" label="Create shop brand" icon="pi pi-plus" />
        </Dialog>
-
    </NuxtLayout>
 </template>
-<script setup >
+<script setup lang="ts">
+    import axios from "axios";
+    import { SHOPIFY_URL } from "~/services/global.variables";
     import { useShopBrandsStore } from "~/stores/shopBrands";
-    import Swal from 'sweetalert2'
     const shopBrandsStore = useShopBrandsStore()
-    const name = storeToRefs(shopBrandsStore).name
-    const logo = storeToRefs(shopBrandsStore).logo
+    const name = ref()
+    const logo = ref()
+    const loading = ref(false)
     const toast = useToast()
     const shop_brand_list = ref()
     const addLineItem = ref(false)
-
-    const handleFileUpload = (event) => {
-        logo.value = event.target.files[0];
-        console.log("new image data",logo.value);
-    };
-
+    const logoFile = ref()
     onMounted(async () => {
-        let result = await shopBrandsStore.getAllShopBrands().then((data) => {
-            console.log("dgfa",data.data.data.data.shopbrands)
+        let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
             shop_brand_list.value = data.data.data.data.shopbrands
         })
-    
     });
-
-    const createShopBrand = async()=>{
-        if(logo.value){
-            console.log('h',logo.value)
-        let result = await shopBrandsStore.createShopBrand()
-        console.log('my result',result)
-
-        if (result.data.success) {
-            toast.add({severity:'success', summary: 'Success', detail:'Shop Brand Succesfully Created', life: 3000});
-            addLineItem.value = false
-        }
-        else {
-            toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-        }
-        }
-        else{
-            toast.add({severity:'warn', summary: 'Failed', detail:'Select Logo', life: 3000});
-        }
+    const handleFileChange = (event:any) => {
+    const file = event.target.files[0];
+    const acceptedTypes = ['image/jpeg', 'image/png'];
+    if (file && acceptedTypes.includes(file.type)) {
+        logoFile.value = file;
+    } else {
+        toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
+        logoFile.value = null;
     }
+    };
+    const createShopBrand = async () => {
+      loading.value = true
+      const url = `${SHOPIFY_URL}/api/shop-brands`;
+      const formData = new FormData();
+      formData.append('name', name.value);
+      if (logoFile.value) {
+        formData.append('logo', logoFile.value, logoFile.value.name);
+      }
+      try {
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Accept': '*/*'
+          },
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+        loading.value = false
+        addLineItem.value = false
+        let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
+            shop_brand_list.value = data.data.data.data.shopbrands
+        })
+      } catch (error:any) {
+        loading.value = false
+        toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
+      }
+    };
+
+
     
-    const removeShopBrand = async(shop_id)=>{
-        id.value = shop_id
+    // const removeShopBrand = async(shop_id:any)=>{
+    //     id.value = shop_id
 
 
-    }
+    // }
  
 </script>
