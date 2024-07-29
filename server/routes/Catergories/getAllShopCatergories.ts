@@ -1,44 +1,39 @@
 import axios from "axios";
-import { SHOPIFY_URL} from "~~/services/global.variables";
+import { SHOPIFY_URL } from "~~/services/global.variables";
 
-export default defineEventHandler(async (event)=>{
-    const {id} = await readBody(event);
+// Define the handler for the GET request
+export default defineEventHandler(async (event) => {
+  // Extract query parameters from the event
+  const query= useQuery(event);
+  const page = query.page ? parseInt(query.page as string) : 1;
+  const per_page = query.per_page ? parseInt(query.per_page as string) : 10;
+  const offset = (page - 1) * per_page;
 
-      
-    
-   
-    var config = {
-        method: 'GET',
-        url: `${SHOPIFY_URL}/api/shop-categories/${id}`,
-        
-        headers: {
-            'Content-Type': 'application/json',
-            
-        },
-       
-       
-    
-    };
-    console.log('Making GET request to URL',config.url);
-        
-    const result = await axios(config)
-    .then(function (response) {
-        const result = response.data;
-
-        return {
-            success: true,
-            data: result
-            
-        };
-    }) .catch(async (error)=>{
-        console.log(error);
-        
-      
-        return {    
-            success: false
-        } 
+  try {
+    // Send a GET request to fetch categories with pagination
+    const response = await axios.get(`${SHOPIFY_URL}/api/categories`, {
+      params: {
+        is_parent: true,
+        _limit: per_page,
+        _start: offset
+      }
     });
-    
-    return result;
+
+    // Filter categories where is_parent is true
+    const filteredCategories = response.data.filter((category: any) => category.is_parent);
+
+    // Return the filtered categories
+    return {
+      success: true,
+      data: filteredCategories
+    };
+  } catch (error) {
+    console.log(error);
+
+    // Handle errors and return a failure response
+    return {
+      success: false,
+      message: error.message
+    };
+  }
 });
- 

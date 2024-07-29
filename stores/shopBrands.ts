@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { SHOPIFY_URL} from "~~/services/global.variables";
 
 
 
@@ -172,8 +173,68 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             });
             return result;
 
-        }
-
+        },
+        
+        async getAllCategories() {
+            let url = new URL(`${SHOPIFY_URL}/api/categories`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            var config = {
+               method: 'GET',
+               url: url,
+               headers: { 
+                   'Accept': '/',
+                   'Cache-Control': 'no-cache',
+                  
+               },
+              
+           }; 
+           const result = await axios(config).then(function (response) { 
+               console.log(JSON.stringify(response.data));
+               return {
+                   data: response.data,
+                   success: true
+               }
+           }).catch(function (error) {
+               console.log(error);
+               return {
+                   success: false
+               }
+           });
+  
+           return result;
+       },
+       async getCategoriesPagination(page) {
+        let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
        
+        var config = {
+           method: 'GET',
+           url: url,
+           headers: { 
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+   },
     }
 });

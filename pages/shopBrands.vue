@@ -111,10 +111,6 @@
 
 
     
-    // const removeShopBrand = async(shop_id:any)=>{
-    //     id.value = shop_id
-
-
-    // }
+    
  
 </script>

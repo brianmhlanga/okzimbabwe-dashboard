@@ -11,7 +11,59 @@
                             </div>
                             
                             <div class="field mb-4 col-12 md:col-12"> 
-                             
+                                <DataTable :value="categories_list" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
+                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
+                            >
+                                    <template #header>
+                                        <div class="flex justify-content-between">
+                                            <SplitButton label="Actions" :model="items" />
+                                            <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
+                                            <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
+                                            <IconField iconPosition="left">
+                                                <InputIcon class="pi pi-search" > </InputIcon>
+                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                            </IconField>
+                                        </div>
+                                    </template>
+                                    <template #empty>
+                                        No categories found.
+                                    </template>
+                                    <template #loading>s
+                                        Loading categories data. Please wait.
+                                    </template>
+                                    <Column  frozen field="name" header="Category Name" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.name}}
+                                        </template>
+                                    </Column>
+                                
+                                    <Column frozen  field="description" header="Category Type" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.is_parent ? 'Parent': 'Child'}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="category.name" header="Active Status" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.is_active ? 'Active': 'Not Active'}}
+                                        </template>
+                                    </Column>
+                                
+                                    <Column frozen  field="created_at" header="Date Created" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data?.created_at ? formatDate(data?.created_at) : "NOT SET"}}
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                                <Paginator @page="onPage($event)"
+                                    :template="{
+                                        '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+                                        '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
+                                        '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
+                                        default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
+                                    }"
+                                    :rows="10"
+                                    :totalRecords="120">
+                                </Paginator>
                             </div>
                            </div>                    
                     </div>
@@ -33,10 +85,10 @@
                         <SelectButton v-model="active_status" :options="options" aria-labelledby="basic" />
                     </div>
                     <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select parent category id</label> 
-                        <Dropdown v-model="parent_category_id" :options="cities" optionLabel="name" placeholder="Select a City" checkmark :highlightOnSelect="false"  />
+                        <label for="company_name" class="font-medium text-900">Select parent category </label> 
+                        <Dropdown v-model="parent_category_id" :options="categories_list" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
                     </div>
-                    
+        
                 </div>
                 <Button @click="createCategory()" label="Create Category" icon="pi pi-plus" />
         </Dialog>
@@ -47,6 +99,7 @@
      
      import { useShopBrandsStore } from "~/stores/shopBrands";
      import Swal from 'sweetalert2'
+     import { FilterMatchMode } from 'primevue/api';
      const shopBrandsStore = useShopBrandsStore()
      const name = ref('')
      const is_parent = ref('')
@@ -55,12 +108,30 @@
      const parent_category_id = ref('')
      const toast = useToast()
      const shop_brand_list = ref()
-     const category_type = ref()
-     const active_status = ref()
+     const category_type = ref('Yes')
+     const active_status = ref('Yes')
+     const categories_list = ref()
+     let number_of_categories = ref()
      const addLineItem = ref(false)
      const options = ref([ 'Yes', 'No']);
  
-    
+     const filters = ref({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+
+    const dt = ref();
+
+    const initFilters = () => {
+        filters.value = {
+            'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        }
+    };
+
+    const clearFilter1 = () => {
+
+        initFilters();
+    };
+
      const checking_category_type = ()=>{
      
         if(category_type.value == 'Yes'){
@@ -74,16 +145,20 @@
             parent_category_id.value = 5
         }
      }
+
      const checking_active_status = ()=>{
-        if(active_status.value == 'Yes'){
+        if (active_status.value == 'Yes') {
             is_active.value = true
         }
-        else{
+        else {
             is_active.value = false
         }
      }
  
      onMounted(async () => {
+        await shopBrandsStore.getAllCategories().then((data)=>{
+            categories_list.value = data.data.data.categories
+        })
         //  let result = await shopBrandsStore.getAllShopBrands().then((data) => {
         //      console.log("dgfa",data.data.data.data.shopbrands)
         //      shop_brand_list.value = data.data.data.data.shopbrands
@@ -91,17 +166,39 @@
      
      });
  
-     const createCategory = async()=>{
+     const createCategory = async () =>{
         checking_category_type()
         checking_active_status()
-        let data = {
-            name: name.value,
-            is_parent: is_parent.value,
-            is_sub_parent: is_sub_parent.value,
-            is_active: is_active.value,
-            parent_category_id: parent_category_id.value
+        if (is_parent.value == true) {
             
-        }
+            let data = {
+                name: name.value,
+                is_parent: is_parent.value,
+                is_sub_parent: is_sub_parent.value,
+                is_active: is_active.value,
+         
+            }
+            let result = await shopBrandsStore.createCategory(data)
+            console.log('my result',result)
+ 
+            if (result.data.success) {
+                toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
+                addLineItem.value = false
+            }
+        
+            else {
+                toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+            }
+        } 
+        
+        else {
+            let data = {
+                name: name.value,
+                is_parent: is_parent.value,
+                is_sub_parent: is_sub_parent.value,
+                is_active: is_active.value,
+                parent_category_id: parent_category_id.value 
+            }
     
            
          let result = await shopBrandsStore.createCategory(data)
@@ -111,18 +208,51 @@
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
              addLineItem.value = false
          }
+
          else {
              toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
          }
+
+        }
+      
         
          
      }
+    
+     const onPage = (event) => {
+        let current_page = event.page + 1
+        let result =  shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+            
+            categories_list.value =  data.data.data.categories
+            console.log('hbj',data.data.data.categories.length)
+            number_of_categories.value = data.data.data.categories.length
+        })
+
+    }
      
-     const removeShopBrand = async(shop_id)=>{
-         id.value = shop_id
- 
- 
-     }
+    const items = [
+        {
+            label: 'Add Product',
+            command: () => {
+                add_product.value = true
+            }
+        }
+    ];
+
+    const formatDate = (value) => {
+        const date = new Date(value);
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short'
+        };
+        //@ts-ignore
+        return date.toLocaleString('en-US', options);
+    };
   
  </script>
  <style>
