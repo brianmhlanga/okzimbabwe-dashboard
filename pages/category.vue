@@ -86,7 +86,7 @@
                     </div>
                     <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Select parent category </label> 
-                        <Dropdown v-model="parent_category_id" :options="categories_list" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
+                        <Dropdown v-model="parent_category_id" :options="parentCategories" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
                     </div>
         
                 </div>
@@ -96,11 +96,14 @@
     </NuxtLayout>
  </template>
  <script setup lang>
-     
+      import { storeToRefs } from "pinia";
      import { useShopBrandsStore } from "~/stores/shopBrands";
      import Swal from 'sweetalert2'
      import { FilterMatchMode } from 'primevue/api';
      const shopBrandsStore = useShopBrandsStore()
+     const parentCategories = storeToRefs(shopBrandsStore).parentCategories
+     console.log('vbhjnk',parentCategories.value)
+     const allCategories = ref([])
      const name = ref('')
      const is_parent = ref('')
      const is_sub_parent = ref('')
@@ -158,6 +161,9 @@
      onMounted(async () => {
         await shopBrandsStore.getAllCategories().then((data)=>{
             categories_list.value = data.data.data.categories
+        })
+        await shopBrandsStore.fetchAllCategories().then((data)=>{
+            allCategories.value.push(...data.data.categories)
         })
         //  let result = await shopBrandsStore.getAllShopBrands().then((data) => {
         //      console.log("dgfa",data.data.data.data.shopbrands)

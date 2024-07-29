@@ -9,6 +9,8 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         name: "",
         id: "",
         logo: "",
+        allCategories: [] as any[],
+        parentCategories: [],
         date: new Date(),
         shopBrands: [],
         posting_date: "",
@@ -235,6 +237,48 @@ export const useShopBrandsStore = defineStore('shopBrands', {
        });
 
        return result;
-   },
+        },
+
+        async fetchAllCategories() {
+            let page = 1;
+            let per_page = 10;
+            let hasMorePages = true;
+            let url = `${SHOPIFY_URL}/api/categories`;
+        
+            var config = {
+                method: 'GET',
+                headers: { 
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                },
+            };
+        
+            this.allCategories = []; // Initialize allCategories array
+        
+            while (hasMorePages) {
+                try {
+                    config.url = `${url}?page=${page}&per_page=${per_page}`;
+                    const response = await axios(config);
+                    console.log('mbilimbi', response.data.data);
+                    this.allCategories.push(...response.data.data.categories);
+        
+                    if (page >= response.data.data.totalPages) {
+                        hasMorePages = false;
+                    } else {
+                        page++;
+                    }
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                    hasMorePages = false;
+                }
+            }
+        
+            // Uncomment this line if you want to filter parent categories
+            this.parentCategories = this.allCategories.filter(category => category.is_parent == true);
+        
+            console.log('All Categories:', this.allCategories);
+            console.log('Parent Categories:', this.parentCategories);
+        },
+        
     }
 });
