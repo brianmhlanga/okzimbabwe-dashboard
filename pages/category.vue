@@ -77,7 +77,7 @@
                         <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Is it a child category</label> 
+                        <label for="company_name" class="font-medium text-900">Is it a sub category</label> 
                         <SelectButton v-model="category_type" :options="options"  aria-labelledby="basic" />
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
@@ -85,7 +85,7 @@
                         <SelectButton v-model="active_status" :options="options" aria-labelledby="basic" />
                     </div>
                     <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select parent category </label> 
+                        <label for="company_name" class="font-medium text-900">Select parent  </label> 
                         <Dropdown v-model="parent_category_id" :options="parentCategories" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
                     </div>
         

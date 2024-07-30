@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
+import type getAllProducts from "~/server/routes/Products/getAllProducts";
 
 
 
@@ -176,6 +177,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async createPrice (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/price/addPrice',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         
         async getAllCategories() {
             let url = new URL(`${SHOPIFY_URL}/api/categories`)
@@ -210,35 +239,68 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
-       async getCategoriesPagination(page) {
-        let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
-       
-        var config = {
-           method: 'GET',
-           url: url,
-           headers: { 
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+        async getCategoriesPagination(page) {
+            let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
+        
+            var config = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
+        return result;
         },
-
+        
+        async getAllProducts() {
+            let url = new URL(`${SHOPIFY_URL}/api/products`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            var config = {
+               method: 'GET',
+               url: url,
+               headers: { 
+                   'Accept': '/',
+                   'Cache-Control': 'no-cache',
+                  
+               },
+              
+           }; 
+           const result = await axios(config).then(function (response) { 
+               console.log(JSON.stringify(response.data));
+               return {
+                   data: response.data,
+                   success: true
+               }
+           }).catch(function (error) {
+               console.log(error);
+               return {
+                   success: false
+               }
+           });
+  
+           return result;
+       },
         async fetchAllCategories() {
             let page = 1;
             let per_page = 10;
