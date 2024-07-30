@@ -238,7 +238,7 @@
      
     const items = [
         {
-            label: 'Add Product',
+            label: 'Add Price',
             command: () => {
                 add_product.value = true
             }
