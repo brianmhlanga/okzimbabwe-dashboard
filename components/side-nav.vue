@@ -53,7 +53,8 @@ const mainMenuItems = ref([
             { label: 'Categories', icon: 'pi pi-list', command:()=>{
                 navigateTo('/category');
             } },
-            { label: 'Inventory', icon: 'pi pi-th-large' },
+            { label: 'Inventory', icon: 'pi pi-th-large', command:()=>{
+                navigateTo('/inventory');} },
             { label: 'Product Reviews', icon: 'pi pi-comments' }
         ]
     },
