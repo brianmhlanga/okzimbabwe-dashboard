@@ -162,7 +162,7 @@
    
     const items = (product:any) => [
       {
-        label: 'Add Product',
+        label: 'Add Price',
         command: () => getProduct(product)
       }
       // Add more actions if needed
