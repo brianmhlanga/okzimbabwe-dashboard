@@ -85,19 +85,19 @@
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900"> Select Product </label> 
-                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select parent" checkmark :highlightOnSelect="false" />
+                    <Dropdown v-model="product_id" :options="all_products" optionLabel="name" optionValue="id" placeholder="Select product" checkmark :highlightOnSelect="false" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop </label> 
-                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select parent" checkmark :highlightOnSelect="false" />
+                    <Dropdown v-model="shop_id" :options="all_shops" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Quantity</label> 
-                    <InputText class="form-control" type="text" v-model="address" />
+                    <InputText class="form-control" type="text" v-model="quantity" />
                 </div>
                 
             </div>
-            <Button @click="createShop()" label="Add Inventory" icon="pi pi-plus" />
+            <Button @click="createInventory()" label="Add Inventory" icon="pi pi-plus" />
         </Dialog>
     </NuxtLayout>
 </template>
@@ -112,15 +112,15 @@ const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
 const allCategories = ref([]);
+const all_products = ref([]);
+const all_shops = ref([])
 const shop_brand_id = ref();
 const name = ref();
 const address = ref();
 const shop_brand_list = ref();
-const city = ref();
-const store_code = ref();
-const contact_person = ref();
-const contact_number = ref();
-const contact_email = ref();
+const product_id = ref()
+const shop_id = ref()
+const quantity = ref()
 const categories_list = ref([]);
 const number_of_categories = ref();
 const addLineItem = ref(false);
@@ -145,6 +145,13 @@ const clearFilter1 = () => {
 };
 
 onMounted(async () => {
+    await shopBrandsStore.getAllProducts().then((data:any)=>{
+            all_products.value = data.data.data.products
+        })
+    await shopBrandsStore.getAllShops().then((data:any)=>{
+          console.log('my shops',data.data)
+          all_shops.value = data.data.data.shops
+    })
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
         items.value = shop_brand_list.value.map((brand) => ({
@@ -163,21 +170,17 @@ onMounted(async () => {
     });
 });
 
-const createShop = async () => {
+const createInventory = async () => {
     const data = {
-        shop_brand_id: shop_brand_id.value,
-        name: name.value,
-        address: address.value,
-        city: city.value,
-        store_code: store_code.value,
-        contact_person: contact_person.value,
-        contact_number: contact_number.value,
-        contact_email: contact_email.value,
-    };
-    const result = await shopBrandsStore.createShop(data);
+        product_id : product_id.value,
+        shop_id :shop_id.value,
+        quantity : quantity.value
+        
+    }
+    const result = await shopBrandsStore.createInventory(data);
     console.log('result',result.data.success)
 
-    if (result.success) {
+    if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Created', life: 3000 });
         addLineItem.value = false;
     } else {

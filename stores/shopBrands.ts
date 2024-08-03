@@ -205,6 +205,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async createInventory (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/inventory/create',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async createPrice (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -295,6 +323,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+        async getAllShops() {
+            let url = new URL(`${SHOPIFY_URL}/api/shops`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            var config = {
+               method: 'GET',
+               url: url,
+               headers: { 
+                   'Accept': '/',
+                   'Cache-Control': 'no-cache',
+                  
+               },
+              
+           }; 
+           const result = await axios(config).then(function (response) { 
+               console.log(JSON.stringify(response.data));
+               return {
+                   data: response.data,
+                   success: true
+               }
+           }).catch(function (error) {
+               console.log(error);
+               return {
+                   success: false
+               }
+           });
+  
+           return result;
+       },
         
         async getAllProducts() {
             let url = new URL(`${SHOPIFY_URL}/api/products`)
