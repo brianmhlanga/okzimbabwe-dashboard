@@ -107,7 +107,8 @@ const mainMenuItems = ref([
             { label: 'Profile Settings', icon: 'pi pi-user-edit' },
             { label: 'Security Settings', icon: 'pi pi-shield' },
             { label: 'Payment Methods', icon: 'pi pi-credit-card' },
-            { label: 'Currencies', icon: 'pi pi-money-bill' },
+            { label: 'Currencies', icon: 'pi pi-money-bill' ,command:()=>{
+                navigateTo('/currencies');}},
             { label: 'Discounts', icon: 'pi pi-percentage' },
             { label: 'Addresses', icon: 'pi pi-map' },
             { label: 'Shipping Methods', icon: 'pi pi-truck' }

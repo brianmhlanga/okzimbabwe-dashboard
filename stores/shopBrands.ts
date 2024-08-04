@@ -261,6 +261,90 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async addCurrency (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/currencies/add_currency',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async updateCurrency (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/currencies/update',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async deleteCurrency (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/currencies/delete',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         
         async getAllCategories() {
             let url = new URL(`${SHOPIFY_URL}/api/categories`)
@@ -390,6 +474,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
+       async getAllCurrencies() {
+        let url = new URL(`${SHOPIFY_URL}/api/currencies`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        var config = {
+           method: 'GET',
+           url: url,
+           headers: { 
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+   },
         async fetchAllCategories() {
             let page = 1;
             let per_page = 10;
