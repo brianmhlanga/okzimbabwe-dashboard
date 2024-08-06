@@ -7,23 +7,22 @@
                     <div class="card p-4 ml-3 mr-10">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
-                                <Button @click="addLineItem = true" label="Create Shop" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                                <Button @click="open_create_shop_modal()" label="Create Shop" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
                             <div class="field mb-4 col-12 md:col-6">
                                 <TabMenu :model="shop_brand_list">
                                     <template #item="{ item, props }">
-                                        <a v-ripple v-bind="props.action" class="flex align-items-center gap-2">
+                                        <a v-ripple v-bind="props.action" class="flex align-items-center gap-2"  @click='selectShop(item.id)'>
                                             <img  :src="`${item.logo}`" style="width: 32px" />
                                             <span class="font-bold">{{ item.name }}</span>
+                                           
                                         </a>
                                     </template>
                                 </TabMenu>
                                 <Toast />
                             </div>
-                            
-                            
-                            <!-- <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="categories_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                            <div v-if="branches" class="field mb-4 col-12 md:col-12"> 
+                                <DataTable :value="branches" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -37,31 +36,56 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No categories found.
+                                        No shops found.
                                     </template>
                                     <template #loading>
                                         Loading categories data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Category Name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Shop Name" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Category Type" style="min-width:12rem">
+                                    <Column frozen field="description" header="Store Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.is_parent ? 'Parent' : 'Child' }}
+                                            {{ data.store_code}}
                                         </template>
                                     </Column>
-                                    <Column frozen field="category.name" header="Active Status" style="min-width:12rem">
+                                    <Column frozen field="category.name" header="Address" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.is_active ? 'Active' : 'Not Active' }}
+                                            {{ data.address }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="Contact Person" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.contact_person }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="Contact Number" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.contact_number }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="Contact Email" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.contact_email}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="City" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.city }}
                                         </template>
                                     </Column>
                                 
                                     <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            <SplitButton label="Actions" :model="actions({data})"  />
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -75,7 +99,7 @@
                                            :rows="10"
                                            :totalRecords="120">
                                 </Paginator>
-                            </div> -->
+                            </div>
                         </div>                    
                     </div>
                 </div>
@@ -89,7 +113,7 @@
                 </div>
                 <div class="field mb-4 col-6 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
-                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select parent" checkmark :highlightOnSelect="false" />
+                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
                 <div class="field mb-4 col-6 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Address</label> 
@@ -116,8 +140,11 @@
                     <InputText class="form-control" type="text" v-model="contact_email" />
                 </div>
             </div>
-            <Button @click="createShop()" label="Add Shop" icon="pi pi-plus" />
+            <div v-if="editing_shop"><Button @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
+            <div v-else-if="shop_creating"><Button @click="createShop()" label="Add Shop" icon="pi pi-plus" /></div>
+            
         </Dialog>
+        <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
 </template>
 
@@ -126,7 +153,8 @@ import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useShopBrandsStore } from '~/stores/shopBrands';
 import { FilterMatchMode } from 'primevue/api';
-
+import { useConfirm } from "primevue/useconfirm";
+const confirm = useConfirm()
 const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
@@ -138,9 +166,14 @@ const shop_brand_list = ref();
 const city = ref();
 const store_code = ref();
 const contact_person = ref();
+const shops_list:any = ref([])
 const contact_number = ref();
 const contact_email = ref();
+const shop_creating = ref(false)
 const categories_list = ref([]);
+const editing_shop = ref(false)
+const shop_id = ref()
+const branches = ref()
 const number_of_categories = ref();
 const addLineItem = ref(false);
 const options = ref(['Yes', 'No']);
@@ -162,22 +195,123 @@ const initFilters = () => {
 const clearFilter1 = () => {
     initFilters();
 };
+const actions = (shop_data:any) => [
+      {
+        label: 'Update Shop',
+        command: () => showShop(shop_data)
+      },
+      {
+        label: 'Delete Shop',
+        command: () => deleteShop(shop_data)
+      },
+      
+      // Add more actions if needed
+    ];
+    const deleteShop = (shop_data:any) => {
+      let data = {
+        "id": shop_data.data.id
+      }
+      console.log('my data',data.id)
+      
+      confirm.require({
+        message: 'Do you want to delete this record?',
+        header: 'Danger Zone',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: async() => {
+            let result = await shopBrandsStore.deleteShop(data)
+            if (result.data.success){
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+            const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
+        shop_brand_list.value = data.data.data.data.shopbrands;
+        
+    });
+            }
+            else{
+                toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
+            }
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        } 
+    });
+}
+const showShop = async(shop_data:any) => {
+     shop_id.value = shop_data.data.id
+      name.value = shop_data.data.name
+       shop_brand_id.value = shop_data.data.name,
+    
+        address.value = shop_data.data.address,
+        city.value = shop_data.data.city,
+        store_code.value = shop_data.data.store_code,
+        contact_person.value = shop_data.data.contact_person,
+        contact_number.value = shop_data.data.contact_number,
+        contact_email.value = shop_data.data.contact_email
+      editing_shop.value = true
+      addLineItem.value = true
+     
+}
 
+const updateShop = async () => {
+    const data = {
+        id: shop_id.value,
+        shop_brand_id: shop_brand_id.value,
+        name: name.value,
+        address: address.value,
+        city: city.value,
+        store_code: store_code.value,
+        contact_person: contact_person.value,
+        contact_number: contact_number.value,
+        contact_email: contact_email.value,
+    };
+    const result = await shopBrandsStore.updateShop(data);
+    console.log('result',result.data.success)
+
+    if (result.data.success) {
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Updated', life: 3000 });
+        const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
+        shop_brand_list.value = data.data.data.data.shopbrands;
+        
+    });
+    addLineItem.value = false;
+    editing_shop.value = false
+    } else {
+        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Updating Failed', life: 3000 });
+    }
+};
+const selectShop = async (shopIDD:any) => {
+  
+ console.log(',y id',shopIDD)
+  await getShopsForBrand(shopIDD)
+  
+}
+const getShopsForBrand = (brandId:any) => {
+  branches.value = null
+  //@ts-ignore
+  let branchess = shop_brand_list.value.find(brand => brand.id === brandId);
+  branches.value = branchess?.shops
+  console.log('branches',branchess)
+}
+const open_create_shop_modal = ()=>{
+    addLineItem.value = true
+    shop_creating.value= true
+}
 onMounted(async () => {
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
-        items.value = shop_brand_list.value.map((brand) => ({
-        label: `${brand.name}`,  // Customize label as needed
-        icon: `${brand.image}`,
-            command: () => {
-                toast.add({ severity: 'success', summary: 'Selected', detail: `${brand.name}`, life: 3000 });
-            }
-        }));
+        
     });
-    await shopBrandsStore.getAllCategories().then((data) => {
+    await shopBrandsStore.getAllCategories().then((data:any) => {
         categories_list.value = data.data.data.categories;
     });
-    await shopBrandsStore.fetchAllCategories().then((data) => {
+    await shopBrandsStore.getAllShops().then((data:any) => {
+        shops_list.value = data.data.data.shops
+        console.log('my shops',shops_list.value)
+    });
+    await shopBrandsStore.fetchAllCategories().then((data:any) => {
         allCategories.value.push(...data.data.categories);
     });
 });
@@ -199,6 +333,10 @@ const createShop = async () => {
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Created', life: 3000 });
         addLineItem.value = false;
+        const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
+        shop_brand_list.value = data.data.data.data.shopbrands;
+        
+    });
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
     }

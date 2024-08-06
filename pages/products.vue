@@ -91,7 +91,7 @@
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Images</label> 
-                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                        <input type="file" accept="image/jpeg, image/png, image/jpg" @change="handleFileChange">
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select category </label> 
@@ -104,6 +104,32 @@
                     
                 </div>
                 <Button @click="createProduct()" label="Create Product" icon="pi pi-plus" />
+        </Dialog>
+        <Dialog v-model:visible="product_modal" maximizable modal header="Update Product" position="top" :style="{ width: '55vw' }">
+                <div class="grid formgrid p-fluid">
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Product name</label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Product description</label> 
+                        <Textarea v-model="description" autoResize rows="3" cols="30" />
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Images</label> 
+                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Select category </label> 
+                        <Dropdown v-model="category_id" :options="allCategories" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Product Code</label> 
+                        <InputText class="form-control" type="text"  v-model="product_code"/>
+                    </div>
+                    
+                </div>
+                <Button @click="updateProduct()" label="Update Product" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="add_price" modal header="Add Price" :style="{ width: '25rem' }">
             <span class="text-center block mb-5">{{selectedProduct}}</span>
@@ -124,6 +150,7 @@
                 <Button type="button" label="Save" @click="addPrice()"></Button>
             </div>
         </Dialog>
+        <ConfirmDialog></ConfirmDialog>
    
  
     </NuxtLayout>
@@ -135,11 +162,14 @@
      import { useShopBrandsStore } from "~/stores/shopBrands";
      import Swal from 'sweetalert2'
      import { FilterMatchMode } from 'primevue/api';
+     import { useConfirm } from "primevue/useconfirm";
+const confirm = useConfirm();
      const shopBrandsStore = useShopBrandsStore()
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
      console.log('vbhjnk',parentCategories.value)
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const name = ref('')
+     const product_modal = ref()
      const description = ref()
      const is_active = ref('')
      const category_id = ref('')
@@ -164,6 +194,14 @@
       {
         label: 'Add Price',
         command: () => getProduct(product)
+      },
+      {
+        label: 'Update Product',
+        command: () => showProduct(product)
+      },
+      {
+        label: 'Delete Product',
+        command: () => deleteProduct(product)
       }
       // Add more actions if needed
     ];
@@ -212,7 +250,16 @@
         //  })
      
      });
- 
+     
+     const showProduct = async(product:any) => {
+      name.value = product.data.name;
+      description.value = product.data.description
+      category_id.value = product.data.category_id
+      product_code.value = product.data.product_code
+      selectedProductId.value = product.data.id
+      product_modal.value = true
+     
+}
     
      const onPage = (event) => {
         let current_page = event.page + 1
@@ -225,6 +272,36 @@
 
     }
      
+    const deleteProduct = (product:any) => {
+      let data = {
+        "id": product.data.id
+      }
+      
+      confirm.require({
+        message: 'Do you want to delete this record?',
+        header: 'Danger Zone',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: async() => {
+            let result = await shopBrandsStore.deleteProduct(data)
+            if (result.data.success){
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+            await shopBrandsStore.getAllProducts().then((data:any)=>{
+                categories_list.value = data.data.data.products
+            })
+            }
+            else{
+                toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
+            }
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        } 
+    });
+}
     const addPrice = async () =>{
        
         
@@ -275,7 +352,7 @@
   
     const handleFileChange = (event:any) => {
     const file = event.target.files[0];
-    const acceptedTypes = ['image/jpeg', 'image/png'];
+    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
     if (file && acceptedTypes.includes(file.type)) {
         imageFiles.value.push(file) 
     } else {
@@ -307,8 +384,47 @@
           },
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
-        
+        await shopBrandsStore.getAllProducts().then((data:any)=>{
+            categories_list.value = data.data.data.products
+        })
         addLineItem.value = false
+        // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
+        //     shop_brand_list.value = data.data.data.data.shopbrands
+        // })
+      } catch (error:any) {
+        console.log('error', error)
+       
+        toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
+      }
+    };
+    const updateProduct = async () => {
+        console.log('simba')
+      
+      const url = `${SHOPIFY_URL}/api/products/edit/${selectedProductId.value}`;
+      const formData = new FormData();
+      formData.append('name', name.value);
+      formData.append('description', description.value);
+      formData.append('category_id', category_id.value);
+      formData.append('product_code', product_code.value);
+      console.log('form',formData)
+   
+      if (imageFiles.value) {
+        imageFiles.value.forEach((file, index) => {
+    formData.append(`images[${index}]`, file);
+  });
+      }
+      try {
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Accept': '*/*'
+          },
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+        await shopBrandsStore.getAllProducts().then((data:any)=>{
+            categories_list.value = data.data.data.products
+        })
+        product_modal.value = false
         // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         //     shop_brand_list.value = data.data.data.data.shopbrands
         // })

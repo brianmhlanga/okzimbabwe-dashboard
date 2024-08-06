@@ -2,12 +2,12 @@ import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
-    const {id} = await readBody(event);
+    const {data:{id}} = await readBody(event)
     
    
     var config = {
         method: 'DELETE',
-        url: `${SHOPIFY_URL}/api/shop-brands/${id}`,
+        url: `${SHOPIFY_URL}/api/products/${id}`,
         headers: {
             'Content-Type': 'application/json',
             

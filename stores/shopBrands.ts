@@ -317,6 +317,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async updateShop (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/shops/update',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async deleteCurrency (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -324,6 +352,90 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/currencies/delete',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async deleteShop (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/shops/delete',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async deleteShopBrand (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/shopBrands/delete',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async deleteProduct (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/Products/delete',
                 headers: { 
                     'Content-Type': 'application/json'
                 },

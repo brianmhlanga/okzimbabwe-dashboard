@@ -39,7 +39,11 @@ const mainMenuItems = ref([
         items: [
             { label: 'Manage Brands', icon: 'pi pi-cog',command: () => {
                     navigateTo('/shopBrands');
+                } },
+                { label: 'Manage Shops', icon: 'pi pi-cog',command: () => {
+                    navigateTo('/shops');
                 } }
+                
         ]
     },
     {
