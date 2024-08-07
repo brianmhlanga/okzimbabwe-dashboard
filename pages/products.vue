@@ -304,19 +304,20 @@ const confirm = useConfirm();
 }
     const addPrice = async () =>{
        
-        
+         
             
             let data = {
                 product_id : selectedProductId.value,
                 shop_brand_id : shop_brand_list.value.map(brand => brand.id),
-                price: brandPrices.value.map(price => (price))
+                price: brandPrices.value.map(price=> (price))
                 
          
             }
             let result = await shopBrandsStore.createPrice(data)
-            console.log('my result',result)
+            console.log('my result',result.success)
+            
  
-            if (result.data.success) {
+            if (result.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Price Succesfully Added', life: 3000});
                 addLineItem.value = false
             }

@@ -12,7 +12,7 @@
                             <div class="field mb-4 col-12 md:col-6">
                                 <TabMenu :model="shop_brand_list">
                                     <template #item="{ item, props }">
-                                        <a v-ripple v-bind="props.action" class="flex align-items-center gap-2">
+                                        <a v-ripple v-bind="props.action" class="flex align-items-center gap-2" @click="selectShop(item.id)">
                                             <img  :src="`${item.logo}`" style="width: 32px" />
                                             <span class="font-bold">{{ item.name }}</span>
                                         </a>
@@ -20,10 +20,17 @@
                                 </TabMenu>
                                 <Toast />
                             </div>
+                            <div v-if="branches" class="field mb-4 col-6 md:col-6"> 
+                                <label for="company_name" class="font-medium text-900"> Select Shop </label> 
+                                <Dropdown v-model="id" :options="branches" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
+                            </div>
+                            <div v-if="id" class="field mb-4 col-12 md:col-6">
+                                <Button @click="getShopInventory()" label="Get Inventory" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                            </div>
+               
                             
-                            
-                            <!-- <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="categories_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                            <div v-if="inventory_list" class="field mb-4 col-12 md:col-12"> 
+                                <DataTable :value="inventory_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -37,25 +44,35 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No categories found.
+                                        No products  found.
                                     </template>
                                     <template #loading>
-                                        Loading categories data. Please wait.
+                                        Loading products data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Category Name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Product name" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.name }}
+                                            {{ data.product ? data.product.name : 'Not Set' }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Category Type" style="min-width:12rem">
+                                    <Column frozen field="description" header="Product Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.is_parent ? 'Parent' : 'Child' }}
+                                            {{ data.product ? data.product.product_code : 'Not Set' }}
                                         </template>
                                     </Column>
-                                    <Column frozen field="category.name" header="Active Status" style="min-width:12rem">
+                                    <Column frozen field="description" header="Store Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.is_active ? 'Active' : 'Not Active' }}
+                                            {{  data.store_code}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="description" header="Quantity" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.quantity}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="Availability " style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.availability}}
                                         </template>
                                     </Column>
                                 
@@ -75,7 +92,7 @@
                                            :rows="10"
                                            :totalRecords="120">
                                 </Paginator>
-                            </div> -->
+                            </div> 
                         </div>                    
                     </div>
                 </div>
@@ -111,16 +128,19 @@ import { FilterMatchMode } from 'primevue/api';
 const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
-const allCategories = ref([]);
+const allCategories:any = ref([]);
 const all_products = ref([]);
 const all_shops = ref([])
 const shop_brand_id = ref();
+const inventory_list:any = ref()
+const id:any = ref()
 const name = ref();
 const address = ref();
-const shop_brand_list = ref();
+const shop_brand_list:any = ref();
 const product_id = ref()
 const shop_id = ref()
 const quantity = ref()
+const branches = ref()
 const categories_list = ref([]);
 const number_of_categories = ref();
 const addLineItem = ref(false);
@@ -143,6 +163,19 @@ const initFilters = () => {
 const clearFilter1 = () => {
     initFilters();
 };
+const selectShop = async (shopIDD:any) => {
+  
+  console.log(',y id',shopIDD)
+   await getShopsForBrand(shopIDD)
+   
+ }
+ const getShopsForBrand = (brandId:any) => {
+   branches.value = null
+   //@ts-ignore
+   let branchess = shop_brand_list.value.find(brand => brand.id === brandId);
+   branches.value = branchess?.shops
+   console.log('branches',branchess)
+ }
 
 onMounted(async () => {
     await shopBrandsStore.getAllProducts().then((data:any)=>{
@@ -154,7 +187,7 @@ onMounted(async () => {
     })
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
-        items.value = shop_brand_list.value.map((brand) => ({
+        items.value = shop_brand_list.value.map((brand:any) => ({
         label: `${brand.name}`,  // Customize label as needed
         icon: `${brand.image}`,
             command: () => {
@@ -162,10 +195,10 @@ onMounted(async () => {
             }
         }));
     });
-    await shopBrandsStore.getAllCategories().then((data) => {
+    await shopBrandsStore.getAllCategories().then((data:any) => {
         categories_list.value = data.data.data.categories;
     });
-    await shopBrandsStore.fetchAllCategories().then((data) => {
+    await shopBrandsStore.fetchAllCategories().then((data:any) => {
         allCategories.value.push(...data.data.categories);
     });
 });
@@ -190,17 +223,24 @@ const createInventory = async () => {
 
 const onPage = async (event: any) => {
     const current_page = event.page + 1;
-    const result = await shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+    const result = await shopBrandsStore.getCategoriesPagination(current_page).then((data:any) => {
         categories_list.value = data.data.data.categories;
         number_of_categories.value = data.data.data.categories.length;
     });
 };
 
+const getShopInventory = async ()=> {
+    await shopBrandsStore.getInventory(id.value).then((data:any) => {
+        inventory_list.value = data.data.data.products;
+        console.log(inventory_list.value)
+    });  
+}
+
 
 
 const formatDate = (value: string) => {
     const date = new Date(value);
-    const options = {
+    const options:any = {
         year: 'numeric',
         month: 'short',
         day: 'numeric',

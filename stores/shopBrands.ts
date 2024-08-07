@@ -8,10 +8,10 @@ import type getAllProducts from "~/server/routes/Products/getAllProducts";
 export const useShopBrandsStore = defineStore('shopBrands', {
     state: () => ({
         name: "",
-        id: "",
+        
         logo: "",
         allCategories: [] as any[],
-        parentCategories: [],
+        parentCategories: [] as any[],
         date: new Date(),
         shopBrands: [],
         posting_date: "",
@@ -86,7 +86,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         async updateShopBrand() {
             
             const data = {
-                id: this.id, 
+            
                 name: this.name,
                 logo: this.logo,
                 
@@ -466,7 +466,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
-            var config = {
+            var config:any = {
                method: 'GET',
                url: url,
                headers: { 
@@ -491,10 +491,43 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
-        async getCategoriesPagination(page) {
+       async getInventory(id:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/inventory?shop_id=${id}`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        var config:any = {
+           method: 'GET',
+           url: url,
+           headers: { 
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+   },
+        async getCategoriesPagination(page:any) {
             let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
         
-            var config = {
+            var config:any = {
             method: 'GET',
             url: url,
             headers: { 
@@ -527,7 +560,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
-            var config = {
+            var config:any = {
                method: 'GET',
                url: url,
                headers: { 
@@ -561,7 +594,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
-            var config = {
+            var config:any = {
                method: 'GET',
                url: url,
                headers: { 
@@ -594,7 +627,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
         );
-        var config = {
+        var config:any = {
            method: 'GET',
            url: url,
            headers: { 
@@ -623,9 +656,9 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             let page = 1;
             let per_page = 10;
             let hasMorePages = true;
-            let url = `${SHOPIFY_URL}/api/categories`;
+            let url:any = `${SHOPIFY_URL}/api/categories`;
         
-            var config = {
+            var config:any = {
                 method: 'GET',
                 headers: { 
                     'Accept': '/',
