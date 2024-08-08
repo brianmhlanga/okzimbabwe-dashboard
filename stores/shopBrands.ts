@@ -233,6 +233,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async addFeaturedProducts (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/featuredProducts/add_featured_product',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async createPrice (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -491,6 +519,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
+       async get_all_featured_products(id:any,shop_brand:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/featured-products/${id}?is_shop_brand=${shop_brand}`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        var config:any = {
+           method: 'GET',
+           url: url,
+           headers: { 
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+   },
        async getInventory(id:any) {
         let url = new URL(`${SHOPIFY_URL}/api/inventory?shop_id=${id}`)
         const params:any = {
