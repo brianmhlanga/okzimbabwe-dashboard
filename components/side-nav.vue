@@ -94,7 +94,8 @@ const mainMenuItems = ref([
         icon: 'pi pi-bullhorn',
         items: [
             { label: 'Manage Adverts', icon: 'pi pi-pencil' },
-            { label: 'Create Advert', icon: 'pi pi-plus' },
+            { label: 'Create Advert', icon: 'pi pi-plus',command:()=>{
+                navigateTo('/adverts');} },
             { label: 'Advert Analytics', icon: 'pi pi-chart-bar' }
         ]
     },

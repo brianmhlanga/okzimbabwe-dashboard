@@ -713,6 +713,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
        return result;
    },
+        async getAllAdverts() {
+        let url = new URL(`${SHOPIFY_URL}/api/adverts`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
         async fetchAllCategories() {
             let page = 1;
             let per_page = 10;
