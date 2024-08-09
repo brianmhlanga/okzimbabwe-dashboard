@@ -212,6 +212,9 @@
          },
      });
      toast.add({ severity: 'success', summary: 'Success', detail: 'Advert Created Successfully', life: 3000 });
+     let my_result = await shopBrandsStore.getAllAdverts().then((data:any)=>{
+        console.log('my adverts',data.data.data.adverts)
+     })
      loading.value = false
      addLineItem.value = false
      
