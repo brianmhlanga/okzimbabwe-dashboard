@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 import type getAllProducts from "~/server/routes/Products/getAllProducts";
+import type signup from "~/server/routes/auth/signup";
 
 
 
@@ -11,6 +12,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         
         logo: "",
         allCategories: [] as any[],
+        products: [] as any[],
         parentCategories: [] as any[],
         date: new Date(),
         shopBrands: [],
@@ -212,6 +214,62 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/inventory/create',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async signup (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/auth/signup',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async login (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            var config = {
+                method: 'post',
+                url: '/auth/login',
                 headers: { 
                     'Content-Type': 'application/json'
                 },
@@ -680,6 +738,34 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
+       async getProductsPagination(page:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/products?page=${page}`)
+    
+        var config:any = {
+        method: 'GET',
+        url: url,
+        headers: { 
+            'Accept': '/',
+            'Cache-Control': 'no-cache',
+            
+        },
+        
+    }; 
+    const result = await axios(config).then(function (response) { 
+        console.log(JSON.stringify(response.data));
+        return {
+            data: response.data,
+            success: true
+        }
+    }).catch(function (error) {
+        console.log(error);
+        return {
+            success: false
+        }
+    });
+
+    return result;
+    },
        async getAllCurrencies() {
         let url = new URL(`${SHOPIFY_URL}/api/currencies`)
         const params:any = {
@@ -786,6 +872,45 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             console.log('All Categories:', this.allCategories);
             console.log('Parent Categories:', this.parentCategories);
         },
+        async fetchAllProducts() {
+            let page = 1;
+            let per_page = 10;
+            let hasMorePages = true;
+            let url:any = `${SHOPIFY_URL}/api/products`;
         
+            var config:any = {
+                method: 'GET',
+                headers: { 
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                },
+            };
+        
+            this.products = []; // Initialize allCategories array
+        
+            while (hasMorePages) {
+                try {
+                    config.url = `${url}?page=${page}&per_page=${per_page}`;
+                    const response = await axios(config);
+                    console.log('mbilimbi', response.data.data);
+                    this.products.push(...response.data.data.products);
+        
+                    if (page >= response.data.data.totalPages) {
+                        hasMorePages = false;
+                    } else {
+                        page++;
+                    }
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                    hasMorePages = false;
+                }
+            }
+        
+            // Uncomment this line if you want to filter parent categories
+            
+        
+            console.log('All Products:', this.products);
+           
+        },
     }
 });

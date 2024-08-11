@@ -163,7 +163,7 @@
      import Swal from 'sweetalert2'
      import { FilterMatchMode } from 'primevue/api';
      import { useConfirm } from "primevue/useconfirm";
-const confirm = useConfirm();
+    const confirm = useConfirm();
      const shopBrandsStore = useShopBrandsStore()
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
      console.log('vbhjnk',parentCategories.value)
@@ -261,11 +261,11 @@ const confirm = useConfirm();
      
 }
     
-     const onPage = (event) => {
+     const onPage = (event:any) => {
         let current_page = event.page + 1
-        let result =  shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+        let result =  shopBrandsStore.getProductsPagination(current_page).then((data:any) => {
             
-            categories_list.value =  data.data.data.categories
+            categories_list.value = data.data.data.products
             console.log('hbj',data.data.data.categories.length)
             number_of_categories.value = data.data.data.categories.length
         })

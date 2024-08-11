@@ -110,7 +110,7 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product </label> 
-                    <Dropdown v-model="product_id" :options="categories_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                    <Dropdown v-model="product_id" :options="products" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
                
                
@@ -141,6 +141,7 @@ const address = ref();
 const shop_brand_list = ref();
 const city = ref();
 const store_code = ref();
+const products = storeToRefs(shopBrandsStore).products
 const contact_person = ref();
 const selected_reference_type = ref()
 const shops_list:any = ref([])
@@ -288,7 +289,7 @@ onMounted(async () => {
     await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
-    
+    await shopBrandsStore.fetchAllProducts()
     await shopBrandsStore.getAllShops().then((data:any) => {
         shops_list.value = data.data.data.shops
         console.log('my shops',shops_list.value)
