@@ -20,7 +20,7 @@
                     <label for="company_name" class="font-medium text-900">Select Shop </label> 
                     <Dropdown v-model="referenced_id" :options="shops_list" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
                 </div>
-                <div  class="field mb-4 col-6 md:col-6"> 
+                <div  class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Is it a shop brand</label> 
                     <Dropdown v-model="shop_brand" :options="option1"   placeholder="Select shop" checkmark :highlightOnSelect="false" />
                 </div>
@@ -48,53 +48,25 @@
                                     <template #loading>
                                         Loading categories data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Shop Name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Product Name" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Store Code" style="min-width:12rem">
+                                    <Column frozen field="description" header="Product Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.store_code}}
+                                            {{ data.product_code}}
                                         </template>
                                     </Column>
-                                    <Column frozen field="category.name" header="Address" style="min-width:12rem">
+                                    <Column frozen field="category.name" header="Product Image" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.address }}
+                                            <img :src="getParsedImages(data.images)"  class="w-3rem border-round" />
                                         </template>
                                     </Column>
-                                    <Column frozen field="category.name" header="Contact Person" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_person }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Contact Number" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_number }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Contact Email" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_email}}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="City" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.city }}
-                                        </template>
-                                    </Column>
+                                    
                                 
-                                    <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            <SplitButton label="Actions" :model="actions({data})"  />
-                                        </template>
-                                    </Column>
+                                    
                                 </DataTable>
                                 <Paginator @page="onPage($event)"
                                            :template="{
@@ -259,6 +231,16 @@ const showShop = async(shop_data:any) => {
       addLineItem.value = true
      
 }
+const getParsedImages = (images: string) => {
+  try {
+    const parsedImages = JSON.parse(images);
+    const cleanedString = JSON.parse(parsedImages.replace(/\\/g, ''));
+    return cleanedString[0]
+  } catch (error) {
+    console.error('Error parsing images JSON:', error);
+  }
+  return null; // Return null if parsing fails or no images are found
+};
 
 const updateShop = async () => {
     const data = {
