@@ -4,7 +4,8 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="text-900 font-medium text-xl mb-3">Products</div>
-                    <div class="card p-4 ml-3  ">
+                    <div>
+                        <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
                                 <Button @click="addLineItem = true" label="Create Product" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
@@ -19,7 +20,7 @@
                                             
                                             <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
                                             <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
-                                            <IconField iconPosition="left">
+                                            <IconField iconPosition="left" >
                                                 <InputIcon class="pi pi-search" > </InputIcon>
                                                 <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
                                             </IconField>
@@ -76,6 +77,8 @@
                             </div>
                            </div>                    
                     </div>
+                    </div>
+                    
                 </div>
             </div>
         </section>
@@ -188,6 +191,9 @@
      const options = ref([ 'Yes', 'No']);
      const selectedProduct = ref()
      const add_price = ref(false)
+     definePageMeta({
+        middleware: ["auth"]
+});
     
    
     const items = (product:any) => [

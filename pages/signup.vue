@@ -85,6 +85,9 @@ import Password from "primevue/password";
  const shop_id = ref()
  const addLineItem = ref(false)
  const logoFile = ref()
+ definePageMeta({
+        middleware: ["auth"]
+});
  onMounted(async () => {
      let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
          shop_brand_list.value = data.data.data.data.shopbrands

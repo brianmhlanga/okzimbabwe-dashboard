@@ -4,23 +4,22 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="text-900 font-medium text-xl mb-3">Categories</div>
-                    <div class="card p-4 ml-3  ">
+                    <div>
+                        <div class="card p-4 ml-3 mr-10">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
-                                <Button @click="addLineItem = true" label="Create Category" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
+                                <Button @click="addLineItem = true" label="Add Currency" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
-                            
-                            <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="categories_list" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
-                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
-                            >
+                             <div class="field mb-4 col-12 md:col-12"> 
+                                <DataTable :value="all_currencies" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                                           dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
-                                            <SplitButton label="Actions" :model="items" />
-                                            <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
+                                           
+                                            <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()" />
                                             <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
                                             <IconField iconPosition="left">
-                                                <InputIcon class="pi pi-search" > </InputIcon>
+                                                <InputIcon class="pi pi-search"></InputIcon>
                                                 <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
                                             </IconField>
                                         </div>
@@ -28,44 +27,50 @@
                                     <template #empty>
                                         No categories found.
                                     </template>
-                                    <template #loading>s
+                                    <template #loading>
                                         Loading categories data. Please wait.
                                     </template>
-                                    <Column  frozen field="name" header="Category Name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Currency name" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.name}}
+                                            {{ data.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen  field="description" header="Category Type" style="min-width:12rem">
+                                    <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.is_parent ? 'Parent': 'Child'}}
+                                            {{ data.iso_code }}
                                         </template>
                                     </Column>
-                                    <Column frozen  field="category.name" header="Active Status" style="min-width:12rem">
+                                    <Column frozen field="category.name" header="Currency Symbol" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.is_active ? 'Active': 'Not Active'}}
+                                            {{ data.symbol }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen  field="created_at" header="Date Created" style="min-width:12rem">
+                                    <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data?.created_at ? formatDate(data?.created_at) : "NOT SET"}}
+                                            {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            <SplitButton label="Actions" :model="actions({data})"  />
                                         </template>
                                     </Column>
                                 </DataTable>
                                 <Paginator @page="onPage($event)"
-                                    :template="{
-                                        '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-                                        '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
-                                        '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
-                                        default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
-                                    }"
-                                    :rows="10"
-                                    :totalRecords="120">
+                                           :template="{
+                                               '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+                                               '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
+                                               '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
+                                               default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
+                                           }"
+                                           :rows="10"
+                                           :totalRecords="120">
                                 </Paginator>
-                            </div>
-                           </div>                    
+                            </div> -->
+                        </div>                    
+                    </div>
                     </div>
                 </div>
             </div>
@@ -117,6 +122,9 @@
      let number_of_categories = ref()
      const addLineItem = ref(false)
      const options = ref([ 'Yes', 'No']);
+     definePageMeta({
+        middleware: ["auth"]
+});
  
      const filters = ref({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },

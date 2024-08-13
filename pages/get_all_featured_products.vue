@@ -4,7 +4,8 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="text-900 font-medium text-xl mb-3">Featured Products</div>
-                    <div class="card p-4 ml-3 mr-10">
+                    <div>
+                        <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-6 md:col-6"> 
                                 <label for="company_name" class="font-medium text-900">Select either shop or shop brand to reference</label> 
@@ -108,6 +109,7 @@
                             </div> -->
                         </div>                    
                     </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -177,6 +179,9 @@ const number_of_categories = ref();
 const addLineItem = ref(false);
 const options = ref(['Shop brand', 'Shop']);
 const option1 = ['true','false']
+definePageMeta({
+        middleware: ["auth"]
+});
 const items = ref([
     
 ]);

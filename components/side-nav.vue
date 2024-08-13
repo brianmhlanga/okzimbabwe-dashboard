@@ -2,7 +2,7 @@
     <nav class="nxl-navigation">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <Nuxtlink to="/dashboard"><img src="/images/okshop.jpg" alt="" class="logo logo-lg"></Nuxtlink>
+                <Nuxtlink to="/"><img src="/images/okshop.jpg" alt="" class="logo logo-lg"></Nuxtlink>
             </div>
             <div class="p-10 navbar-content">
                 <PanelMenu class=" card" :model="mainMenuItems" />
@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <h6 class="mt-1 text-dark fw-bolder">Brian Mhlanga</h6>
                         <p class="fs-11 my-3 text-dark">Super Admin</p>
-                        <a href="javascript:void(0);" class="btn btn-primary text-dark w-100">Log Out</a>
+                        <a href="javascript:void(0);" class="btn btn-primary text-dark w-100" @click="logout()">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -18,6 +18,10 @@
     </nav>
 </template>
 <script setup lang="ts">
+const authStore:any = useAuthStore()
+const logout = async()=>{
+    await authStore.logout()
+}
 const mainMenuItems = ref([
     {
         label: 'Dashboard',

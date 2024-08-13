@@ -3,8 +3,10 @@
       <section class="section">
            <div class="container-fluid pt-3">
                <div class="row">
-                   <div class="text-900 font-medium text-xl mb-3">Shop Brands</div>
-                   <div class="card p-4 ml-3 pr-20">
+                <div class="text-900 font-medium text-xl mb-3">Shop Brands</div>
+                 
+                   <div>
+                   <div class="card p-4 m-3 ">
                        <div class="grid formgrid p-fluid">
                            <div class="field mb-4 col-12 md:col-6">
                                <Button @click="addLineItem = true" label="Create Shop Brand" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
@@ -37,6 +39,7 @@
                            </div>
                           </div>                    
                    </div>
+                </div>
                </div>
            </div>
        </section>
@@ -85,6 +88,9 @@ const shop_brand_list = ref()
 const shop_id = ref()
 const addLineItem = ref(false)
 const logoFile = ref()
+definePageMeta({
+        middleware: ["auth"]
+});
 onMounted(async () => {
     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         shop_brand_list.value = data.data.data.data.shopbrands

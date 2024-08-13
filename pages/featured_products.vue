@@ -4,7 +4,8 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="text-900 font-medium text-xl mb-3">Featured Products</div>
-                    <div class="card p-4 ml-3 mr-10">
+                    <div>
+                        <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
                                 <Button @click="open_create_shop_modal()" label="Featured Products" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
@@ -91,6 +92,7 @@
                             </div>
                         </div>                    
                     </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -157,6 +159,9 @@ const product_id = ref()
 const is_shop_brand = ref()
 const number_of_categories = ref();
 const addLineItem = ref(false);
+definePageMeta({
+        middleware: ["auth"]
+});
 
 const options = ref(['Shop brand', 'Shop']);
 const items = ref([
