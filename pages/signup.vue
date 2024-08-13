@@ -58,6 +58,9 @@
                         <label  for="company_name" class="font-medium text-900">Password Confirmation</label> 
                         <Password  type="text" toggleMask v-model="password_confirmation"/>
                     </div>
+                    <div class="mb-4" v-if="password != password_confirmation">
+                        <InlineMessage severity="error">Error Message Password does not match</InlineMessage>
+                    </div>
                    
                 </div>
                 <Button :loading="loading" @click="signup()" label="Register User" icon="pi pi-plus" />

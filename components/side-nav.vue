@@ -134,7 +134,8 @@ const mainMenuItems = ref([
         label: 'Admin',
         icon: 'pi pi-lock',
         items: [
-            { label: 'User Management', icon: 'pi pi-users' },
+            { label: 'User Management', icon: 'pi pi-users' ,command:()=>{
+                navigateTo('/signup');}},
             { label: 'Roles & Permissions', icon: 'pi pi-key' },
             { label: 'Access Control', icon: 'pi pi-shield' },
             { label: 'System Logs', icon: 'pi pi-file' },
