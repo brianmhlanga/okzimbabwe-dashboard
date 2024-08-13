@@ -28,7 +28,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             const formData = new FormData();
             formData.append('name', info.name); // Assuming `info.name` contains the shop brand name
             formData.append('logo', info.logo); // Assuming `info.logo` is the File object
-          
+            
             // Define the configuration for the axios request
             const config = {
               method: 'post',

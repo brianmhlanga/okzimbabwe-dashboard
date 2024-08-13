@@ -217,7 +217,7 @@ const createInventory = async () => {
     console.log('result',result.data.success)
 
     if (result.data.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Created', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Inventory Successfully Created', life: 3000 });
         addLineItem.value = false;
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
