@@ -9,7 +9,7 @@ import type signup from "~/server/routes/auth/signup";
 export const useShopBrandsStore = defineStore('shopBrands', {
     state: () => ({
         name: "",
-        
+        full_name: "",
         logo: "",
         allCategories: [] as any[],
         products: [] as any[],
@@ -288,6 +288,9 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     success: false
                  }
             });
+            
+            console.log('simba',this.full_name)
+            console.log('mybddnd',result)
             return result;
 
         },

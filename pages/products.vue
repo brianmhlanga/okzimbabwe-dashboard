@@ -137,12 +137,12 @@
         <Dialog v-model:visible="add_price" modal header="Add Price" :style="{ width: '25rem' }">
             <span class="text-center block mb-5">{{selectedProduct}}</span>
             <div v-for="(brand,index) in shop_brand_list" class="flex align-items-center gap-3 mb-3">
-                <div class="grid formgrid p-fluid">
-                            <div class=" mb-4 col-6 md:col-12">
+                <div class="grid formgrid p-fluid w-full">
+                            <div class=" mb-2 col-12 md:col-12">
                                 {{ brand.name}}
                             </div>
-                            <div class=" mb-4 col-6 md:col-12">
-                                <InputText id="username" v-model="brandPrices[index]" placeholder="Add Price" autocomplete="off" />
+                            <div class=" mb-2 col-12 md:col-12">
+                                <InputText id="username" v-model="brandPrices[index]" class="w-full" placeholder="Add Price" autocomplete="off" />
                             </div>
                             
                 </div>

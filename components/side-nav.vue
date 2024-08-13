@@ -8,7 +8,7 @@
                 <PanelMenu class=" card" :model="mainMenuItems" />
                 <div class="card text-center">
                     <div class="card-body">
-                        <h6 class="mt-1 text-dark fw-bolder">Brian Mhlanga</h6>
+                        <h6 class="mt-1 text-dark fw-bolder">{{ name }}</h6>
                         <p class="fs-11 my-3 text-dark">Super Admin</p>
                         <a href="javascript:void(0);" class="btn btn-primary text-dark w-100" @click="logout()">Log Out</a>
                     </div>
@@ -19,6 +19,9 @@
 </template>
 <script setup lang="ts">
 const authStore:any = useAuthStore()
+const shopBrandsStore = useShopBrandsStore()
+     const name = storeToRefs(shopBrandsStore).full_name
+     console.log('name',name)
 const logout = async()=>{
     await authStore.logout()
 }
