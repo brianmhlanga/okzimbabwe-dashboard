@@ -97,6 +97,15 @@ const mainMenuItems = ref([
         ]
     },
     {
+        label: 'Influencer',
+        icon: 'pi pi-users',
+        items: [
+            { label: 'Create Influencer', icon: 'pi pi-list',command:()=>{
+                navigateTo('/influencer');} },
+           
+        ]
+    },
+    {
         label: 'Adverts',
         icon: 'pi pi-bullhorn',
         items: [

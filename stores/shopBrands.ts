@@ -60,10 +60,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
           },
         async getAllShopBrands() {
+             const token = useCookie('token').value || ""
              var config = {
                 method: 'post',
                 url: '/shopBrands/getAllShopBrands',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Accept': '/',
                     'Cache-Control': 'no-cache',
                    
@@ -155,10 +157,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+             const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/Catergories/create',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -183,10 +187,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/shops/create',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -211,10 +217,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+             const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/inventory/create',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -298,10 +306,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+          const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/featuredProducts/add_featured_product',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -326,10 +336,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/price/addPrice',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -354,10 +366,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/currencies/add_currency',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -382,10 +396,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/currencies/update',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -410,10 +426,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/shops/update',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -438,10 +456,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/currencies/delete',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -466,10 +486,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/shops/delete',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -494,10 +516,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/shopBrands/delete',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -522,10 +546,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/Products/delete',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -555,10 +581,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
+            const token = useCookie('token').value || ""
             var config:any = {
                method: 'GET',
                url: url,
                headers: { 
+                 "Authorization": `Bearer ${token}`,
                    'Accept': '/',
                    'Cache-Control': 'no-cache',
                   
@@ -588,10 +616,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
         );
+        const token = useCookie('token').value || ""
         var config:any = {
            method: 'GET',
            url: url,
            headers: { 
+            "Authorization": `Bearer ${token}`,
                'Accept': '/',
                'Cache-Control': 'no-cache',
               
@@ -621,10 +651,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
         );
+        const token = useCookie('token').value || ""
         var config:any = {
            method: 'GET',
            url: url,
-           headers: { 
+           headers: {
+               "Authorization": `Bearer ${token}`,
                'Accept': '/',
                'Cache-Control': 'no-cache',
               
@@ -648,11 +680,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
    },
         async getCategoriesPagination(page:any) {
             let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
-        
+            const token = useCookie('token').value || ""
             var config:any = {
             method: 'GET',
             url: url,
-            headers: { 
+            headers: {
+                "Authorization": `Bearer ${token}`,
                 'Accept': '/',
                 'Cache-Control': 'no-cache',
                 
@@ -682,10 +715,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
+              const token = useCookie('token').value || ""
             var config:any = {
                method: 'GET',
                url: url,
-               headers: { 
+               headers: {
+                "Authorization": `Bearer ${token}`, 
                    'Accept': '/',
                    'Cache-Control': 'no-cache',
                   
@@ -716,10 +751,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
+            const token = useCookie('token').value || ""
             var config:any = {
                method: 'GET',
                url: url,
                headers: { 
+                "Authorization": `Bearer ${token}`,
                    'Accept': '/',
                    'Cache-Control': 'no-cache',
                   
@@ -743,11 +780,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
        },
        async getProductsPagination(page:any) {
         let url = new URL(`${SHOPIFY_URL}/api/products?page=${page}`)
-    
+          const token = useCookie('token').value || ""
         var config:any = {
         method: 'GET',
         url: url,
         headers: { 
+            "Authorization": `Bearer ${token}`,
             'Accept': '/',
             'Cache-Control': 'no-cache',
             
@@ -777,10 +815,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
         );
+        const token = useCookie('token').value || ""
         var config:any = {
            method: 'GET',
            url: url,
            headers: { 
+            "Authorization": `Bearer ${token}`,
                'Accept': '/',
                'Cache-Control': 'no-cache',
               
@@ -810,10 +850,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
         );
+        const token = useCookie('token').value || ""
         var config:any = {
             method: 'GET',
             url: url,
-            headers: { 
+            headers: {
+                "Authorization": `Bearer ${token}`, 
                 'Accept': '/',
                 'Cache-Control': 'no-cache',
                 
@@ -840,10 +882,11 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             let per_page = 10;
             let hasMorePages = true;
             let url:any = `${SHOPIFY_URL}/api/categories`;
-        
+            const token = useCookie('token').value || ""
             var config:any = {
                 method: 'GET',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
                     'Accept': '/',
                     'Cache-Control': 'no-cache',
                 },
@@ -880,10 +923,11 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             let per_page = 10;
             let hasMorePages = true;
             let url:any = `${SHOPIFY_URL}/api/products`;
-        
+            const token = useCookie('token').value || ""
             var config:any = {
                 method: 'GET',
                 headers: { 
+                    "Authorization": `Bearer ${token}`,
                     'Accept': '/',
                     'Cache-Control': 'no-cache',
                 },
