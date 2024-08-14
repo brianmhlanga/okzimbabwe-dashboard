@@ -61,6 +61,9 @@ const mainMenuItems = ref([
             { label: 'Add New Product', icon: 'pi pi-plus', command:()=>{
                 navigateTo('/products');
             }},
+            { label: 'Products Brands', icon: 'pi pi-plus', command:()=>{
+                navigateTo('/product_brands');} },
+
             { label: 'Categories', icon: 'pi pi-list', command:()=>{
                 navigateTo('/category');
             } },
