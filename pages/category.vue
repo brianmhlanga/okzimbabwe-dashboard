@@ -36,14 +36,14 @@
                                         </template>
                                     </Column>
                                 
-                                    <!-- <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
+                                    <!-- <!-- <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.iso_code }}
                                         </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Currency Symbol" style="min-width:12rem">
+                                    </Column> -->
+                                    <Column frozen field="category.name" header="Parent Category" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.symbol }}
+                                            {{ data.is_parent? true:false }}
                                         </template>
                                     </Column> -->
                                 
