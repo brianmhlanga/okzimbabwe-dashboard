@@ -100,6 +100,10 @@
                         <label for="company_name" class="font-medium text-900">Select category </label> 
                         <Dropdown v-model="category_id" :options="allCategories" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
                     </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
+                        <Dropdown v-model="product_brand" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                    </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
                         <InputText class="form-control" type="text"  v-model="product_code"/>
@@ -125,6 +129,10 @@
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select category </label> 
                         <Dropdown v-model="category_id" :options="allCategories" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
+                        <Dropdown v-model="category_id" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
@@ -173,6 +181,7 @@
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const name = ref('')
      const product_modal = ref()
+     const product_brand = ref()
      const description = ref()
      const is_active = ref('')
      const category_id = ref('')
@@ -191,6 +200,7 @@
      const options = ref([ 'Yes', 'No']);
      const selectedProduct = ref()
      const add_price = ref(false)
+     const product_brands_list = ref()
      definePageMeta({
         middleware: ["auth"]
 });
@@ -251,6 +261,9 @@
      onMounted(async () => {
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
+        })
+        await shopBrandsStore.get_product_brands().then((data:any)=>{
+            product_brands_list.value = data.data.data.data
         })
         await shopBrandsStore.getAllShopBrands().then((data:any)=>{
             shop_brand_list.value = data.data.data.data.shopbrands
@@ -385,6 +398,7 @@
       formData.append('name', name.value);
       formData.append('description', description.value);
       formData.append('category_id', category_id.value);
+      formData.append('product_brand', product_brand.value);
       formData.append('product_code', product_code.value);
       console.log('form',formData)
    
@@ -400,7 +414,7 @@
             'Accept': '*/*'
           },
         });
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Product Created Successfully', life: 3000 });
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })

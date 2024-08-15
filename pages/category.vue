@@ -8,10 +8,10 @@
                         <div class="card p-4 ml-3 mr-10">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
-                                <Button @click="addLineItem = true" label="Add Currency" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                                <Button @click="addLineItem = true" label="Add Category" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
                              <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="all_currencies" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                                <DataTable :value="categories_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -30,13 +30,13 @@
                                     <template #loading>
                                         Loading categories data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Currency name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Category name" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
+                                    <!-- <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.iso_code }}
                                         </template>
@@ -45,18 +45,14 @@
                                         <template #body="{data}">
                                             {{ data.symbol }}
                                         </template>
-                                    </Column>
+                                    </Column> -->
                                 
                                     <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
                                         </template>
                                     </Column>
-                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            <SplitButton label="Actions" :model="actions({data})"  />
-                                        </template>
-                                    </Column>
+                                   
                                 </DataTable>
                                 <Paginator @page="onPage($event)"
                                            :template="{
@@ -169,6 +165,7 @@
      onMounted(async () => {
         await shopBrandsStore.getAllCategories().then((data)=>{
             categories_list.value = data.data.data.categories
+            console.log('categories list',categories_list.value)
         })
         await shopBrandsStore.fetchAllCategories().then((data)=>{
             allCategories.value.push(...data.data.categories)

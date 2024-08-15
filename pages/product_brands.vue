@@ -28,19 +28,7 @@
                 </div>
                 <Button :loading="loading" @click="createProductBrand()" label="Create product brand" icon="pi pi-plus" />
         </Dialog>
-        <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Create Shop Brand" position="top" :style="{ width: '55vw' }">
-                <div class="grid formgrid p-fluid">
-                    <div class="field mb-4 col-12 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Shop brand name</label> 
-                        <input class="form-control" type="text"  v-model="name">
-                    </div>
-                    <div class="field mb-4 col-12 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
-                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
-                    </div>
-                </div>
-                <Button :loading="loading" @click="updateShopBrand()" label="Create shop brand" icon="pi pi-plus" />
-        </Dialog>
+       
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
  </template>
