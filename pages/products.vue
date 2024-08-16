@@ -98,11 +98,45 @@
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select category </label> 
-                        <Dropdown v-model="category_id" :options="allCategories" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                        
+                        <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
-                        <Dropdown v-model="product_brand_id" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                       
+                        <Dropdown v-model="product_brand_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select  product brand" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
