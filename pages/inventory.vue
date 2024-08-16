@@ -102,11 +102,45 @@
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900"> Select Product </label> 
-                    <Dropdown v-model="product_id" :options="all_products" optionLabel="name" optionValue="id" placeholder="Select product" checkmark :highlightOnSelect="false" />
+                  
+                    <Dropdown v-model="product_id" :options="products" filter optionLabel="name" optionValue="id" placeholder="Select  product" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ products.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                    </Dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop </label> 
-                    <Dropdown v-model="shop_id" :options="all_shops" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
+                   
+                    <Dropdown v-model="shop_id" :options="all_shops" filter optionLabel="name" optionValue="id" placeholder="Select  Shop" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ all_shops.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                    </Dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Quantity</label> 
@@ -126,11 +160,11 @@ import { useShopBrandsStore } from '~/stores/shopBrands';
 import { FilterMatchMode } from 'primevue/api';
 
 const shopBrandsStore = useShopBrandsStore();
-const { parentCategories } = storeToRefs(shopBrandsStore);
+const products = storeToRefs(shopBrandsStore).products;
 const toast = useToast()
 const allCategories:any = ref([]);
 const all_products = ref([]);
-const all_shops = ref([])
+const all_shops:any = ref([])
 const shop_brand_id = ref();
 const inventory_list:any = ref()
 const id:any = ref()
@@ -198,12 +232,8 @@ onMounted(async () => {
             }
         }));
     });
-    await shopBrandsStore.getAllCategories().then((data:any) => {
-        categories_list.value = data.data.data.categories;
-    });
-    await shopBrandsStore.fetchAllCategories().then((data:any) => {
-        allCategories.value.push(...data.data.categories);
-    });
+   
+    await shopBrandsStore.fetchAllProducts()
 });
 
 const createInventory = async () => {
