@@ -6,11 +6,12 @@ export default defineEventHandler(async (event)=>{
     
     
     let data = JSON.stringify({
-        "name": name,
-        "email": email,
-        "password": password,
+         "name": name,
+         "email": email,
+         "password": password,
         "password_confirmation": password_confirmation
       });
+      console.log('sign',data)
     var config = {
         method: 'POST',
         url: `${SHOPIFY_URL}/api/auth/signup`,
@@ -36,7 +37,7 @@ export default defineEventHandler(async (event)=>{
       
         return {    
             success: false,
-            error: error.message
+            error: error.errors
         } 
     });
     

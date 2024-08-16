@@ -117,7 +117,7 @@ import Password from "primevue/password";
     const result = await shopBrandsStore.signup(data);
     console.log('result',result.data.success)
 
-    if (result.success) {
+    if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'User Successfully Created', life: 3000 });
         addLineItem.value = false;
         

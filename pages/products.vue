@@ -39,7 +39,7 @@
                                     </Column>
                                      <Column header="Image">
                                         <template #body="slotProps">
-                                            <img :src="getParsedImages(slotProps.data.images)" :alt="slotProps.data.image_url" class="w-3rem border-round" />
+                                            <img :src="getParsedImages(slotProps.data.thumbnails)" :alt="slotProps.data.image_url" class="w-3rem border-round" />
                                         </template>
                                     </Column>
                                     <Column frozen  field="description" header="Product description" style="min-width:12rem">
@@ -102,7 +102,7 @@
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
-                        <Dropdown v-model="product_brand" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                        <Dropdown v-model="product_brand_id" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
@@ -132,7 +132,7 @@
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
-                        <Dropdown v-model="category_id" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                        <Dropdown v-model="product_brand_id" :options="product_brands_list" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
@@ -181,7 +181,7 @@
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const name = ref('')
      const product_modal = ref()
-     const product_brand = ref()
+     const product_brand_id = ref()
      const description = ref()
      const is_active = ref('')
      const category_id = ref('')
@@ -398,7 +398,7 @@
       formData.append('name', name.value);
       formData.append('description', description.value);
       formData.append('category_id', category_id.value);
-      formData.append('product_brand', product_brand.value);
+      formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
       console.log('form',formData)
    
@@ -437,6 +437,7 @@
       formData.append('description', description.value);
       formData.append('category_id', category_id.value);
       formData.append('product_code', product_code.value);
+      formData.append('product_brand_id', product_brand_id.value);
       console.log('form',formData)
    
       if (imageFiles.value) {

@@ -278,10 +278,12 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
+               const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/auth/signup',
-                headers: { 
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 },
                 data: data
