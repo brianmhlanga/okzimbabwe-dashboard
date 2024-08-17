@@ -161,7 +161,17 @@
             is_active.value = false
         }
      }
- 
+    
+     const refresh_data = ()=>{
+        name.value = ''
+        is_parent.value = ''
+        is_sub_parent.value = "",
+        is_active.value = "",
+        parent_category_id.value = "" 
+    }
+
+
+     
      onMounted(async () => {
         await shopBrandsStore.getAllCategories().then((data)=>{
             categories_list.value = data.data.data.categories
@@ -195,6 +205,7 @@
             if (result.data.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
                 addLineItem.value = false
+                refresh_data()
             }
         
             else {
@@ -218,6 +229,7 @@
          if (result.data.success) {
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
              addLineItem.value = false
+             refresh_data()
          }
 
          else {

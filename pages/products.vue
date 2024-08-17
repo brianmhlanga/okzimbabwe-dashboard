@@ -394,7 +394,16 @@
            
          
          
-      
+        const refresh_data = ()=>{
+        name.value = ''
+        description.value = ''
+        category_id.value = "",
+        product_brand_id.value = "",
+        product_code.value = "" 
+        imageFiles.value = []
+
+    }
+
         
          
      
@@ -452,6 +461,7 @@
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
+        refresh_data()
         addLineItem.value = false
         // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         //     shop_brand_list.value = data.data.data.data.shopbrands
