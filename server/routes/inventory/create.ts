@@ -1,46 +1,42 @@
 import axios from "axios";
-import { SHOPIFY_URL} from "~~/services/global.variables";
+import { SHOPIFY_URL } from "~~/services/global.variables";
 
-export default defineEventHandler(async (event)=>{
-    const {data:{product_id,shop_id,quantity}} = await readBody(event);
+export default defineEventHandler(async (event) => {
+    const { data: { product_id, shop_id, quantity } } = await readBody(event);
     
-    
-    let data = JSON.stringify({
-        "product_id": product_id,
-        "shop_id": shop_id,
-        "quantity": quantity,
-        
-        
-    });
-    var config = {
-        method: 'POST',
-        url: `${SHOPIFY_URL}/api/inventory`,
-        headers: {
-            'Content-Type': 'application/json',
-            
-        },
-        data: data
-    };
-      
-    const result = await axios(config)
-    .then(function (response) {
-        const result = response.data;
+    // To store all results
+    const results = [];
 
-        return {
-            success: true,
-            data: result
-            
+    for (let i = 0; i < shop_id.length; i++) {
+        const brandId = shop_id[i];
+        let data = JSON.stringify({
+            "product_id": product_id,
+            "shop_id": brandId,
+            "quantity": quantity,
+        });
+
+        var config = {
+            method: 'POST',
+            url: `${SHOPIFY_URL}/api/inventory`,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data
         };
-    }) .catch(async (error)=>{
-        console.log(error);
         
-      
-        return {    
-            success: false,
-            error: error.message
-        } 
-    });
-    
-    return result;
+        try {
+            const response = await axios(config);
+            results.push({
+                success: true,
+                data: response.data
+            });
+        } catch (error) {
+            results.push({
+                success: false,
+                error: error.message
+            });
+        }
+    }
+
+    return results;
 });
- 

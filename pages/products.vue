@@ -27,7 +27,7 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No categories found.
+                                        No products found.
                                     </template>
                                     <template #loading>s
                                         Loading categories data. Please wait.

@@ -817,7 +817,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         async getAllShops() {
             let url = new URL(`${SHOPIFY_URL}/api/shops`)
             const params:any = {
-                per_page: "10",
+                per_page: "100",
             };
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])

@@ -123,24 +123,9 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop </label> 
+                    <MultiSelect v-model="shop_id" :options="all_shops" filter optionLabel="name" optionValue="id" placeholder="Select Shop"
+            :maxSelectedLabels="10"  />
                    
-                    <Dropdown v-model="shop_id" :options="all_shops" filter optionLabel="name" optionValue="id" placeholder="Select  Shop" >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex align-items-center">
-                                
-                                    <div>{{ all_shops.find(brand => brand.id === slotProps.value)?.name }}</div>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                    </Dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Quantity</label> 
