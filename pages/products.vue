@@ -120,11 +120,11 @@
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
                        
-                        <Dropdown v-model="product_brand_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select  product brand" >
+                        <Dropdown v-model="product_brand_id" :options="product_brands" filter optionLabel="name" optionValue="id" placeholder="Select  product brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ product_brands.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -213,6 +213,8 @@
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
      console.log('vbhjnk',parentCategories.value)
      const allCategories = storeToRefs(shopBrandsStore).allCategories
+     const product_brands = storeToRefs(shopBrandsStore).product_brands
+    
      const name = ref('')
      const product_modal = ref()
      const product_brand_id = ref()
@@ -296,6 +298,8 @@
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
+        shopBrandsStore.fetchAllProductBrands()
+        
         await shopBrandsStore.get_product_brands().then((data:any)=>{
             product_brands_list.value = data.data.data.data
         })
@@ -311,7 +315,7 @@
         //      console.log("dgfa",data.data.data.data.shopbrands)
         //      shop_brand_list.value = data.data.data.data.shopbrands
         //  })
-     
+        console.log('prrrr',product_brands.value)
      });
      
      const showProduct = async(product:any) => {

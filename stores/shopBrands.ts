@@ -12,6 +12,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         full_name: "",
         logo: "",
         allCategories: [] as any[],
+        product_brands: [] as any[],
         products: [] as any[],
         parentCategories: [] as any[],
         date: new Date(),
@@ -676,6 +677,44 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
        return result;
    },
+   async fetchAllProductBrands() {
+    let page = 1;
+    let per_page = 10;
+    let hasMorePages = true;
+    let url:any = `${SHOPIFY_URL}/api/product-brands`;
+    const token = useCookie('token').value || ""
+    var config:any = {
+        method: 'GET',
+        headers: {
+            "Authorization": `Bearer ${token}`, 
+            'Accept': '/',
+            'Cache-Control': 'no-cache',
+        },
+    };
+
+    this.product_brands = []; // Initialize allCategories array
+
+    while (hasMorePages) {
+        try {
+            config.url = `${url}?page=${page}&per_page=${per_page}`;
+            const response = await axios(config);
+            console.log('mbilimbi23', response.data.data);
+            this.product_brands.push(...response.data.data.data);
+            console.log('product_brands',this.product_brands)
+            if (page >= response.data.data.totalPages) {
+                hasMorePages = false;
+            } else {
+                page++;
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            hasMorePages = false;
+        }
+    }
+
+    // Uncomment this line if you want to filter parent categories
+    
+},
        async get_all_featured_products(id:any,shop_brand:any) {
         let url = new URL(`${SHOPIFY_URL}/api/featured-products/${id}?is_shop_brand=${shop_brand}`)
         const params:any = {
