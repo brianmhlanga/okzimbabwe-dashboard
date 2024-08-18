@@ -117,6 +117,12 @@
                             </template>
                         </Dropdown>
                     </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Categories </label> 
+                    <MultiSelect v-model="categories" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select categories"
+            :maxSelectedLabels="10"  />
+                   
+                </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Select Product Brand </label> 
                        
@@ -138,6 +144,7 @@
                             </template>
                         </Dropdown>
                     </div>
+
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
                         <InputText class="form-control" type="text"  v-model="product_code"/>
@@ -202,6 +209,12 @@
                             </template>
                         </Dropdown>
                     </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Categories </label> 
+                    <MultiSelect v-model="categories" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select categories"
+            :maxSelectedLabels="10"  />
+                   
+                </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
                         <InputText class="form-control" type="text"  v-model="product_code"/>
@@ -257,6 +270,7 @@
      const category_id = ref('')
      const product_code = ref()
      const price = ref()
+     const categories = ref()
      const toast = useToast()
      const imageFiles = ref([])
      const shop_brand_list:any = ref()
@@ -359,6 +373,7 @@
       product_code.value = product.data.product_code
       selectedProductId.value = product.data.id
       product_brand_id.value = product.data.product_brand_id
+      categories.value = product.data.categories
       product_modal.value = true
      
 }
@@ -439,6 +454,7 @@
         category_id.value = "",
         product_brand_id.value = "",
         product_code.value = "" 
+        categories.value = ''
         imageFiles.value = []
 
     }
@@ -482,6 +498,7 @@
       formData.append('category_id', category_id.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
+      formData.append('categories', categories.value);
       console.log('form',formData)
    
       if (imageFiles.value) {
@@ -521,6 +538,7 @@
       formData.append('category_id', category_id.value);
       formData.append('product_code', product_code.value);
       formData.append('product_brand_id', product_brand_id.value);
+      formData.append('categories', categories.value);
       console.log('form',formData)
    
       if (imageFiles.value) {
