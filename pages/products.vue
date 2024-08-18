@@ -120,7 +120,7 @@
                     <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Categories </label> 
                     <MultiSelect v-model="categories" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select categories"
-            :maxSelectedLabels="10"  />
+                    :maxSelectedLabels="10"  />
                    
                 </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
