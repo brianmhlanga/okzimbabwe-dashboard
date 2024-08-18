@@ -97,7 +97,7 @@
                         <input type="file" accept="image/jpeg, image/png, image/jpg" @change="handleFileChange">
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
-                        <label for="company_name" class="font-medium text-900">Select category </label> 
+                        <label for="company_name" class="font-medium text-900">Select main  category </label> 
                         
                         <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
                             <template #value="slotProps">
@@ -168,7 +168,7 @@
                         <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
-                        <label for="company_name" class="font-medium text-900">Select category </label> 
+                        <label for="company_name" class="font-medium text-900">Select main category </label> 
                         
                         <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
                             <template #value="slotProps">
