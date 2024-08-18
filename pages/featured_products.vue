@@ -112,7 +112,9 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product </label> 
-                    <Dropdown v-model="product_id" :options="products" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                   
+                    <MultiSelect v-model="product_id" :options="products" filter optionLabel="name" optionValue="id" placeholder="Select product"
+                    :maxSelectedLabels="10"  />
                 </div>
                
                
