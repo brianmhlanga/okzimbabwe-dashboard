@@ -504,6 +504,7 @@
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
+        refresh_data()
         product_modal.value = false
         // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         //     shop_brand_list.value = data.data.data.data.shopbrands

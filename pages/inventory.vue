@@ -231,7 +231,7 @@ const createInventory = async () => {
     const result = await shopBrandsStore.createInventory(data);
     console.log('result',result.data.success)
 
-    if (result.data.success) {
+    if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Inventory Successfully Created', life: 3000 });
         addLineItem.value = false;
     } else {
