@@ -367,13 +367,18 @@
      });
      
      const showProduct = async(product:any) => {
+      console.log('Product',product)
       name.value = product.data.name;
       description.value = product.data.description
       category_id.value = product.data.category_id
       product_code.value = product.data.product_code
       selectedProductId.value = product.data.id
       product_brand_id.value = product.data.product_brand_id
-      categories.value = product.data.categories
+      categories.value = product.data.categories.map(category => {
+    return category.id
+    
+});
+console.log('categories',categories.value)
       product_modal.value = true
      
 }
