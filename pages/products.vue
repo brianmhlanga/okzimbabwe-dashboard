@@ -270,7 +270,7 @@
      const category_id = ref('')
      const product_code = ref()
      const price = ref()
-     const categories = ref()
+     const categories:any = ref([])
      const toast = useToast()
      const imageFiles = ref([])
      const shop_brand_list:any = ref()
@@ -489,16 +489,20 @@
     }
     };
     const createProduct = async () => {
-        console.log('simba')
+        console.log('simba',categories.value)
       
       const url = `${SHOPIFY_URL}/api/products`;
+
       const formData = new FormData();
       formData.append('name', name.value);
       formData.append('description', description.value);
       formData.append('category_id', category_id.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
-      formData.append('categories', categories.value);
+    
+      categories.value.forEach((file, index) => {
+    formData.append(`categories[${index}]`, file);
+  })
       console.log('form',formData)
    
       if (imageFiles.value) {
@@ -538,7 +542,9 @@
       formData.append('category_id', category_id.value);
       formData.append('product_code', product_code.value);
       formData.append('product_brand_id', product_brand_id.value);
-      formData.append('categories', categories.value);
+      categories.value.forEach((file, index) => {
+    formData.append(`categories[${index}]`, file);
+  })
       console.log('form',formData)
    
       if (imageFiles.value) {
