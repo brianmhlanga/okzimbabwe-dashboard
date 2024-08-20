@@ -885,6 +885,76 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
+       async getUsers() {
+        let url = new URL(`${SHOPIFY_URL}/api/users`)
+        const params:any = {
+            per_page: "100",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+           method: 'GET',
+           url: url,
+           headers: { 
+            "Authorization": `Bearer ${token}`,
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+        },
+        async getShoppingCart() {
+            let url = new URL(`${SHOPIFY_URL}/api/carts`)
+            const params:any = {
+                per_page: "100",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            const token = useCookie('token').value || ""
+            var config:any = {
+               method: 'GET',
+               url: url,
+               headers: { 
+                "Authorization": `Bearer ${token}`,
+                   'Accept': '/',
+                   'Cache-Control': 'no-cache',
+                  
+               },
+              
+           }; 
+           const result = await axios(config).then(function (response) { 
+               console.log(JSON.stringify(response.data));
+               return {
+                   data: response.data,
+                   success: true
+               }
+           }).catch(function (error) {
+               console.log(error);
+               return {
+                   success: false
+               }
+           });
+    
+           return result;
+            },
        async getProductsPagination(page:any) {
         let url = new URL(`${SHOPIFY_URL}/api/products?page=${page}`)
           const token = useCookie('token').value || ""
