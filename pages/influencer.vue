@@ -34,11 +34,23 @@
                         <InputText class="form-control" type="text"  v-model="whatsapp_number"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-12"> 
-                        <label  for="company_name" class="font-medium text-900">Phone Number</label> 
+                        <label  for="company_name" class="font-medium text-900">Mobile</label> 
                         <InputText class="form-control" type="text"  v-model="phone_number"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
-                        <label  for="company_name" class="font-medium text-900">Discount Type</label> 
+                        <label  for="company_name" class="font-medium text-900">Contact Person</label> 
+                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Contact Number</label> 
+                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Address</label> 
+                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">City</label> 
                         <InputText class="form-control" type="text"  v-model="discount_type"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-6"> 

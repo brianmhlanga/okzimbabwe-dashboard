@@ -29,7 +29,7 @@
                                     </template>
                                     <Column  frozen field="name" header="User" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.user?data.user.name:'Not Set'}}
+                                            {{data.user?data.user.name:'Guest User'}}
                                         </template>
                                     </Column>
                                     <Column frozen  field="description" header="Status" style="min-width:12rem">

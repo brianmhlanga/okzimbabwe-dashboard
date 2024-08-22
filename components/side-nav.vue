@@ -84,7 +84,8 @@ const mainMenuItems = ref([
             { label: 'Pending Orders', icon: 'pi pi-clock' },
             { label: 'Completed Orders', icon: 'pi pi-check' },
             { label: 'Cancelled Orders', icon: 'pi pi-times' },
-            { label: 'View Cart', icon: 'pi pi-eye' },
+            { label: 'View Cart', icon: 'pi pi-eye',command:()=>{
+                navigateTo('/cart'); }},
             { label: 'Manage Discounts', icon: 'pi pi-percentage' },
             { label: 'Checkout', icon: 'pi pi-check' }
         ]
@@ -148,6 +149,8 @@ const mainMenuItems = ref([
         items: [
             { label: 'User Management', icon: 'pi pi-users' ,command:()=>{
                 navigateTo('/signup');}},
+            { label: 'View Users', icon: 'pi pi-eye' ,command:()=>{
+                    navigateTo('/users');}},
             { label: 'Roles & Permissions', icon: 'pi pi-key' },
             { label: 'Access Control', icon: 'pi pi-shield' },
             { label: 'System Logs', icon: 'pi pi-file' },
