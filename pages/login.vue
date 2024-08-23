@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <button   type="submit" class="btn btn-lg btn-primary w-100">Login</button>
+                                <button :loading="loading"  type="submit" class="btn btn-lg btn-primary w-100">Login</button>
                             </div>
                         </form>
                         <div class="w-100 mt-5 text-center mx-auto">
