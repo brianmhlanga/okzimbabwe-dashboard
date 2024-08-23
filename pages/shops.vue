@@ -142,8 +142,8 @@
                     <InputText class="form-control" type="text" v-model="contact_email" />
                 </div>
             </div>
-            <div v-if="editing_shop"><Button @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
-            <div v-else-if="shop_creating"><Button @click="createShop()" label="Add Shop" icon="pi pi-plus" /></div>
+            <div v-if="editing_shop"><Button :loading="loading" @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
+            <div v-else-if="shop_creating"><Button :loading="loading" @click="createShop()" label="Add Shop" icon="pi pi-plus" /></div>
             
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
@@ -161,6 +161,7 @@ const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
 const allCategories = ref([]);
+const loading = ref(false)
 const shop_brand_id = ref();
 const name = ref();
 const address = ref();
@@ -261,6 +262,7 @@ const showShop = async(shop_data:any) => {
 }
 
 const updateShop = async () => {
+    loading.value = true
     const data = {
         id: shop_id.value,
         shop_brand_id: shop_brand_id.value,
@@ -277,6 +279,7 @@ const updateShop = async () => {
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Updated', life: 3000 });
+        loading.value = false
         const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
         
@@ -285,6 +288,7 @@ const updateShop = async () => {
     editing_shop.value = false
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Updating Failed', life: 3000 });
+        loading.value = false
     }
 };
 const selectShop = async (shopIDD:any) => {
@@ -338,6 +342,7 @@ const createShop = async () => {
 
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Created', life: 3000 });
+        loading.value = false
         addLineItem.value = false;
         const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
@@ -345,6 +350,7 @@ const createShop = async () => {
     });
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false
     }
 };
 
