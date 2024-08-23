@@ -151,7 +151,7 @@
                     </div>
                     
                 </div>
-                <Button @click="createProduct()" label="Create Product" icon="pi pi-plus" />
+                <Button :loading="loading" @click="createProduct()" label="Create Product" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="product_modal" maximizable modal header="Update Product" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
@@ -221,7 +221,7 @@
                     </div>
                     
                 </div>
-                <Button @click="updateProduct()" label="Update Product" icon="pi pi-plus" />
+                <Button :loading="loading" @click="updateProduct()" label="Update Product" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="add_price" modal header="Add Price" :style="{ width: '25rem' }">
             <span class="text-center block mb-5">{{selectedProduct}}</span>
@@ -239,7 +239,7 @@
             
             <div class="flex justify-content-end gap-2">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-                <Button type="button" label="Save" @click="addPrice()"></Button>
+                <Button :loading="loading" type="button" label="Save" @click="addPrice()"></Button>
             </div>
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
@@ -265,6 +265,7 @@
      const name = ref('')
      const product_modal = ref()
      const product_brand_id = ref()
+     const loading = ref(false)
      const description = ref()
      const is_active = ref('')
      const category_id = ref('')
@@ -395,6 +396,7 @@ console.log('categories',categories.value)
     }
      
     const deleteProduct = (product:any) => {
+        loading.value = true
       let data = {
         "id": product.data.id
       }
@@ -410,13 +412,15 @@ console.log('categories',categories.value)
         accept: async() => {
             let result = await shopBrandsStore.deleteProduct(data)
             if (result.data.success){
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });false
+            loading.value = false
             await shopBrandsStore.getAllProducts().then((data:any)=>{
                 categories_list.value = data.data.data.products
             })
             }
             else{
                 toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
+                loading.value = false
             }
         },
         reject: () => {
@@ -426,7 +430,7 @@ console.log('categories',categories.value)
 }
     const addPrice = async () =>{
        
-         
+        loading.value = true
             
             let data = {
                 product_id : selectedProductId.value,
@@ -441,11 +445,13 @@ console.log('categories',categories.value)
  
             if (result.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Price Succesfully Added', life: 3000});
+                loading.value = false
                 addLineItem.value = false
             }
         
             else {
                 toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+                loading.value = false
             }
         } 
         
@@ -495,6 +501,7 @@ console.log('categories',categories.value)
     };
     const createProduct = async () => {
         console.log('simba',categories.value)
+        loading.value = true
       
       const url = `${SHOPIFY_URL}/api/products`;
 
@@ -523,6 +530,7 @@ console.log('categories',categories.value)
           },
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product Created Successfully', life: 3000 });
+        loading.value = false
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
@@ -535,10 +543,12 @@ console.log('categories',categories.value)
         console.log('error', error)
        
         toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
+        loading.value = false
       }
     };
     const updateProduct = async () => {
         console.log('simba')
+        loading.value = true
       
       const url = `${SHOPIFY_URL}/api/products/edit/${selectedProductId.value}`;
       const formData = new FormData();
@@ -565,6 +575,7 @@ console.log('categories',categories.value)
           },
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+        loading.value = false
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
@@ -575,7 +586,7 @@ console.log('categories',categories.value)
         // })
       } catch (error:any) {
         console.log('error', error)
-       
+        loading.value = false
         toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
       }
     };

@@ -322,6 +322,7 @@ onMounted(async () => {
 });
 
 const createShop = async () => {
+    loading.value = true
     const data = {
         shop_brand_id: shop_brand_id.value,
         name: name.value,

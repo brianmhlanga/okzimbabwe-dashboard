@@ -77,6 +77,7 @@
 import Password from "primevue/password";
  const confirm = useConfirm();
  const shopBrandsStore = useShopBrandsStore()
+ 
  const name = ref()
  const email = ref()
  const password = ref()
@@ -106,6 +107,7 @@ import Password from "primevue/password";
      console.log('my brand id',data.id)
  }
  const signup = async () => {
+  loading.value = true
     const data = {
     
         name: name.value,
@@ -119,10 +121,12 @@ import Password from "primevue/password";
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'User Successfully Created', life: 3000 });
+        loading.value = false
         addLineItem.value = false;
         
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = true
     }
 };
  
