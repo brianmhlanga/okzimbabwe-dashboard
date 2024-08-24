@@ -434,7 +434,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
-                url: '/discounts/add_discounts',
+                url: '/discounts/add_discount',
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -1210,6 +1210,41 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+        async getInfluencers() {
+            let url = new URL(`${SHOPIFY_URL}/api/influencers`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            const token = useCookie('token').value || ""
+            var config:any = {
+                method: 'GET',
+                url: url,
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+    
+            return result;
+            },
         async fetchAllCategories() {
             let page = 1;
             let per_page = 10;
@@ -1246,7 +1281,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             }
         
             // Uncomment this line if you want to filter parent categories
-            this.parentCategories = this.allCategories.filter(category => category.is_parent == true);
+            
         
             console.log('All Categories:', this.allCategories);
             console.log('Parent Categories:', this.parentCategories);

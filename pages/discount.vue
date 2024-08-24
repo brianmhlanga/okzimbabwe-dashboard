@@ -87,11 +87,11 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Influencer</label> 
-                    <Dropdown v-model="influencer_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select Influencer" >
+                    <Dropdown v-model="influencer_id" :options="influencer_list" filter optionLabel="name" optionValue="id" placeholder="Select Influencer" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ influencer_list.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -108,11 +108,11 @@
                
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product</label> 
-                    <Dropdown v-model="product_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select product" >
+                    <Dropdown v-model="product_id" :options="product_list" filter optionLabel="name" optionValue="id" placeholder="Select product" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ product_list.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -128,11 +128,11 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Discount Type </label> 
-                    <Dropdown v-model="discount_type_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select discount type" >
+                    <Dropdown v-model="discount_type_id" :options="discount_type_list" filter optionLabel="name" optionValue="id" placeholder="Select discount type" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ discount_type_list.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -149,11 +149,11 @@
                
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop Brand</label> 
-                    <Dropdown v-model="shop_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select Shop Brand" >
+                    <Dropdown v-model="shop_id" :options="shop_brand_list" filter optionLabel="name" optionValue="id" placeholder="Select Shop Brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ shop_brand_list.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -189,11 +189,11 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product Brand</label> 
-                    <Dropdown v-model="product_brand_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select product brand" >
+                    <Dropdown v-model="product_brand_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select product brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -213,11 +213,11 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Start Date</label> 
-                    <InputText class="form-control" type="text" v-model="code" />
+                    <Calendar v-model="starts_at" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Expiry Date</label> 
-                    <InputText class="form-control" type="text" v-model="code" />
+                    <Calendar v-model="expires_at" />
                 </div>
                 
             </div>
@@ -252,12 +252,13 @@ import { storeToRefs } from 'pinia';
 import { useShopBrandsStore } from '~/stores/shopBrands';
 import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
+import Product_brands from './product_brands.vue';
 const confirm = useConfirm();
 const shopBrandsStore = useShopBrandsStore();
-const { parentCategories } = storeToRefs(shopBrandsStore);
+const allCategories = storeToRefs(shopBrandsStore).allCategories;
 const toast = useToast()
 const loading = ref(false);
-const allCategories = ref([]);
+
 const all_products = ref([]);
 const all_currencies = ref([])
 const all_shops = ref([])
@@ -272,9 +273,13 @@ const value = ref()
 const starts_at = ref()
 const expires_at = ref()
 const address = ref();
+const influencer_list = ref()
+const product_list = ref()
 const shop_brand_list = ref();
 const product_id = ref()
 const symbol = ref()
+const product_brands_list = ref()
+const discount_type_list = ref()
 const currency_id = ref()
 const quantity = ref()
 const update_visibility = ref(false)
@@ -317,28 +322,30 @@ const clearFilter1 = () => {
 };
 
 onMounted(async () => {
-    await shopBrandsStore.getAllCurrencies().then((data:any)=>{
-            all_currencies.value = data.data.data.currencies
-        })
-    await shopBrandsStore.getAllShops().then((data:any)=>{
-          console.log('my shops',data.data)
-          all_shops.value = data.data.data.shops
-    })
+   
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
-        items.value = shop_brand_list.value.map((brand) => ({
-        label: `${brand.name}`,  // Customize label as needed
-        icon: `${brand.image}`,
-            command: () => {
-                toast.add({ severity: 'success', summary: 'Selected', detail: `${brand.name}`, life: 3000 });
-            }
-        }));
+       
     });
-    await shopBrandsStore.getAllCategories().then((data) => {
+    await shopBrandsStore.getAllCategories().then((data:any) => {
         categories_list.value = data.data.data.categories;
     });
-    await shopBrandsStore.fetchAllCategories().then((data) => {
-        allCategories.value.push(...data.data.categories);
+    await shopBrandsStore.getAllProducts().then((data:any) => {
+        product_list.value = data.data.data.products;
+    });
+    await shopBrandsStore.getInfluencers().then((data:any) => {
+        influencer_list.value = data.data.data.data;
+    });
+    await shopBrandsStore.get_all_discount_types().then((data:any) => {
+        discount_type_list.value = data.data.data.discounts;
+    });
+    await shopBrandsStore.get_product_brands().then((data:any) => {
+        product_brands_list.value = data.data.data.data;
+    });
+    
+    
+    await shopBrandsStore.fetchAllCategories().then((data:any) => {
+        
     });
 });
 
@@ -412,16 +419,23 @@ const editCurrency = async () => {
 const addCurrency = async () => {
     loading.value = true;
     const data = {
-        name : name.value,
-        iso_code :iso_code.value,
-        symbol : symbol.value
-        
+       name: name.value,
+       code: code.value,
+       influencer_id: influencer_id.value,
+       discount_type_id: discount_type_id.value,
+       product_id: product_id.value,
+       shop_id: shop_id.value,
+       category_id: category_id.value,
+       product_brand_id: product_brand_id.value,
+       value: value.value,
+       starts_at: starts_at.value,
+       expires_at: expires_at.value
     }
-    const result = await shopBrandsStore.addCurrency(data);
+    const result = await shopBrandsStore.addDiscount(data);
     console.log('result',result.data.success)
 
     if (result.data.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Currency Successfully Added', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Discount Successfully Added', life: 3000 });
         loading.value = false;
         await shopBrandsStore.getAllCurrencies().then((data:any)=>{
             all_currencies.value = data.data.data.currencies

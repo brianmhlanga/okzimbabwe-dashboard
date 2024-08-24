@@ -38,7 +38,7 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log(error);
+        console.log("error",error.resposne);
         return {    
             success: false,
             error: error.message
