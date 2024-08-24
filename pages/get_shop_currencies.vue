@@ -14,12 +14,12 @@
                     <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
                
-                <div ><Button @click="getFeaturedProduct()" label="Get Shop Currencies" icon="pi pi-plus" /></div>
+                <div ><Button :loading="loading" @click="getFeaturedProduct()" label="Get Shop Currencies" icon="pi pi-plus" /></div>
                 <div  class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Currency</label> 
                     <Dropdown v-model="shop_brand_id" :options="shop_curriences" optionLabel="currency.name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
-                <div ><Button @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
+                <div ><Button :loading="loading" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
 
                     
                            
@@ -92,6 +92,7 @@ const referenced_id = ref()
 const product_id = ref()
 const is_shop_brand = ref()
 const shop_curriences = ref()
+const loading = ref(false)
 const featured_product_list:any = ref([])
 const number_of_categories = ref();
 const addLineItem = ref(false);
@@ -252,7 +253,7 @@ onMounted(async () => {
 
 const getFeaturedProduct = async () => {
    
-    
+      loading.value = true
     
     console.log('is shop brand',shop_brand.value)
     const result:any = await shopBrandsStore.get_shop_currencies(shop_brand_id.value);
@@ -264,13 +265,15 @@ const getFeaturedProduct = async () => {
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Featured Product Successfully Added', life: 3000 });
         addLineItem.value = false;
+        loading.value = false
        
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false
     }
 };
 const create_default_currency = async () => {
-   
+   loading.value = true
     const data = {
         shop_brand_id: shop_brand_id.value
     }
@@ -283,9 +286,11 @@ const create_default_currency = async () => {
    if (result.success) {
        toast.add({ severity: 'success', summary: 'Success', detail: 'Default Currency Successfully Added', life: 3000 });
        addLineItem.value = false;
+       loading.value = false
       
    } else {
        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+       loading.value = false
    }
 };
 
