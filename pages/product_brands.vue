@@ -62,11 +62,13 @@
         name: name.value,
        
     };
+    loading.value = true
     const result = await shopBrandsStore.createProductBrand(data);
     console.log('result',result.data.success)
 
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product Brand Successfully Created', life: 3000 });
+        loading.value = false
         addLineItem.value = false;
         const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
@@ -74,6 +76,7 @@
     });
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false
     }
 };
  const shopBrandModal = (data:any)=>{
@@ -84,7 +87,7 @@
      console.log('my brand id',data.id)
  }
  const updateShopBrand = async ()=>{
-    
+    loading.value = true
      const url = `${SHOPIFY_URL}/api/shop-brands/${shop_id.value}`;
      const formData = new FormData();
      formData.append('name', name.value);

@@ -91,7 +91,7 @@
                     </div>
         
                 </div>
-                <Button @click="createCategory()" label="Create Category" icon="pi pi-plus" />
+                <Button :loading="loading" @click="createCategory()" label="Create Category" icon="pi pi-plus" />
         </Dialog>
  
     </NuxtLayout>
@@ -109,6 +109,7 @@
      const is_parent = ref('')
      const is_sub_parent = ref('')
      const is_active = ref('')
+     const loading = ref(false)
      const parent_category_id = ref('')
      const toast = useToast()
      const shop_brand_list = ref()
@@ -199,21 +200,25 @@
                 is_active: is_active.value,
          
             }
+            loading.value = true
             let result = await shopBrandsStore.createCategory(data)
             console.log('my result',result)
  
             if (result.data.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
+                loading.value = false
                 addLineItem.value = false
                 refresh_data()
             }
         
             else {
                 toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+                loading.value = false
             }
         } 
         
         else {
+            loading.value = true
             let data = {
                 name: name.value,
                 is_parent: is_parent.value,
@@ -228,12 +233,14 @@
  
          if (result.data.success) {
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
+             loading.value = false
              addLineItem.value = false
              refresh_data()
          }
 
          else {
              toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+             loading.value = false
          }
 
         }

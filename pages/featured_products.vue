@@ -121,7 +121,7 @@
                
             </div>
             <div v-if="editing_shop"><Button @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
-            <div v-else-if="shop_creating"><Button @click="addFeaturedProduct()" label="Add Featured Product" icon="pi pi-plus" /></div>
+            <div v-else-if="shop_creating"><Button :loading="loading"  @click="addFeaturedProduct()" label="Add Featured Product" icon="pi pi-plus" /></div>
             
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
@@ -151,6 +151,7 @@ const selected_reference_type = ref()
 const shops_list:any = ref([])
 const contact_number = ref();
 const contact_email = ref();
+const loading = ref(false)
 const shop_creating = ref(false)
 const categories_list = ref([]);
 const editing_shop = ref(false)
@@ -313,6 +314,7 @@ const addFeaturedProduct = async () => {
     else{
         is_shop_brand.value = false
     }
+    loading.value = true
     const data = {
         is_shop_brand: is_shop_brand.value,
         product_id: product_id.value,
@@ -323,6 +325,7 @@ const addFeaturedProduct = async () => {
 
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Featured Product Successfully Added', life: 3000 });
+        loading.value = false
         addLineItem.value = false;
         const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
@@ -330,6 +333,7 @@ const addFeaturedProduct = async () => {
     });
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false
     }
 };
 

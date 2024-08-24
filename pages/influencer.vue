@@ -35,35 +35,28 @@
                     </div>
                     <div class="field mb-4 col-6 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Mobile</label> 
-                        <InputText class="form-control" type="text"  v-model="phone_number"/>
+                        <InputText class="form-control" type="text"  v-model="mobile"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Contact Person</label> 
-                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                        <InputText class="form-control" type="text"  v-model="contact_person"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Contact Number</label> 
-                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                        <InputText class="form-control" type="text"  v-model="contact_number"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Address</label> 
-                        <InputText class="form-control" type="text"  v-model="discount_type"/>
+                        <InputText class="form-control" type="text"  v-model="address"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">City</label> 
-                        <InputText class="form-control" type="text"  v-model="discount_type"/>
-                    </div>
-                    <div class="field mb-4 col-12 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Start Date</label> 
-                        <Calendar v-model="start_date" />
-                    </div>
-                    <div class="field mb-4 col-12 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">End Date</label> 
-                        <Calendar v-model="end_date" />
+                        <InputText class="form-control" type="text"  v-model="city"/>
                     </div>
                     
+                    
                 </div>
-                <Button @click="createProduct()" label="Apply   " icon="pi pi-plus" />
+                <Button :loading="loading" @click="createInflencer()" label="Create Influencer" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="product_modal" maximizable modal header="Update Product" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
@@ -132,11 +125,17 @@
      const email = ref('')
      const whatsapp_number = ref('')
      const phone_number = ref('')
+     const contact_number = ref()
+     const contact_person = ref()
      const product_modal = ref()
+     const address = ref()
+     const city = ref()
+     const mobile = ref()
      const start_date = ref()
      const end_date = ref()
      const discount_type = ref()
      const is_active = ref('')
+     const loading = ref(false)
      const category_id = ref('')
      const product_code = ref()
      const price = ref()
@@ -329,32 +328,33 @@
         return date.toLocaleString('en-US', options);
     };
   
-    const handleFileChange = (event:any) => {
-    const file = event.target.files[0];
-    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
-    if (file && acceptedTypes.includes(file.type)) {
-        imageFiles.value.push(file) 
-    } else {
-        toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
-        imageFiles.value = null;
+    const refresh = ()=>{
+        name.value = '',
+        email.value = "",
+        mobile.value = "",
+        contact_number.value = "",
+        contact_person.value = "",
+        address.value = "",
+        whatsapp_number.value = "",
+        city.value = ""
+
     }
-    };
-    const createProduct = async () => {
+
+    const createInflencer = async () => {
+        loading.value = true
         console.log('simba')
       
-      const url = `${SHOPIFY_URL}/api/products`;
+      const url = `${SHOPIFY_URL}/api/influencers`;
       const formData = new FormData();
       formData.append('name', name.value);
-      formData.append('description', description.value);
-      formData.append('category_id', category_id.value);
-      formData.append('product_code', product_code.value);
+      formData.append('mobile', mobile.value);
+      formData.append('email', email.value);
+      formData.append('city', city.value);
+      formData.append('address', address.value);
+      formData.append('contact_person', contact_person.value);
+      formData.append('contact_number', contact_number.value);
+      formData.append('whatsapp_number', whatsapp_number.value);
       console.log('form',formData)
-   
-      if (imageFiles.value) {
-        imageFiles.value.forEach((file, index) => {
-    formData.append(`images[${index}]`, file);
-  });
-      }
       try {
         const response = await axios.post(url, formData, {
           headers: {
@@ -362,18 +362,16 @@
             'Accept': '*/*'
           },
         });
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
-        await shopBrandsStore.getAllProducts().then((data:any)=>{
-            categories_list.value = data.data.data.products
-        })
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Influencer Created Successfully', life: 3000 });
+        loading.value = false
         addLineItem.value = false
-        // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
-        //     shop_brand_list.value = data.data.data.data.shopbrands
-        // })
+        refresh()
+       
       } catch (error:any) {
         console.log('error', error)
        
-        toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
+        toast.add({ severity: 'error', summary: 'Creation Failed', detail: error, life: 3000 });
+        loading.value = false
       }
     };
     const updateProduct = async () => {
