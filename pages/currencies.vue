@@ -12,7 +12,7 @@
                             </div>
                              <div class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="all_currencies" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
-                                           dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
+                                           dataKey="id" v-model:filters="filters" filterDisplay="menu"  responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
                                            
@@ -91,7 +91,7 @@
                 </div>
                 
             </div>
-            <Button @click="addCurrency()" label="Add Currency" icon="pi pi-plus" />
+            <Button :loading="loading" @click="addCurrency()" label="Add Currency" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="update_visibility" maximizable modal header="Update Currency" position="top" :style="{ width: '55vw' }">
             <div class="grid formgrid p-fluid">
@@ -109,7 +109,7 @@
                 </div>
                 
             </div>
-            <Button @click="editCurrency()" label="Update Currency" icon="pi pi-plus" />
+            <Button :loading="loading" @click="editCurrency()" label="Update Currency" icon="pi pi-plus" />
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
      
@@ -126,6 +126,7 @@ const confirm = useConfirm();
 const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
+const loading = ref(false);
 const allCategories = ref([]);
 const all_products = ref([]);
 const all_currencies = ref([])
@@ -243,6 +244,7 @@ const showCurrency = async(currency:any) => {
 }
 const editCurrency = async () => {
     console.log('simbilimbi', )
+    loading.value = true;
     const data = {
         id: currency_id.value,
         name : name.value,
@@ -256,18 +258,21 @@ const editCurrency = async () => {
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Currency Successfully Added', life: 3000 });
+        loading.value = false;
         await shopBrandsStore.getAllCurrencies().then((data:any)=>{
             all_currencies.value = data.data.data.currencies
         })
         update_visibility.value = false;
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false;
     }
 
 };
 
  
 const addCurrency = async () => {
+    loading.value = true;
     const data = {
         name : name.value,
         iso_code :iso_code.value,
@@ -279,12 +284,14 @@ const addCurrency = async () => {
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Currency Successfully Added', life: 3000 });
+        loading.value = false;
         await shopBrandsStore.getAllCurrencies().then((data:any)=>{
             all_currencies.value = data.data.data.currencies
         })
         addLineItem.value = false;
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false;
     }
 
 };
