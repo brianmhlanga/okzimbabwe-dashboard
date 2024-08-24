@@ -145,7 +145,8 @@ const mainMenuItems = ref([
             
             { label: 'Discounts', icon: 'pi pi-percentage',command:()=>{
                 navigateTo('/discount');} },
-            { label: 'Discount Types', icon: 'pi pi-percentage' },
+            { label: 'Discount Types', icon: 'pi pi-percentage',command:()=>{
+                navigateTo('/discount_type');} },
             { label: 'Addresses', icon: 'pi pi-map' },
             { label: 'Shipping Methods', icon: 'pi pi-truck' }
         ]
