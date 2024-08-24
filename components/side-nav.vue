@@ -138,7 +138,14 @@ const mainMenuItems = ref([
             { label: 'Payment Methods', icon: 'pi pi-credit-card' },
             { label: 'Currencies', icon: 'pi pi-money-bill' ,command:()=>{
                 navigateTo('/currencies');}},
-            { label: 'Discounts', icon: 'pi pi-percentage' },
+            { label: 'Shop Brand Currencies', icon: 'pi pi-money-bill' ,command:()=>{
+                navigateTo('/brand_currency');}},
+            { label: 'Default Currency', icon: 'pi pi-money-bill' ,command:()=>{
+                navigateTo('/default_currency');}},
+            
+            { label: 'Discounts', icon: 'pi pi-percentage',command:()=>{
+                navigateTo('/discount');} },
+            { label: 'Discount Types', icon: 'pi pi-percentage' },
             { label: 'Addresses', icon: 'pi pi-map' },
             { label: 'Shipping Methods', icon: 'pi pi-truck' }
         ]
