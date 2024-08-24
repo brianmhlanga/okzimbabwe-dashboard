@@ -87,7 +87,7 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Influencer</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                    <Dropdown v-model="influencer_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select Influencer" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
@@ -105,29 +105,10 @@
                             </template>
                         </Dropdown>
                 </div>
-                <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Discount Type</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex align-items-center">
-                                
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                        </Dropdown>
-                </div>
+               
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                    <Dropdown v-model="product_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select product" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
@@ -146,8 +127,8 @@
                         </Dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Shop</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                    <label for="company_name" class="font-medium text-900">Discount Type </label> 
+                    <Dropdown v-model="discount_type_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select discount type" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
@@ -165,9 +146,10 @@
                             </template>
                         </Dropdown>
                 </div>
+               
                 <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Product</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                    <label for="company_name" class="font-medium text-900">Select Shop Brand</label> 
+                    <Dropdown v-model="shop_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select Shop Brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
@@ -207,7 +189,7 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Product Brand</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                    <Dropdown v-model="product_brand_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select product brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
@@ -227,23 +209,7 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Value</label> 
-                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex align-items-center">
-                                
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                        </Dropdown>
+                    <InputText class="form-control" type="text" v-model="value" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Start Date</label> 
@@ -295,8 +261,16 @@ const allCategories = ref([]);
 const all_products = ref([]);
 const all_currencies = ref([])
 const all_shops = ref([])
-const iso_code = ref();
+const code = ref();
 const name = ref();
+const influencer_id = ref()
+const discount_type_id = ref()
+const shop_id = ref()
+const category_id = ref()
+const product_brand_id = ref()
+const value = ref()
+const starts_at = ref()
+const expires_at = ref()
 const address = ref();
 const shop_brand_list = ref();
 const product_id = ref()
