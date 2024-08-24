@@ -4,6 +4,7 @@ import { SHOPIFY_URL} from "~~/services/global.variables";
 import type getAllProducts from "~/server/routes/Products/getAllProducts";
 import type signup from "~/server/routes/auth/signup";
 import type discount_type from "~/server/routes/discounts/discount_type";
+import type shop_default_currency from "~/server/routes/currencies/shop_default_currency";
 
 
 
@@ -427,6 +428,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async shop_default_currency(info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/currencies/shop_default_currency',
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async addDiscount(info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -798,6 +829,42 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
        return result;
    },
+   async get_shop_currencies(id:any) {
+    let url = new URL(`${SHOPIFY_URL}/api/shop-currencies`)
+    const params:any = {
+        shop_brand_id: id,
+        per_page: "10",
+    };
+    Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+    );
+    const token = useCookie('token').value || ""
+    var config:any = {
+       method: 'GET',
+       url: url,
+       headers: { 
+         "Authorization": `Bearer ${token}`,
+           'Accept': '/',
+           'Cache-Control': 'no-cache',
+          
+       },
+      
+   }; 
+   const result = await axios(config).then(function (response) { 
+       console.log(JSON.stringify(response.data));
+       return {
+           data: response.data,
+           success: true
+       }
+   }).catch(function (error) {
+       console.log(error);
+       return {
+           success: false
+       }
+   });
+
+   return result;
+},
        async get_product_brands() {
         let url = new URL(`${SHOPIFY_URL}/api/product-brands`)
         const params:any = {
@@ -1041,6 +1108,41 @@ export const useShopBrandsStore = defineStore('shopBrands', {
   
            return result;
        },
+       async getOrders() {
+        let url = new URL(`${SHOPIFY_URL}/api/orders`)
+        const params:any = {
+            per_page: "100",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+           method: 'GET',
+           url: url,
+           headers: { 
+            "Authorization": `Bearer ${token}`,
+               'Accept': '/',
+               'Cache-Control': 'no-cache',
+              
+           },
+          
+       }; 
+       const result = await axios(config).then(function (response) { 
+           console.log(JSON.stringify(response.data));
+           return {
+               data: response.data,
+               success: true
+           }
+       }).catch(function (error) {
+           console.log(error);
+           return {
+               success: false
+           }
+       });
+
+       return result;
+   },
        async getUsers() {
         let url = new URL(`${SHOPIFY_URL}/api/users`)
         const params:any = {

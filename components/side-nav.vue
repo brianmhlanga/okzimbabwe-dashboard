@@ -81,7 +81,8 @@ const mainMenuItems = ref([
         icon: 'pi pi-shopping-cart',
         items: [
             { label: 'New Orders', icon: 'pi pi-plus-circle' },
-            { label: 'Pending Orders', icon: 'pi pi-clock' },
+            { label: 'Pending Orders', icon: 'pi pi-clock',command:()=>{
+                navigateTo('/orders'); } },
             { label: 'Completed Orders', icon: 'pi pi-check' },
             { label: 'Cancelled Orders', icon: 'pi pi-times' },
             { label: 'View Cart', icon: 'pi pi-eye',command:()=>{
@@ -140,6 +141,8 @@ const mainMenuItems = ref([
                 navigateTo('/currencies');}},
             { label: 'Shop Brand Currencies', icon: 'pi pi-money-bill' ,command:()=>{
                 navigateTo('/brand_currency');}},
+            { label: 'Shop Brand Default Currency', icon: 'pi pi-money-bill' ,command:()=>{
+                navigateTo('/get_shop_currencies');}},
             { label: 'Default Currency', icon: 'pi pi-money-bill' ,command:()=>{
                 navigateTo('/default_currency');}},
             

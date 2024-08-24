@@ -9,7 +9,7 @@ export default defineEventHandler(async (event)=>{
         "name": name,
         "code": code,
         "influencer_id": influencer_id,
-        "discount_type_type": discount_type_id,
+        "discount_type_id": discount_type_id,
         "product_id": product_id,
         "shop_id": shop_id,
         "category_id": category_id,
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log("error",error.resposne);
+        console.log("error",error.response.data);
         return {    
             success: false,
             error: error.message
