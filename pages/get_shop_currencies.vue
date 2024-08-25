@@ -3,7 +3,7 @@
         <section class="section">
             <div class="container-fluid pt-3">
                 <div class="row">
-                    <div class="text-900 font-medium text-xl mb-3">Featured Products</div>
+                    <div class="text-900 font-medium text-xl mb-3">Set Shop Default Currency</div>
                     <div>
                         <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
@@ -13,13 +13,14 @@
                     <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
                     <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
-               
-                <div ><Button :loading="loading" @click="getFeaturedProduct()" label="Get Shop Currencies" icon="pi pi-plus" /></div>
-                <div  class="field mb-4 col-12 md:col-6"> 
+                
+                <div  class="field mb-4 col-12 md:col-6" ><Button :loading="loading" @click="getFeaturedProduct()" label="Get Shop Currencies" icon="pi pi-plus" /></div>
+                <div class="border-right-1 col-12 md:col-6 surface-border" style="width: 1px; height: 50%;"></div>
+                <div v-if="shop_curriences" class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Currency</label> 
                     <Dropdown v-model="shop_brand_id" :options="shop_curriences" optionLabel="currency.name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
-                <div ><Button :loading="loading" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
+                <div class="field mb-4 col-12 md:col-6" v-if="shop_curriences"><Button :loading="loading1" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
 
                     
                            
@@ -93,6 +94,7 @@ const product_id = ref()
 const is_shop_brand = ref()
 const shop_curriences = ref()
 const loading = ref(false)
+const loading1 = ref(false)
 const featured_product_list:any = ref([])
 const number_of_categories = ref();
 const addLineItem = ref(false);
@@ -273,7 +275,7 @@ const getFeaturedProduct = async () => {
     }
 };
 const create_default_currency = async () => {
-   loading.value = true
+   loading1.value = true
     const data = {
         shop_brand_id: shop_brand_id.value
     }
@@ -286,11 +288,11 @@ const create_default_currency = async () => {
    if (result.success) {
        toast.add({ severity: 'success', summary: 'Success', detail: 'Default Currency Successfully Added', life: 3000 });
        addLineItem.value = false;
-       loading.value = false
+       loading1.value = false
       
    } else {
        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
-       loading.value = false
+       loading1.value = false
    }
 };
 

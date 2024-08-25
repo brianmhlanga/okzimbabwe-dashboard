@@ -138,13 +138,8 @@ const mainMenuItems = ref([
             { label: 'Security Settings', icon: 'pi pi-shield' },
             { label: 'Payment Methods', icon: 'pi pi-credit-card' },
             { label: 'Currencies', icon: 'pi pi-money-bill' ,command:()=>{
-                navigateTo('/currencies');}},
-            { label: 'Shop Brand Currencies', icon: 'pi pi-money-bill' ,command:()=>{
-                navigateTo('/brand_currency');}},
-            { label: 'Shop Brand Default Currency', icon: 'pi pi-money-bill' ,command:()=>{
-                navigateTo('/get_shop_currencies');}},
-            { label: 'Default Currency', icon: 'pi pi-money-bill' ,command:()=>{
-                navigateTo('/default_currency');}},
+                navigateTo('/currency_dashboard');}},
+           
             
             { label: 'Discounts', icon: 'pi pi-percentage',command:()=>{
                 navigateTo('/discount');} },
