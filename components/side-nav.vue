@@ -139,8 +139,6 @@ const mainMenuItems = ref([
             { label: 'Payment Methods', icon: 'pi pi-credit-card' },
             { label: 'Currencies', icon: 'pi pi-money-bill' ,command:()=>{
                 navigateTo('/currency_dashboard');}},
-           
-            
             { label: 'Discounts', icon: 'pi pi-percentage',command:()=>{
                 navigateTo('/discount');} },
             { label: 'Discount Types', icon: 'pi pi-percentage',command:()=>{

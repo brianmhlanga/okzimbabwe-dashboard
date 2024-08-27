@@ -22,10 +22,10 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No shopping carts found.
+                                        No orders found.
                                     </template>
                                     <template #loading>s
-                                        Loading shopping carts data. Please wait.
+                                        Loading orders data. Please wait.
                                     </template>
                                     <Column  frozen field="name" header="Order Ref" style="min-width:12rem">
                                         <template #body="{data}">
@@ -42,12 +42,27 @@
                                             {{data.currency}}
                                         </template>
                                     </Column>
+                                    <Column  frozen field="name" header="Billing Address" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.currency}}
+                                        </template>
+                                    </Column>
+                                    <Column  frozen field="name" header="Delivery Address" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.currency}}
+                                        </template>
+                                    </Column>
                                     <Column frozen  field="description" header="Total Amount" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{data.total_amount}}
                                         </template>
                                     </Column>
                                     <Column frozen  field="category.name" header="Vat Total" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.vat_tax_amount}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="category.name" header="Number of Items" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{data.vat_tax_amount}}
                                         </template>

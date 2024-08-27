@@ -415,6 +415,11 @@ const editCurrency = async () => {
 
 };
 
+function formatToYmdHis(isoDateString:any) {
+    const date = new Date(isoDateString);
+    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+    return formattedDate;
+}
  
 const addCurrency = async () => {
     loading.value = true;
@@ -428,8 +433,8 @@ const addCurrency = async () => {
        category_id: category_id.value,
        product_brand_id: product_brand_id.value,
        value: value.value,
-       starts_at: starts_at.value,
-       expires_at: expires_at.value
+       starts_at: formatToYmdHis(starts_at.value),
+       expires_at: formatToYmdHis(expires_at.value)
     }
     const result = await shopBrandsStore.addDiscount(data);
     console.log('result',result.data.success)
@@ -457,7 +462,13 @@ const onPage = async (event: any) => {
 };
 
 
-
+function format_date(date:any) {
+    let my_date = new Date(date)
+    let year = my_date.getFullYear();
+    let month = String(my_date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    let day = String(my_date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 const formatDate = (value: string) => {
     const date = new Date(value);
     const options = {

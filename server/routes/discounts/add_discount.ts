@@ -11,7 +11,7 @@ export default defineEventHandler(async (event)=>{
         "influencer_id": influencer_id,
         "discount_type_id": discount_type_id,
         "product_id": product_id,
-        "shop_id": shop_id,
+        "shop_brand_id": shop_id,
         "category_id": category_id,
         "product_brand_id": product_brand_id,
         "value": value,

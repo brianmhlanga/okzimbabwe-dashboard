@@ -104,7 +104,7 @@
                         <Calendar v-model="end_date" />
                     </div>
                 </div>
-                <Button  @click="createShopBrand()" label="Create Advert" icon="pi pi-plus" />
+                <Button  :loading="loading" @click="createShopBrand()" label="Create Advert" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Create Shop Brand" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
