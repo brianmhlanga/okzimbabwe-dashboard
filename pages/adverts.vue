@@ -45,7 +45,7 @@
                                  <Column header="Actions">
                                      <template #body="slotProps">
                                          <Button  icon="pi pi-pencil" severity="info" @click="shopBrandModal(slotProps.data)" text rounded aria-label="Cancel" />
-                                         <Button  icon="pi pi-trash" severity="danger" @click="deleteShopBrand(slotProps.data.id)" text rounded aria-label="Cancel" />
+                                         <Button  icon="pi pi-trash" severity="danger" @click="deleteAdvert(slotProps.data.id)" text rounded aria-label="Cancel" />
                                      </template>
                                  </Column>
                                  
@@ -106,18 +106,54 @@
                 </div>
                 <Button  :loading="loading" @click="createShopBrand()" label="Create Advert" icon="pi pi-plus" />
         </Dialog>
-        <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Create Shop Brand" position="top" :style="{ width: '55vw' }">
+        <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Update Advert" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
                     <div class="field mb-4 col-12 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Shop brand name</label> 
+                        <label  for="company_name" class="font-medium text-900">Advert name</label> 
                         <input class="form-control" type="text"  v-model="name">
                     </div>
                     <div class="field mb-4 col-12 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
-                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                        <label  for="company_name" class="font-medium text-900">Display Position</label> 
+                        <input class="form-control" type="text"  v-model="display_position">
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Shop Brand ID  </label> 
+                        <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select  shop" checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Product ID </label> 
+                        <Dropdown v-model="product_id" :options="categories_list" optionLabel="name" optionValue="id" placeholder="Select  product" checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Category ID </label> 
+                        <Dropdown v-model="category_id" :options="allCategories" optionLabel="name" optionValue="id" placeholder="Select  category" checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">Description</label> 
+                        <input class="form-control" type="text"  v-model="description">
+                    </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">Redirect  Url</label> 
+                        <input class="form-control" type="text"  v-model="redirect">
+                    </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Adverts Banner/Image</label> 
+                        <input type="file" accept="image/jpeg, image/png ,image/jpg" @change="handleFileChange">
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Advert Duration</label> 
+                        <Dropdown v-model="type" :options="option1"  checkmark :highlightOnSelect="false"  />
+                    </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">Start Date</label> 
+                        <Calendar v-model="start_date" />
+                    </div>
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">End Date</label> 
+                        <Calendar v-model="end_date" />
                     </div>
                 </div>
-                <Button :loading="loading" @click="updateShopBrand()" label="Create shop brand" icon="pi pi-plus" />
+                <Button :loading="loading" @click="update_advert()" label="Update Advert" icon="pi pi-plus" />
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
@@ -138,6 +174,7 @@
  const product_id = ref()
  const category_id = ref()
  const description = ref()
+ const id = ref()
  const redirect = ref()
  const logo = ref()
  const type = ref()
@@ -151,8 +188,7 @@
  const shop_id = ref()
  const option1 = ['timed','open-ended']
  const parentCategories = storeToRefs(shopBrandsStore).parentCategories
-     console.log('vbhjnk',parentCategories.value)
-     const allCategories = storeToRefs(shopBrandsStore).allCategories
+ const allCategories = storeToRefs(shopBrandsStore).allCategories
  const addLineItem = ref(false)
  const categories_list:any = ref([])
  const logoFile = ref()
@@ -161,28 +197,28 @@
         console.log('my adverts',data.data.data.adverts)
         advert_list.value = data.data.data.adverts
     })
-     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
-         shop_brand_list.value = data.data.data.data.shopbrands
+    let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
+        shop_brand_list.value = data.data.data.data.shopbrands
+    })
+     shopBrandsStore.fetchAllCategories().then((data:any)=>{    
      })
-     shopBrandsStore.fetchAllCategories().then((data:any)=>{
-        
-            console.log('rury',allCategories.value)
-        })
   
     shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
  });
+
  const handleFileChange = (event:any) => {
- const file = event.target.files[0];
- const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
- if (file && acceptedTypes.includes(file.type)) {
-     logoFile.value = file;
- } else {
-     toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
-     logoFile.value = null;
- }
+    const file = event.target.files[0];
+    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
+    if (file && acceptedTypes.includes(file.type)) {
+        logoFile.value = file;
+    } else {
+        toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
+        logoFile.value = null;
+    }
  };
+
  function formatDate(date:any) {
     let my_date = new Date(date)
     let year = my_date.getFullYear();
@@ -201,7 +237,7 @@
      formData.append('product_id', product_id.value)
      formData.append('category_id', category_id.value)
      formData.append('description', description.value)
-     formData.append('redirect', redirect.value)
+     formData.append('redirect_url', redirect.value)
      formData.append('type', type.value)
      formData.append('start_date',formatDate(start_date.value))
      formData.append('end_date',formatDate(end_date.value))
@@ -217,9 +253,11 @@
          },
      });
      toast.add({ severity: 'success', summary: 'Success', detail: 'Advert Created Successfully', life: 3000 });
-     let my_result = await shopBrandsStore.getAllAdverts().then((data:any)=>{
+      await shopBrandsStore.getAllAdverts().then((data:any)=>{
         console.log('my adverts',data.data.data.adverts)
-     })
+        advert_list.value = data.data.data.adverts
+    })
+    refresh_data()
      loading.value = false
      addLineItem.value = false
      
@@ -227,45 +265,92 @@
      loading.value = false
      toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
      }
+     refresh_data()
  };
+
+ const update_advert = async ()=>{
+    loading.value = true
+   
+   const url = `${SHOPIFY_URL}/api/adverts/${id.value}`;
+   const formData = new FormData();
+   formData.append('name', name.value);
+   formData.append('display_position', display_position.value)
+   formData.append('shop_brand_id', shop_brand_id.value)
+   formData.append('product_id', product_id.value)
+   formData.append('category_id', category_id.value)
+   formData.append('description', description.value)
+   formData.append('redirect_url', redirect.value)
+   formData.append('type', type.value)
+   formData.append('start_date',formatDate(start_date.value))
+   formData.append('end_date',formatDate(end_date.value))
+   if (logoFile.value) {
+   formData.append('file', logoFile.value, logoFile.value.name);
+   }
+   console.log('formdata',formData)
+   try {
+   const response = await axios.post(url, formData, {
+       headers: {
+       'Content-Type': 'multipart/form-data',
+       'Accept': '*/*'
+       },
+   });
+   toast.add({ severity: 'success', summary: 'Success', detail: 'Advert  Successfully Updated', life: 3000 });
+   refresh_data()
+    await shopBrandsStore.getAllAdverts().then((data:any)=>{
+      console.log('my adverts',data.data.data.adverts)
+      advert_list.value = data.data.data.adverts
+  })
+  open_shop_brand_modal.value = false
+   
+   loading.value = false
+   addLineItem.value = false
+   
+   } catch (error:any) {
+   loading.value = false
+   toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
+   }
+   refresh_data()
+ }
+
  const shopBrandModal = (data:any)=>{
      open_shop_brand_modal.value = true
-     shop_id.value = data.id
+     id.value = data.id
+     shop_brand_id.value = data.shop_brand_id
+     display_position.value = data.display_position
+     description.value = data.description
+     category_id.value = data.category_id
+     product_id.value = data.product_id
+     redirect.value = data.redirect_url
+     type.value = data.type
+     start_date.value = data.start_date
+     end_date.value = data.end_date
      name.value = data.name
-     logoFile.value = data.logo
-     console.log('my brand id',data.id)
- }
- const updateShopBrand = async ()=>{
-    
-     const url = `${SHOPIFY_URL}/api/shop-brands/${shop_id.value}`;
-     const formData = new FormData();
-     formData.append('name', name.value);
-     if (logoFile.value) {
-     formData.append('logo', logoFile.value, logoFile.value.name);
-     }
-     try {
-     const response = await axios.post(url, formData, {
-         headers: {
-         'Content-Type': 'multipart/form-data',
-         'Accept': '*/*'
-         },
-     });
-     toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
-     loading.value = false
-     addLineItem.value = false
-     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
-         shop_brand_list.value = data.data.data.data.shopbrands
-     })
-     } catch (error:any) {
-     loading.value = false
-     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
-     }
+     console.log('my brand id',data)
  }
  
- const deleteShopBrand = (shop_brand_id:any) => {
+        
+ const refresh_data = ()=>{
+        name.value = ''
+        description.value = ''
+        category_id.value = "",
+        shop_brand_id.value = "",
+        product_id.value = "" 
+        category_id.value = ''
+        redirect.value = ''
+        logoFile.value = ''
+        start_date.value = ''
+        end_date.value = ''
+        type.value = ''
+        display_position.value = ''
+
+    }
+
+
+ 
+ const deleteAdvert= (advert_id:any) => {
      console.log('shop_id',shop_brand_id)
      let data = {
-     "id": shop_brand_id
+     "id": advert_id
      }
      
      confirm.require({
@@ -277,12 +362,18 @@
      rejectClass: 'p-button-secondary p-button-outlined',
      acceptClass: 'p-button-danger',
      accept: async() => {
-         let result = await shopBrandsStore.deleteShopBrand(data)
+        loading.value = true
+         let result = await shopBrandsStore.deleteAdvert(data)
          if (result.data.success){
+        loading.value = false
          toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-     
+         await shopBrandsStore.getAllAdverts().then((data:any)=>{
+            console.log('my adverts',data.data.data.adverts)
+            advert_list.value = data.data.data.adverts
+        })
          }
          else{
+            loading.value = false
              toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
          }
      },

@@ -37,19 +37,10 @@
                                             {{data.customer_name}}
                                         </template>
                                     </Column>
-                                    <Column  frozen field="name" header="Currency" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{data.currency}}
-                                        </template>
-                                    </Column>
-                                    <Column  frozen field="name" header="Billing Address" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{data.currency}}
-                                        </template>
-                                    </Column>
+                                   >
                                     <Column  frozen field="name" header="Delivery Address" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.currency}}
+                                            {{getCityAndAddress(data.delivery_address)}}
                                         </template>
                                     </Column>
                                     <Column frozen  field="description" header="Total Amount" style="min-width:12rem">
@@ -206,6 +197,17 @@
         
      });
      
+     function getCityAndAddress(deliveryAddress:any) {
+    // Parse the JSON string into an object
+    const addressObj = JSON.parse(deliveryAddress);
+    
+    // Extract the city and address
+    const city = addressObj.city;
+    const address = addressObj.address;
+    
+    // Return the concatenated string
+    return `${city}, ${address}`;
+}
      const showProduct = async(product:any) => {
       console.log('Product',product)
       name.value = product.data.name;
