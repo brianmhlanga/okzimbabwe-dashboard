@@ -10,7 +10,6 @@
                             <div class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="orders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
-                            >
                                     <template #header>
                                         <div class="flex justify-content-between">
                                             <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
@@ -53,19 +52,15 @@
                                             {{data.vat_tax_amount}}
                                         </template>
                                     </Column>
-                                    <Column frozen  field="category.name" header="Number of Items" style="min-width:12rem">
+                                    <Column frozen  field="category.name" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.vat_tax_amount}}
+                                            {{formatDate(data.created_at)}}
                                         </template>
                                     </Column>
                                     
                                     
                                   
-                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            <SplitButton label="Actions" :model="items({data})"  />
-                                        </template>
-                                    </Column>
+                                   
                                 </DataTable>
                                 <Paginator @page="onPage($event)"
                                     :template="{
