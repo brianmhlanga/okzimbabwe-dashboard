@@ -5,11 +5,12 @@
                 <div class="row">
                     <div class="text-900 font-medium text-xl mb-3">Shopping Orders</div>
                     <div>
-                        <div class="card p-4 ">
+                        <div class="card p-4">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="orders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
+                            >
                                     <template #header>
                                         <div class="flex justify-content-between">
                                             <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
