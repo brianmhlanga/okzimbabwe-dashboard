@@ -11,7 +11,7 @@
                                 <Button @click="addLineItem = true" label="Add New Discount" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
                              <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="all_currencies" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                                <DataTable :value="discount_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu"  responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -25,31 +25,41 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No categories found.
+                                        No discounts found.
                                     </template>
                                     <template #loading>
-                                        Loading categories data. Please wait.
+                                        Loading discounts data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Currency name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Name" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
+                                    <Column frozen field="description" header="Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.iso_code }}
+                                            {{ data.code }}
                                         </template>
                                     </Column>
-                                    <Column frozen field="category.name" header="Currency Symbol" style="min-width:12rem">
+                                    <Column frozen field="category.name" header="Value" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.symbol }}
+                                            {{ data.value }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="category.name" header="Discount Type" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data.discount_type.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
+                                    <Column frozen field="created_at" header="Starts At" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
+                                            {{ data?.starts_at ? formatDate(data?.starts_at) : "NOT SET" }}
+                                        </template>
+                                    </Column>
+                                    <Column frozen field="created_at" header="Expires At" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data?.expires_at ? formatDate(data?.expires_at) : "NOT SET" }}
                                         </template>
                                     </Column>
                                     <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
@@ -221,7 +231,7 @@
                 </div>
                 
             </div>
-            <Button :loading="loading" @click="addCurrency()" label="Add Currency" icon="pi pi-plus" />
+            <Button :loading="loading" @click="addCurrency()" label="Add Discount" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="update_visibility" maximizable modal header="Update Currency" position="top" :style="{ width: '55vw' }">
             <div class="grid formgrid p-fluid">
@@ -282,6 +292,7 @@ const product_brands_list = ref()
 const discount_type_list = ref()
 const currency_id = ref()
 const quantity = ref()
+const discount_list = ref()
 const update_visibility = ref(false)
 const categories_list = ref([]);
 const number_of_categories = ref();
@@ -341,6 +352,9 @@ onMounted(async () => {
     });
     await shopBrandsStore.get_product_brands().then((data:any) => {
         product_brands_list.value = data.data.data.data;
+    });
+    await shopBrandsStore.getAllDiscounts().then((data:any) => {
+        discount_list.value = data.data.data.discounts;
     });
     
     
