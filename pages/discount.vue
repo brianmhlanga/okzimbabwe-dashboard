@@ -233,23 +233,153 @@
             </div>
             <Button :loading="loading" @click="addCurrency()" label="Add Discount" icon="pi pi-plus" />
         </Dialog>
-        <Dialog v-model:visible="update_visibility" maximizable modal header="Update Currency" position="top" :style="{ width: '55vw' }">
+        <Dialog v-model:visible="update_visibility" maximizable modal header="Update Discount" position="top" :style="{ width: '55vw' }">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Currency name</label> 
+                    <label for="company_name" class="font-medium text-900">Discount name</label> 
                     <InputText class="form-control" type="text" v-model="name" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Currency iso code</label> 
-                    <InputText class="form-control" type="text" v-model="iso_code" />
+                    <label for="company_name" class="font-medium text-900">Discount code</label> 
+                    <InputText class="form-control" type="text" v-model="code" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Currency symbol</label> 
-                    <InputText class="form-control" type="text" v-model="symbol" />
+                    <label for="company_name" class="font-medium text-900">Select Influencer</label> 
+                    <Dropdown v-model="influencer_id" :options="influencer_list" filter optionLabel="name" optionValue="id" placeholder="Select Influencer" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ influencer_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+               
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Select Product</label> 
+                    <Dropdown v-model="product_id" :options="product_list" filter optionLabel="name" optionValue="id" placeholder="Select product" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ product_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Discount Type </label> 
+                    <Dropdown v-model="discount_type_id" :options="discount_type_list" filter optionLabel="name" optionValue="id" placeholder="Select discount type" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ discount_type_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+               
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Select Shop Brand</label> 
+                    <Dropdown v-model="shop_id" :options="shop_brand_list" filter optionLabel="name" optionValue="id" placeholder="Select Shop Brand" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ shop_brand_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Select Category</label> 
+                    <Dropdown v-model="category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Select Product Brand</label> 
+                    <Dropdown v-model="product_brand_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select product brand" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Value</label> 
+                    <InputText class="form-control" type="text" v-model="value" />
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Start Date</label> 
+                    <Calendar v-model="starts_at" />
+                </div>
+                <div class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Expiry Date</label> 
+                    <Calendar v-model="expires_at" />
                 </div>
                 
             </div>
-            <Button :loading="loading" @click="editCurrency()" label="Update Currency" icon="pi pi-plus" />
+            <Button :loading="loading" @click="editCurrency()" label="Update Discount" icon="pi pi-plus" />
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
      
@@ -273,6 +403,7 @@ const all_products = ref([]);
 const all_currencies = ref([])
 const all_shops = ref([])
 const code = ref();
+const id = ref()
 const name = ref();
 const influencer_id = ref()
 const discount_type_id = ref()
@@ -303,11 +434,11 @@ definePageMeta({
 });
 const actions = (currency:any) => [
       {
-        label: 'Update Currency',
+        label: 'Update Discount',
         command: () => showCurrency(currency)
       },
       {
-        label: 'Delete Currency',
+        label: 'Delete Discount',
         command: () => deleteCurrency(currency)
       },
       
@@ -363,6 +494,22 @@ onMounted(async () => {
     });
 });
 
+const refresh_data = ()=>{
+    
+       name.value = '',
+       code.value = '',
+       influencer_id.value = '',
+       discount_type_id.value = '',
+       product_id.value = '',
+       shop_id.value = '',
+       category_id.value = '',
+       product_brand_id.value = '',
+       value.value = '',
+       starts_at.value = '',
+       expires_at.value = ''
+    }
+
+
 const deleteCurrency = (currency:any) => {
       let data = {
         "id": currency.data.id
@@ -377,12 +524,12 @@ const deleteCurrency = (currency:any) => {
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptClass: 'p-button-danger',
         accept: async() => {
-            let result = await shopBrandsStore.deleteCurrency(data)
+            let result = await shopBrandsStore.deleteDiscount(data)
             if (result.data.success){
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-            await shopBrandsStore.getAllCurrencies().then((data:any)=>{
-            all_currencies.value = data.data.data.currencies
-        })
+            await shopBrandsStore.getAllDiscounts().then((data:any) => {
+        discount_list.value = data.data.data.discounts;
+    }); 
             }
             else{
                 toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
@@ -394,33 +541,51 @@ const deleteCurrency = (currency:any) => {
     });
 }
 const showCurrency = async(currency:any) => {
-      name.value = currency.data.name
-      iso_code.value = currency.data.iso_code
-      symbol.value = currency.data.symbol
-      currency_id.value = currency.data.id
-      update_visibility.value = true
-     
+      console.log('data ghj',currency.data.name)
+    update_visibility.value = true
+    id.value = currency.data.id
+    name.value = currency.data.name,
+    code.value = currency.data.code,
+    influencer_id.value = currency.data.influencer_id,
+    discount_type_id.value = currency.data.discount_type_id,
+    product_id.value = currency.data.product_id,
+    shop_id.value = currency.data.shop_id,
+    category_id.value = currency.data.category_id,
+    product_brand_id.value = currency.data.product_brand_id,
+    value.value = currency.data.value,
+    starts_at.value = currency.data.starts_at,
+    expires_at.value = currency.data.expires_at
+     console.log('simba')
 }
 const editCurrency = async () => {
     console.log('simbilimbi', )
     loading.value = true;
     const data = {
-        id: currency_id.value,
-        name : name.value,
-        iso_code :iso_code.value,
-        symbol : symbol.value
-        
+       id: id.value,
+       name: name.value,
+       code: code.value,
+       influencer_id: influencer_id.value,
+       discount_type_id: discount_type_id.value,
+       product_id: product_id.value,
+       shop_id: shop_id.value,
+       category_id: category_id.value,
+       product_brand_id: product_brand_id.value,
+       value: value.value,
+       starts_at: formatToYmdHis(starts_at.value),
+       expires_at: formatToYmdHis(expires_at.value)
     }
     console.log('simbilimbi', data)
-    const result = await shopBrandsStore.updateCurrency(data)
+    const result = await shopBrandsStore.updateDiscount(data)
     console.log('result',result.data.success)
 
     if (result.data.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Currency Successfully Added', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Discount Successfully Updated', life: 3000 });
         loading.value = false;
-        await shopBrandsStore.getAllCurrencies().then((data:any)=>{
-            all_currencies.value = data.data.data.currencies
-        })
+        await shopBrandsStore.getAllDiscounts().then((data:any) => {
+        discount_list.value = data.data.data.discounts;
+    });
+    
+        refresh_data()
         update_visibility.value = false;
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
@@ -456,10 +621,12 @@ const addCurrency = async () => {
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Discount Successfully Added', life: 3000 });
         loading.value = false;
-        await shopBrandsStore.getAllCurrencies().then((data:any)=>{
-            all_currencies.value = data.data.data.currencies
-        })
+        await shopBrandsStore.getAllDiscounts().then((data:any) => {
+        discount_list.value = data.data.data.discounts;
+    });
+    
         addLineItem.value = false;
+        refresh_data()
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
         loading.value = false;

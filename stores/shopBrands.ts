@@ -638,6 +638,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async updateDiscount (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/discounts/update_discount',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async deleteCurrency (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -676,6 +706,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/shops/delete',
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async deleteDiscount (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/discounts/delete_discount',
                 headers: { 
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'

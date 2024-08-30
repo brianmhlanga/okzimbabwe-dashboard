@@ -3,7 +3,7 @@ import { SHOPIFY_URL} from "~~/services/global.variables";
 import discount_type from "./discount_type";
 
 export default defineEventHandler(async (event)=>{
-    const {data:{name,code,influencer_id,discount_type_id,product_id,shop_id,category_id,product_brand_id,value,starts_at,expires_at}} = await readBody(event);
+    const {data:{id,name,code,influencer_id,discount_type_id,product_id,shop_id,category_id,product_brand_id,value,starts_at,expires_at}} = await readBody(event);
     
     let data = JSON.stringify({
         "name": name,
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event)=>{
     });
     var config = {
         method: 'POST',
-        url: `${SHOPIFY_URL}/api/discounts`,
+        url: `${SHOPIFY_URL}/api/discounts/${id}`,
         headers: {
             'Content-Type': 'application/json',
             
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log("error h",error.response.data);
+        console.log("error",error.response.data);
         return {    
             success: false,
             error: error.message
