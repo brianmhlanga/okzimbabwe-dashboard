@@ -53,6 +53,13 @@
                                             {{data.vat_tax_amount}}
                                         </template>
                                     </Column>
+                                    <Column frozen  field="category.name" header="Order Status" style="min-width:12rem">
+                                        <template #body="{data}">
+                                          
+                                            <Tag :class="data?.status.name" :value="data?.status.name" :severity="getSeverity(data.status.name)" />
+                                        </template>
+                                      
+                                    </Column>
                                     <Column frozen  field="category.name" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{formatDate(data.created_at)}}
@@ -130,7 +137,21 @@
      definePageMeta({
         middleware: ["auth"]
 });
-    
+const getSeverity = (over_budget:any) => {
+    console.log('sbhb',over_budget)
+    switch (over_budget) {
+        case 'Pending':
+            return 'warning';
+ 
+        case 'MOVING':
+            return 'danger';
+
+        case 'REJECTED':
+        return 'success';
+        default:
+            return null;
+    }
+ };
    
     const items = (product:any) => [
       {
