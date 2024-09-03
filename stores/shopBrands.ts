@@ -277,6 +277,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async update_order_status (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/order_status/update',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async createInventory (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -796,6 +826,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/shopBrands/delete',
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async delete_order_status (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/order_status/delete',
                 headers: { 
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'

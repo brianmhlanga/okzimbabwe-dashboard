@@ -51,6 +51,15 @@
                 </div>
                 <Button :loading="loading" @click="createProductBrand()" label="Create Order Status" icon="pi pi-plus" />
         </Dialog>
+        <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Update Order Status" position="top" :style="{ width: '55vw' }">
+                <div class="grid formgrid p-fluid">
+                    <div class="field mb-4 col-12 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">Order Status name</label> 
+                        <input class="form-control" type="text"  v-model="name">
+                    </div>
+                </div>
+                <Button :loading="loading" @click="update_order_status()" label="Update Order Status" icon="pi pi-plus" />
+        </Dialog>
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
  </template>
@@ -63,6 +72,7 @@
  const shopBrandsStore = useShopBrandsStore()
  const name = ref()
  const logo = ref()
+ const id = ref()
  const loading = ref(false)
  const open_shop_brand_modal = ref(false)
  const toast = useToast()
@@ -80,6 +90,10 @@
      })
  });
 
+ const refresh_data = ()=>{
+    name.value = ""
+ }
+
  const createProductBrand = async () => {
     const data = {
         name: name.value,
@@ -92,7 +106,35 @@
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Order Status Successfully Created', life: 3000 });
         loading.value = false
+        refresh_data()
         addLineItem.value = false;
+         await shopBrandsStore.get_order_status().then((data:any) => {
+         order_list.value = data.data.data.data
+     })
+    
+    } else {
+        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading.value = false
+    }
+};
+const update_order_status = async () => {
+    const data = {
+        id: id.value,
+        name: name.value,
+       
+    };
+    loading.value = true
+    const result = await shopBrandsStore.update_order_status(data);
+    console.log('result',result)
+
+    if (result.data.success) {
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Order Status Successfully Updated', life: 3000 });
+        loading.value = false
+        refresh_data()
+        addLineItem.value = false;
+        await shopBrandsStore.get_order_status().then((data:any) => {
+         order_list.value = data.data.data.data
+     })
     
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
@@ -101,10 +143,10 @@
 };
  const shopBrandModal = (data:any)=>{
      open_shop_brand_modal.value = true
-     shop_id.value = data.id
+     id.value = data.id
      name.value = data.name
-     logoFile.value = data.logo
-     console.log('my brand id',data.id)
+     console.log('name',data.name)
+     
  }
  const updateShopBrand = async ()=>{
     loading.value = true
@@ -133,10 +175,10 @@
      }
  }
  
- const deleteShopBrand = (shop_brand_id:any) => {
-     console.log('shop_id',shop_brand_id)
+ const deleteShopBrand = (order:any) => {
+     console.log('shop_id',order)
      let data = {
-     "id": shop_brand_id
+     'id': order
      }
      
      confirm.require({
@@ -148,9 +190,12 @@
      rejectClass: 'p-button-secondary p-button-outlined',
      acceptClass: 'p-button-danger',
      accept: async() => {
-         let result = await shopBrandsStore.deleteShopBrand(data)
+         let result = await shopBrandsStore.delete_order_status(data)
          if (result.data.success){
          toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+          await shopBrandsStore.get_order_status().then((data:any) => {
+         order_list.value = data.data.data.data
+     })
      
          }
          else{
