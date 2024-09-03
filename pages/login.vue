@@ -10,7 +10,6 @@
                     <div class="card-body p-sm-5">
                         <h2 class="fs-20 fw-bolder mb-4">Login</h2>
                         <h4 class="fs-13 fw-bold mb-2">Login to your account</h4>
-
                         <form @submit.prevent="signIn"  class="w-100 mt-4 pt-2">
                             <div class="mb-4">
                                 <input type="email" class="form-control" placeholder="Email " v-model="email" required>
