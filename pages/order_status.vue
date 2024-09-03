@@ -10,7 +10,32 @@
                             <div class="field mb-4 col-12 md:col-6">
                                 <Button @click="addLineItem = true" label="Create Order Status" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
                             </div>
-                          
+                            <div class="field mb-4 col-12 md:col-12"> 
+                            <DataTable :value="order_list" tableStyle="min-width: 50rem">
+                                <template #header>
+                                    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                                        <span class="text-xl text-900 font-bold">Order Statuses</span>
+                                    </div>
+                                </template>
+                                <Column field="name" header="Status name">
+                                    <template #body="slotProps">
+                                        {{slotProps.data.name}}
+                                    </template>
+                                </Column>
+                                <Column header="Date Created">
+                                    <template #body="slotProps">
+                                        {{formatDate(slotProps.data.created_at)}} 
+                                    </template>
+                                </Column>          
+                                <Column header="Actions">
+                                    <template #body="slotProps">
+                                        <Button  icon="pi pi-pencil" severity="info" @click="shopBrandModal(slotProps.data)" text rounded aria-label="Cancel" />
+                                        <Button  icon="pi pi-trash" severity="danger" @click="deleteShopBrand(slotProps.data.id)" text rounded aria-label="Cancel" />
+                                    </template>
+                                </Column>
+                                
+                            </DataTable>
+                           </div>
                            </div>                    
                     </div>
                  </div>
@@ -43,13 +68,16 @@
  const toast = useToast()
  const shop_brand_list = ref()
  const shop_id = ref()
+ const order_list = ref()
  const addLineItem = ref(false)
  const logoFile = ref()
  definePageMeta({
          middleware: ["auth"]
  });
  onMounted(async () => {
-   
+    let result = await shopBrandsStore.get_order_status().then((data:any) => {
+         order_list.value = data.data.data.data
+     })
  });
 
  const createProductBrand = async () => {
@@ -135,6 +163,18 @@
  });
  }
  
- 
+ const formatDate = (value: string) => {
+    const date = new Date(value);
+    const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+    };
+    return date.toLocaleString('en-US', options);
+};
  
  </script>
