@@ -2,7 +2,7 @@
     <nav class="nxl-navigation">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <Nuxtlink to="/"><img src="/images/okshop.jpg" alt="" class="logo logo-lg"></Nuxtlink>
+                <Nuxtlink to="/"><img src="/images/shopeasy.png" alt="" class="logo logo-lg"></Nuxtlink>
             </div>
             <div class="p-10 navbar-content">
                 <PanelMenu class=" card" :model="mainMenuItems" />
