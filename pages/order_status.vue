@@ -3,13 +3,12 @@
        <section class="section">
             <div class="container-fluid pt-3">
                 <div class="row">
-                 <div class="text-900 font-medium text-xl mb-3">Product Brands</div>
-                  
+                 <div class="text-900 font-medium text-xl mb-2">Order Status</div>
                     <div>
                     <div class="card p-4 m-3 ">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
-                                <Button @click="addLineItem = true" label="Product Brand" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
+                                <Button @click="addLineItem = true" label="Create Order Status" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
                             </div>
                           
                            </div>                    
@@ -18,17 +17,15 @@
                 </div>
             </div>
         </section>
-        <Dialog v-model:visible="addLineItem" maximizable modal header="Create Product Brand" position="top" :style="{ width: '55vw' }">
+        <Dialog v-model:visible="addLineItem" maximizable modal header="Create Order Status" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
                     <div class="field mb-4 col-12 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Product brand name</label> 
+                        <label  for="company_name" class="font-medium text-900">Order Status name</label> 
                         <input class="form-control" type="text"  v-model="name">
                     </div>
-                  
                 </div>
-                <Button :loading="loading" @click="createProductBrand()" label="Create product brand" icon="pi pi-plus" />
+                <Button :loading="loading" @click="createProductBrand()" label="Create Order Status" icon="pi pi-plus" />
         </Dialog>
-       
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
  </template>
@@ -52,9 +49,7 @@
          middleware: ["auth"]
  });
  onMounted(async () => {
-     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
-         shop_brand_list.value = data.data.data.data.shopbrands
-     })
+   
  });
 
  const createProductBrand = async () => {
@@ -63,17 +58,14 @@
        
     };
     loading.value = true
-    const result = await shopBrandsStore.createProductBrand(data);
-    console.log('resultvggucuhhh',result.data.success)
+    const result = await shopBrandsStore.create_order_status(data);
+    console.log('result',result)
 
     if (result.data.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Product Brand Successfully Created', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Order Status Successfully Created', life: 3000 });
         loading.value = false
         addLineItem.value = false;
-        const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands;
-        
-    });
+    
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
         loading.value = false

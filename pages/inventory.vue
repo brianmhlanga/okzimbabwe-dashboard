@@ -25,10 +25,8 @@
                                 <Dropdown v-model="id" :options="branches" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
                             </div>
                             <div v-if="id" class="field mb-4 col-12 md:col-6">
-                                <Button @click="getShopInventory()" label="Get Inventory" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                                <Button :loading="loading2" @click="getShopInventory()" label="Get Inventory" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
-               
-                            
                             <div v-if="inventory_list" class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="inventory_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
@@ -102,7 +100,6 @@
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900"> Select Product </label> 
-                  
                     <Dropdown v-model="product_id" :options="products" filter optionLabel="name" optionValue="id" placeholder="Select  product" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
@@ -133,7 +130,7 @@
                 </div>
                 
             </div>
-            <Button @click="createInventory()" label="Add Inventory" icon="pi pi-plus" />
+            <Button :loading="loading1" @click="createInventory()" label="Add Inventory" icon="pi pi-plus" />
         </Dialog>
     </NuxtLayout>
 </template>
@@ -146,6 +143,8 @@ import { FilterMatchMode } from 'primevue/api';
 
 const shopBrandsStore = useShopBrandsStore();
 const products = storeToRefs(shopBrandsStore).products;
+const loading1 = ref(false)
+const loading2 = ref(false)
 const toast = useToast()
 const allCategories:any = ref([]);
 const all_products = ref([]);
@@ -222,6 +221,7 @@ onMounted(async () => {
 });
 
 const createInventory = async () => {
+    loading1.value = true
     const data = {
         product_id : product_id.value,
         shop_id :shop_id.value,
@@ -233,9 +233,11 @@ const createInventory = async () => {
 
     if (result.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Inventory Successfully Created', life: 3000 });
+        loading1.value = false
         addLineItem.value = false;
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        loading1.value = false
     }
 };
 
@@ -248,8 +250,10 @@ const onPage = async (event: any) => {
 };
 
 const getShopInventory = async ()=> {
+    loading2.value = true
     await shopBrandsStore.getInventory(id.value).then((data:any) => {
         inventory_list.value = data.data.data.products;
+        loading2.value = false
         console.log(inventory_list.value)
     });  
 }

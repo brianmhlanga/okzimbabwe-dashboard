@@ -13,7 +13,7 @@ export default defineEventHandler(async (event)=>{
     });
     var config = {
         method: 'POST',
-        url: `${SHOPIFY_URL}/api/product-brands`,
+        url: `${SHOPIFY_URL}/api/order-statuses`,
         headers: {
             'Content-Type': 'application/json',
             
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log(error);
+        console.log('hie',error.response.data);
         
       
         return {    
