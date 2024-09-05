@@ -65,7 +65,11 @@
                                             {{formatDate(data.created_at)}}
                                         </template>
                                     </Column>
-                                    
+                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            <SplitButton label="Actions" :model="items({data})"  />
+                                        </template>
+                                    </Column>
                                     
                                   
                                    
@@ -128,6 +132,7 @@
      const categories_list = ref()
      let number_of_categories = ref()
      const selectedProductId = ref()
+     const order_ref = ref()
      const addLineItem = ref(false)
      const brandPrices:any = ref([]);
      const options = ref([ 'Yes', 'No']);
@@ -155,7 +160,7 @@ const getSeverity = (over_budget:any) => {
    
     const items = (product:any) => [
       {
-        label: 'Add Price',
+        label: 'Download Invoice',
         command: () => getProduct(product)
       },
       {
@@ -169,11 +174,18 @@ const getSeverity = (over_budget:any) => {
       // Add more actions if needed
     ];
 
-    const getProduct = (product:any) => {
-      selectedProduct.value = product.data.name;
-      selectedProductId.value = product.data.id
-      console.log(selectedProduct.value)
-      add_price.value = true;
+    const getProduct = async(product:any) => {
+        console.log('order',product.data.order_ref)
+        order_ref.value = product.data.order_ref
+        const data = {
+            ref: order_ref.value
+        }
+        let result = await shopBrandsStore.downloadInvoice(data)
+        console.log('my result',result.success)
+        if (result.success) {
+        window.open(`https://api.hakikasystems.co.zw/invoice/${order_ref.value}`, '_blank'); // You can replace 'your-invoice-url' with the actual invoice URL or data
+    }
+    
     };
     
     const getParsedImages = (images: string) => {
