@@ -80,14 +80,13 @@ const mainMenuItems = ref([
         label: 'Orders',
         icon: 'pi pi-shopping-cart',
         items: [
-            { label: 'New Orders', icon: 'pi pi-plus-circle' },
+        { label: 'Orders', icon: 'pi pi-plus-circle',command:()=>{
+            navigateTo('/orders'); } },
             { label: 'Order Statuses', icon: 'pi pi-plus-circle',command:()=>{
                 navigateTo('/order_status'); } },
-            { label: 'Pending Orders', icon: 'pi pi-clock',command:()=>{
-                navigateTo('/orders'); } },
+           
             
-            { label: 'Completed Orders', icon: 'pi pi-check' },
-            { label: 'Cancelled Orders', icon: 'pi pi-times' },
+           
             { label: 'View Cart', icon: 'pi pi-eye',command:()=>{
                 navigateTo('/cart'); }},
             { label: 'Manage Discounts', icon: 'pi pi-percentage' },

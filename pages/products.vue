@@ -318,6 +318,7 @@
   try {
     const parsedImages = JSON.parse(images);
     const cleanedString = JSON.parse(parsedImages.replace(/\\/g, ''));
+    console.log('mbililimbi',cl)
     return cleanedString[0]
   } catch (error) {
     console.error('Error parsing images JSON:', error);

@@ -74,6 +74,14 @@
                                   
                                    
                                 </DataTable>
+                                <Dialog v-model:visible="change_order_status" modal header="Change Order Status" :style="{ width: '50rem' }">
+                            <span class="p-text-secondary block mb-5">Order Number #{{ order_ref }}</span>
+                            <Dropdown v-model="selectedOrderStatus" :options="order_statuses" optionLabel="name" optionValue="id" placeholder="Select Status" class="w-full md:w-12 mb-6" />
+                            <div class="flex justify-content-end gap-2">
+                                <Button type="button" label="Cancel" severity="secondary" @click="change_order_status = false"></Button>
+                                <Button :loading="loading1" type="button" label="Save" @click="updateOrderStatus()"></Button>
+                            </div>
+                        </Dialog>
                                 <Paginator @page="onPage($event)"
                                     :template="{
                                         '640px': 'PrevPageLink CurrentPageReport NextPageLink',
@@ -114,6 +122,8 @@
      const product_brands = storeToRefs(shopBrandsStore).product_brands
     
      const name = ref('')
+     const order_id = ref()
+     const selectedOrderStatus = ref()
      const carts = ref()
      const product_modal = ref()
      const product_brand_id = ref()
@@ -129,15 +139,18 @@
      const shop_brand_list:any = ref()
      const category_type = ref('Yes')
      const active_status = ref('Yes')
+     const loading1 = ref(false)
      const categories_list = ref()
      let number_of_categories = ref()
      const selectedProductId = ref()
      const order_ref = ref()
+     const change_order_status = ref(false)
      const addLineItem = ref(false)
      const brandPrices:any = ref([]);
      const options = ref([ 'Yes', 'No']);
      const selectedProduct = ref()
      const add_price = ref(false)
+     const order_statuses = ref()
      const product_brands_list = ref()
      definePageMeta({
         middleware: ["auth"]
@@ -159,21 +172,31 @@ const getSeverity = (over_budget:any) => {
  };
    
     const items = (product:any) => [
+    {
+        label: 'Change Order Status',
+        command: () => openChangeOrderStatus(product)
+      },
       {
         label: 'Download Invoice',
         command: () => getProduct(product)
       },
       {
-        label: 'Update Product',
-        command: () => showProduct(product)
+        label: 'Download Picking Slip ',
+        command: () => getPickSlip(product)
       },
       {
-        label: 'Delete Product',
+        label: 'Delete Order',
         command: () => deleteProduct(product)
       }
       // Add more actions if needed
     ];
 
+    const openChangeOrderStatus = (product:any) => {
+      change_order_status.value = true
+      order_ref.value = product.data.order_ref
+      order_id.value = product.data.id
+      
+}
     const getProduct = async(product:any) => {
         console.log('order',product.data.order_ref)
         order_ref.value = product.data.order_ref
@@ -183,7 +206,31 @@ const getSeverity = (over_budget:any) => {
         let result = await shopBrandsStore.downloadInvoice(data)
         console.log('my result',result.success)
         if (result.success) {
-        window.open(`https://api.hakikasystems.co.zw/invoice/${order_ref.value}`, '_blank'); // You can replace 'your-invoice-url' with the actual invoice URL or data
+        window.open(`https://api.hakikasystems.co.zw/invoice/${order_ref.value}`, '_blank');
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Invoice Successfully Downloaded', life: 3000 }); // You can replace 'your-invoice-url' with the actual invoice URL or data
+    }
+    else {
+        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Downloading Failed', life: 3000 });
+        
+    }
+    
+    };
+    const getPickSlip = async(product:any) => {
+        console.log('order',product.data.order_ref)
+        order_ref.value = product.data.order_ref
+        const data = {
+            ref: order_ref.value
+        }
+        let result = await shopBrandsStore.downloadPickingSlip(data)
+        console.log('my result',result.success)
+        if (result.success) {
+        window.open(`https://api.hakikasystems.co.zw/picking-list/${order_ref.value}`, '_blank'); 
+        // You can replace 'your-invoice-url' with the actual invoice URL or data
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Picking Slip Successfully Downloaded', life: 3000 });
+    }
+    else {
+        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Downloading Failed', life: 3000 });
+        
     }
     
     };
@@ -223,8 +270,33 @@ const getSeverity = (over_budget:any) => {
             orders.value = data.data.data.orders
             console.log('user',orders.value)
         })
+        await shopBrandsStore.get_order_status().then((data:any) => {
+         order_statuses.value = data.data.data.data
+     })
         
      });
+     const updateOrderStatus = async () => {
+    loading1.value = true
+    let data = {
+        order_status_id: selectedOrderStatus.value,
+        id: order_id.value
+    }
+    let result = await shopBrandsStore.updateStatus(data).then(async(data:any) => {
+        console.log('ddd',data.data.success)
+         if (data.data.success) {
+            loading1.value = false,
+            change_order_status.value = false
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Status Succesfully Changed', life: 3000 });
+            let resultt = await shopBrandsStore.getOrders().then((data:any) => {
+                orders.value = data.data.data.orders
+                loading1.value = false
+            })
+         } else {
+            toast.add({ severity: 'warn', summary: 'Update Failed', detail: 'Could not update status', life: 3000 });
+            loading1.value = false
+         }
+    })
+}
      
      function getCityAndAddress(deliveryAddress:any) {
     // Parse the JSON string into an object
@@ -271,7 +343,7 @@ console.log('categories',categories.value)
       }
       
       confirm.require({
-        message: 'Do you want to delete this record?',
+        message: 'Do you want to delete this order?',
         header: 'Danger Zone',
         icon: 'pi pi-info-circle',
         rejectLabel: 'Cancel',
@@ -281,10 +353,11 @@ console.log('categories',categories.value)
         accept: async() => {
             let result = await shopBrandsStore.deleteProduct(data)
             if (result.data.success){
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-            await shopBrandsStore.getAllProducts().then((data:any)=>{
-                categories_list.value = data.data.data.products
-            })
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+                await shopBrandsStore.getOrders().then((data:any)=>{
+                orders.value = data.data.data.orders
+                console.log('user',orders.value)
+                })
             }
             else{
                 toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
