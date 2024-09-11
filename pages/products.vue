@@ -39,7 +39,7 @@
                                     </Column>
                                      <Column header="Image">
                                         <template #body="slotProps">
-                                            <img :src="getParsedImages(slotProps.data.thumbnails)" :alt="slotProps.data.image_url" class="w-3rem border-round" />
+                                            <img :src="getParsedImages(slotProps.data.images)" :alt="slotProps.data.image_url" class="w-3rem border-round" />
                                         </template>
                                     </Column>
                                     <Column frozen  field="description" header="Product description" style="min-width:12rem">
@@ -318,7 +318,7 @@
   try {
     const parsedImages = JSON.parse(images);
     const cleanedString = JSON.parse(parsedImages.replace(/\\/g, ''));
-    console.log('mbililimbi',cl)
+    console.log('mbililimbi',)
     return cleanedString[0]
   } catch (error) {
     console.error('Error parsing images JSON:', error);

@@ -90,6 +90,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
    
             return result;
         },
+       
         
         async updateShopBrand() {
             
@@ -225,6 +226,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/brands/create',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async createUserRole (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/roles/create',
                 headers: {
                     "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
@@ -1129,6 +1160,41 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
        return result;
    },
+   async getAllRoles() {
+    let url = new URL(`${SHOPIFY_URL}/api/roles`)
+    const params:any = {
+        per_page: "10",
+    };
+    Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+    );
+    const token = useCookie('token').value || ""
+    var config:any = {
+       method: 'GET',
+       url: url,
+       headers: { 
+         "Authorization": `Bearer ${token}`,
+           'Accept': '/',
+           'Cache-Control': 'no-cache',
+          
+       },
+      
+   }; 
+   const result = await axios(config).then(function (response) { 
+       console.log(JSON.stringify(response.data));
+       return {
+           data: response.data,
+           success: true
+       }
+   }).catch(function (error) {
+       console.log(error);
+       return {
+           success: false
+       }
+   });
+
+   return result;
+},
        async get_all_discount_types() {
         let url = new URL(`${SHOPIFY_URL}/api/discount-types`)
         const params:any = {

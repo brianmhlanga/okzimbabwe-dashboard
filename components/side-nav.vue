@@ -114,7 +114,7 @@ const mainMenuItems = ref([
     },
     {
         label: 'Adverts',
-        icon: 'pi pi-bullhorn',
+        icon: 'pi pi-cog',
         items: [
             { label: 'Manage Adverts', icon: 'pi pi-pencil' },
             { label: 'Create Advert', icon: 'pi pi-plus',command:()=>{
@@ -157,7 +157,8 @@ const mainMenuItems = ref([
                 navigateTo('/signup');}},
             { label: 'View Users', icon: 'pi pi-eye' ,command:()=>{
                     navigateTo('/users');}},
-            { label: 'Roles & Permissions', icon: 'pi pi-key' },
+            { label: 'Roles & Permissions', icon: 'pi pi-key' ,command:()=>{
+                navigateTo('/role');} },
             { label: 'Access Control', icon: 'pi pi-shield' },
             { label: 'System Logs', icon: 'pi pi-file' },
             { label: 'API Settings', icon: 'pi pi-code' }

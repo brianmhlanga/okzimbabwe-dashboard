@@ -1,24 +1,19 @@
 import axios from "axios";
-import Role from "~/pages/role.vue";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
-    const {data:{name,email,shop_brand_id,role_id, shop_id,password,password_confirmation}} = await readBody(event);
+    const {data:{name}} = await readBody(event);
     
     
     let data = JSON.stringify({
-         "name": name,
-         "email": email,
-         "shop_brand_id": shop_brand_id,
-         "shop_id": shop_id,
-         "role_id": role_id,
-         "password": password,
-        "password_confirmation": password_confirmation
-      });
-      console.log('sign',data)
+        "name": name
+       
+        
+        
+    });
     var config = {
         method: 'POST',
-        url: `${SHOPIFY_URL}/api/users`,
+        url: `${SHOPIFY_URL}/api/roles`,
         headers: {
             'Content-Type': 'application/json',
             
@@ -41,7 +36,7 @@ export default defineEventHandler(async (event)=>{
       
         return {    
             success: false,
-            error: error.errors
+            error: error.response.data
         } 
     });
     

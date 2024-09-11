@@ -50,6 +50,69 @@
                         <label  for="company_name" class="font-medium text-900">Email</label> 
                         <input class="form-control" type="text"  v-model="email">
                     </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Shop Brand </label> 
+                        
+                        <Dropdown v-model="shop_brand_id" :options="shop_brand_list" filter optionLabel="name" optionValue="id" placeholder="Select shop brand" required>
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ shop_brand_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Shop</label> 
+                        
+                        <Dropdown v-model="shop_id" :options="shops_list" filter optionLabel="name" optionValue="id" placeholder="Select shop" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ shops_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                    </div>
+                    <div  class="field mb-4 col-12 md:col-12"> 
+                        <label for="company_name" class="font-medium text-900">Role</label> 
+                        
+                        <Dropdown v-model="role_id" :options="roles_list" filter optionLabel="name" optionValue="id" placeholder="Select  role" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ roles_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                    </div>
                     <div class="field mb-4 col-12 md:col-6"> 
                         <label  for="company_name" class="font-medium text-900">Password </label> 
                         <Password  type="text" toggleMask v-model="password" />
@@ -87,6 +150,10 @@ import Password from "primevue/password";
  const toast = useToast()
  const shop_brand_list = ref()
  const shop_id = ref()
+ const shops_list = ref()
+ const shop_brand_id =  ref()
+ const role_id = ref()
+ const roles_list = ref()
  const addLineItem = ref(false)
  const logoFile = ref()
  definePageMeta({
@@ -95,6 +162,14 @@ import Password from "primevue/password";
  onMounted(async () => {
      let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
          shop_brand_list.value = data.data.data.data.shopbrands
+     })
+     await shopBrandsStore.getAllShops().then((data:any) => {
+        shops_list.value = data.data.data.shops
+        console.log('my shops',shops_list.value)
+    });
+    await shopBrandsStore.getAllRoles().then((data:any) => {
+        console.log('roles',data.data.data.data)
+         roles_list.value = data.data.data.data
      })
  });
  
@@ -112,6 +187,9 @@ import Password from "primevue/password";
     
         name: name.value,
         email: email.value,
+        shop_brand_id: shop_brand_id.value,
+        shop_id: shop_id.value,
+        role_id: role_id.value,
         password: password.value,
         password_confirmation: password_confirmation.value,
         
