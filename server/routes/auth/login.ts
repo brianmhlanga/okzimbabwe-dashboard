@@ -8,6 +8,9 @@ export default defineEventHandler(async (event) => {
         const data = await login({ email, password });
         setCookie(event, "token",JSON.stringify(data?.data?.token));
         setCookie(event, "user", JSON.stringify(data));
+        setCookie(event, "username ", JSON.stringify(data?.data?.user.name));
+        setCookie(event, "role ", JSON.stringify(data?.data?.user?.role?.name));
+        setCookie(event, "user_shop ", JSON.stringify(data?.data?.user?.shop?.id));
         response['login'] = data;
         response['success'] = true;
     } catch (error:any) {

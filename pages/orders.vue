@@ -8,7 +8,7 @@
                         <div class="card p-4">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="orders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
+                                <DataTable :value="filteredOrders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
                             >
                                     <template #header>
@@ -120,7 +120,9 @@
      console.log('vbhjnk',parentCategories.value)
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const product_brands = storeToRefs(shopBrandsStore).product_brands
-    
+     const role = useCookie('role');
+     const user_shop = useCookie('user_shop');
+     console.log('id',user_shop.value)
      const name = ref('')
      const order_id = ref()
      const selectedOrderStatus = ref()
@@ -143,6 +145,7 @@
      const categories_list = ref()
      let number_of_categories = ref()
      const selectedProductId = ref()
+     const filteredOrders = ref()
      const order_ref = ref()
      const change_order_status = ref(false)
      const addLineItem = ref(false)
@@ -268,6 +271,7 @@ const getSeverity = (over_budget:any) => {
        
         shopBrandsStore.getOrders().then((data:any)=>{
             orders.value = data.data.data.orders
+            filteredOrders.value = orders.value.filter(order => order.cart.shop_id === user_shop.value)
             console.log('user',orders.value)
         })
         await shopBrandsStore.get_order_status().then((data:any) => {

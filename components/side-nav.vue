@@ -5,11 +5,13 @@
                 <Nuxtlink to="/"><img src="/images/shopeasy.png" alt="" class="logo logo-lg"></Nuxtlink>
             </div>
             <div class="p-10 navbar-content">
-                <PanelMenu class=" card" :model="mainMenuItems" />
+                
+                <PanelMenu class=" card"v-if="role=='Supervisor'" :model="supervisorMenu" />
+                <PanelMenu class=" card" v-else :model="mainMenuItems" />
                 <div class="card text-center">
                     <div class="card-body">
                         <h6 class="mt-1 text-dark fw-bolder">{{ name }}</h6>
-                        <p class="fs-11 my-3 text-dark">Super Admin</p>
+                        <p class="fs-11 my-3 text-dark">{{ role }}</p>
                         <a href="javascript:void(0);" class="btn btn-primary text-dark w-100" @click="logout()">Log Out</a>
                     </div>
                 </div>
@@ -20,7 +22,9 @@
 <script setup lang="ts">
 const authStore:any = useAuthStore()
 const shopBrandsStore = useShopBrandsStore()
-     const name = storeToRefs(shopBrandsStore).full_name
+const name = useCookie('username');
+const role = useCookie('role');
+const user_shop = useCookie('user_shop');
      console.log('name',name)
 const logout = async()=>{
     await authStore.logout()
@@ -164,6 +168,34 @@ const mainMenuItems = ref([
             { label: 'API Settings', icon: 'pi pi-code' }
         ]
     }
+]);
+const supervisorMenu = ref([
+  
+  
+  
+    {
+        label: 'Orders',
+        icon: 'pi pi-shopping-cart',
+        items: [
+        { label: 'Orders', icon: 'pi pi-plus-circle',command:()=>{
+            navigateTo('/orders'); } },
+            { label: 'Order Statuses', icon: 'pi pi-plus-circle',command:()=>{
+                navigateTo('/order_status'); } },
+           
+            
+           
+            { label: 'View Cart', icon: 'pi pi-eye',command:()=>{
+                navigateTo('/cart'); }},
+            { label: 'Manage Discounts', icon: 'pi pi-percentage' },
+            { label: 'Checkout', icon: 'pi pi-check' }
+        ]
+    },
+  
+  
+  
+  
+ 
+   
 ]);
 </script>
 <style>
