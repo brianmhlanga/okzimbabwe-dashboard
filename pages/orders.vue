@@ -7,7 +7,7 @@
                     <div>
                         <div class="card p-4">
                         <div class="grid formgrid p-fluid">
-                            <div class="field mb-4 col-12 md:col-12"> 
+                            <div v-if="role == 'Supervisor'"class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="filteredOrders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
                             >
@@ -43,9 +43,15 @@
                                             {{getCityAndAddress(data.delivery_address)}}
                                         </template>
                                     </Column>
+                                    <Column  frozen field="name" header="Order Status" style="min-width:12rem">
+                                        <template #body="{data}">
+                                          <Tag :value="data.status?.name" :severity="getSeverity(data.status.name)"</Tag>
+                                        </template>
+                                    </Column>
+                                    
                                     <Column frozen  field="description" header="Total Amount" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{data.total_amount}}
+                                            {{data.total_incl_tax}}
                                         </template>
                                     </Column>
                                     <Column frozen  field="category.name" header="Vat Total" style="min-width:12rem">
@@ -53,13 +59,92 @@
                                             {{data.vat_tax_amount}}
                                         </template>
                                     </Column>
-                                    <Column frozen  field="category.name" header="Order Status" style="min-width:12rem">
+                                    
+                                    <Column frozen  field="category.name" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
-                                          
-                                            <Tag :class="data?.status.name" :value="data?.status.name" :severity="getSeverity(data.status.name)" />
+                                            {{formatDate(data.created_at)}}
                                         </template>
-                                      
                                     </Column>
+                                    <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            <SplitButton label="Actions" :model="items({data})"  />
+                                        </template>
+                                    </Column>
+                                    
+                                  
+                                   
+                                </DataTable>
+                                <Dialog v-model:visible="change_order_status" modal header="Change Order Status" :style="{ width: '50rem' }">
+                            <span class="p-text-secondary block mb-5">Order Number #{{ order_ref }}</span>
+                            <Dropdown v-model="selectedOrderStatus" :options="order_statuses" optionLabel="name" optionValue="id" placeholder="Select Status" class="w-full md:w-12 mb-6" />
+                            <div class="flex justify-content-end gap-2">
+                                <Button type="button" label="Cancel" severity="secondary" @click="change_order_status = false"></Button>
+                                <Button :loading="loading1" type="button" label="Save" @click="updateOrderStatus()"></Button>
+                            </div>
+                        </Dialog>
+                                <Paginator @page="onPage($event)"
+                                    :template="{
+                                        '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+                                        '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
+                                        '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
+                                        default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
+                                    }"
+                                    :rows="10"
+                                    :totalRecords="120">
+                                </Paginator>
+                            </div>
+                            <div v-else class="field mb-4 col-12 md:col-12"> 
+                                <DataTable :value="orders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
+                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
+                            >
+                                    <template #header>
+                                        <div class="flex justify-content-between">
+                                            <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
+                                            <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
+                                            <IconField iconPosition="left" >
+                                                <InputIcon class="pi pi-search" > </InputIcon>
+                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                            </IconField>
+                                        </div>
+                                    </template>
+                                    <template #empty>
+                                        No orders found.
+                                    </template>
+                                    <template #loading>s
+                                        Loading orders data. Please wait.
+                                    </template>
+                                    <Column  frozen field="name" header="Order Ref" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.order_ref}}
+                                        </template>
+                                    </Column>
+                                    <Column  frozen field="name" header="Customer name" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.customer_name}}
+                                        </template>
+                                    </Column>
+                                   >
+                                    <Column  frozen field="name" header="Delivery Address" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{getCityAndAddress(data.delivery_address)}}
+                                        </template>
+                                    </Column>
+                                    <Column  frozen field="name" header="Order Status" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            <Tag :value="data.status?.name" :severity="getSeverity(data.status.name)"></Tag>
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="description" header="Total Amount" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.total_incl_tax}}
+                                        </template>
+                                    </Column>
+                                    <Column frozen  field="category.name" header="Vat Total" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.vat_tax_amount}}
+                                        </template>
+                                    </Column>
+                                    
                                     <Column frozen  field="category.name" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{formatDate(data.created_at)}}
@@ -121,6 +206,7 @@
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const product_brands = storeToRefs(shopBrandsStore).product_brands
      const role = useCookie('role');
+     console.log('role',role)
      const user_shop = useCookie('user_shop');
      console.log('id',user_shop.value)
      const name = ref('')
@@ -269,9 +355,13 @@ const getSeverity = (over_budget:any) => {
  
      onMounted(async () => {
        
-        shopBrandsStore.getOrders().then((data:any)=>{
+      await  shopBrandsStore.getShopOrders(user_shop.value).then((data:any)=>{
+           filteredOrders.value =  data.data.data.orders
+        })
+
+        await  shopBrandsStore.getOrders().then((data:any)=>{
             orders.value = data.data.data.orders
-            filteredOrders.value = orders.value.filter(order => order.cart.shop_id === user_shop.value)
+           
             console.log('user',orders.value)
         })
         await shopBrandsStore.get_order_status().then((data:any) => {

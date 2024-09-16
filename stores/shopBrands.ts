@@ -1580,6 +1580,41 @@ async get_order_status() {
 
        return result;
    },
+   async getShopOrders(user_shop:any) {
+    let url = new URL(`${SHOPIFY_URL}/api/orders/shop/${user_shop}`)
+    const params:any = {
+        per_page: "100",
+    };
+    Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+    );
+    const token = useCookie('token').value || ""
+    var config:any = {
+       method: 'GET',
+       url: url,
+       headers: { 
+        "Authorization": `Bearer ${token}`,
+           'Accept': '/',
+           'Cache-Control': 'no-cache',
+          
+       },
+      
+   }; 
+   const result = await axios(config).then(function (response) { 
+       console.log(JSON.stringify(response.data));
+       return {
+           data: response.data,
+           success: true
+       }
+   }).catch(function (error) {
+       console.log(error);
+       return {
+           success: false
+       }
+   });
+
+   return result;
+},
        async getUsers() {
         let url = new URL(`${SHOPIFY_URL}/api/users`)
         const params:any = {
