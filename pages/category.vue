@@ -52,7 +52,12 @@
                                             {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
                                         </template>
                                     </Column>
-                                   
+                                    <Column header="Actions">
+                                    <template #body="slotProps">
+                                        <Button  icon="pi pi-pencil" severity="info" @click="shopBrandModal(slotProps.data)" text rounded aria-label="Cancel" />
+                                        <Button  icon="pi pi-trash" severity="danger" @click="deleteShopBrand(slotProps.data.id)" text rounded aria-label="Cancel" />
+                                    </template>
+                                </Column>
                                 </DataTable>
                                 <Paginator @page="onPage($event)"
                                            :template="{
@@ -93,6 +98,29 @@
                 </div>
                 <Button :loading="loading" @click="createCategory()" label="Create Category" icon="pi pi-plus" />
         </Dialog>
+        <Dialog v-model:visible="open_category_modal" maximizable modal header="Update Category" position="top" :style="{ width: '55vw' }">
+                <div class="grid formgrid p-fluid">
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label  for="company_name" class="font-medium text-900">Category name</label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
+                    </div>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Is it a sub category</label> 
+                        <SelectButton v-model="category_type" :options="options"  aria-labelledby="basic" />
+                    </div>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Is it Active</label> 
+                        <SelectButton v-model="active_status" :options="options" aria-labelledby="basic" />
+                    </div>
+                    <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Select parent  </label> 
+                        <Dropdown v-model="parent_category_id" :options="parentCategories" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
+                    </div>
+        
+                </div>
+                <Button :loading="loading" @click="updateCategory()" label="Update Category" icon="pi pi-plus" />
+        </Dialog>
+        <ConfirmDialog></ConfirmDialog>
  
     </NuxtLayout>
  </template>
@@ -100,6 +128,7 @@
       import { storeToRefs } from "pinia";
      import { useShopBrandsStore } from "~/stores/shopBrands";
      import Swal from 'sweetalert2'
+     const confirm = useConfirm();
      import { FilterMatchMode } from 'primevue/api';
      const shopBrandsStore = useShopBrandsStore()
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
@@ -107,9 +136,11 @@
      const allCategories = ref([])
      const name = ref('')
      const is_parent = ref('')
+     const id = ref()
      const is_sub_parent = ref('')
      const is_active = ref('')
      const loading = ref(false)
+     const  open_category_modal = ref(false)
      const parent_category_id = ref('')
      const toast = useToast()
      const shop_brand_list = ref()
@@ -139,6 +170,47 @@
 
         initFilters();
     };
+
+    const shopBrandModal = (data)=>{
+    open_category_modal.value = true
+    id.value = data.id
+    name.value = data.name
+    is_active.value = data.is_active
+    is_parent.value = data.is_parent
+    is_sub_parent.value = data.is_sub_parent
+    console.log('category',data)
+}
+
+const deleteShopBrand = (shop_brand_id) => {
+    console.log('shop_id',shop_brand_id)
+    let data = {
+    "id": shop_brand_id
+    }
+    
+    confirm.require({
+    message: 'Do you want to delete this record?',
+    header: 'Danger Zone',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    acceptLabel: 'Delete',
+    rejectClass: 'p-button-secondary p-button-outlined',
+    acceptClass: 'p-button-danger',
+    accept: async() => {
+        let result = await shopBrandsStore.deleteShopBrand(data)
+        if (result.data.success){
+        toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+    
+        }
+        else{
+            toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
+        }
+    },
+    reject: () => {
+        toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    } 
+});
+}
+
 
      const checking_category_type = ()=>{
      
@@ -187,7 +259,77 @@
         //  })
      
      });
+
+     const updateCategory = async () =>{
+        checking_category_type()
+        checking_active_status()
+        if (is_parent.value == true) {
+            
+            let data = {
+                id: id.value,
+                name: name.value,
+                is_parent: is_parent.value,
+                is_sub_parent: is_sub_parent.value,
+                is_active: is_active.value,
+         
+            }
+            loading.value = true
+            let result = await shopBrandsStore.updateCategory(data)
+            console.log('my result',result)
  
+            if (result.data.success) {
+                toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
+                loading.value = false
+                await shopBrandsStore.getAllCategories().then((data)=>{
+                    categories_list.value = data.data.data.categories
+                    console.log('categories list',categories_list.value)
+                })
+                open_category_modal.value = false
+                refresh_data()
+            }
+        
+            else {
+                toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+                loading.value = false
+            }
+        } 
+        
+        else {
+            loading.value = true
+            let data = {
+                id: id.value,
+                name: name.value,
+                is_parent: is_parent.value,
+                is_sub_parent: is_sub_parent.value,
+                is_active: is_active.value,
+                parent_category_id: parent_category_id.value 
+            }
+    
+           
+         let result = await shopBrandsStore.updateCategory(data)
+         console.log('my result',result)
+ 
+         if (result.data.success) {
+             toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
+             loading.value = false
+             open_category_modal.value = false
+             await shopBrandsStore.getAllCategories().then((data)=>{
+                categories_list.value = data.data.data.categories
+                console.log('categories list',categories_list.value)
+            })
+             refresh_data()
+         }
+
+         else {
+             toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
+             loading.value = false
+         }
+
+        }
+      
+        
+         
+     }
      const createCategory = async () =>{
         checking_category_type()
         checking_active_status()
@@ -208,6 +350,10 @@
                 toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
                 loading.value = false
                 addLineItem.value = false
+                await shopBrandsStore.getAllCategories().then((data)=>{
+                    categories_list.value = data.data.data.categories
+                    console.log('categories list',categories_list.value)
+                })
                 refresh_data()
             }
         
@@ -235,6 +381,10 @@
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
              loading.value = false
              addLineItem.value = false
+             await shopBrandsStore.getAllCategories().then((data)=>{
+                categories_list.value = data.data.data.categories
+                console.log('categories list',categories_list.value)
+            })
              refresh_data()
          }
 
