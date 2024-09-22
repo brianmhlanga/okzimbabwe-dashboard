@@ -75,6 +75,8 @@ const mainMenuItems = ref([
                 navigateTo('/inventory');} },
             { label: 'Add Featured Products', icon: 'pi pi-plus', command:()=>{
                 navigateTo('/featured_products');} },
+            { label: 'Featured Menus', icon: 'pi pi-plus', command:()=>{
+                navigateTo('/featured_menu');} },
             { label: 'Get All Featured Products', icon: 'pi pi-th-large', command:()=>{
                         navigateTo('/get_all_featured_products');} },
             { label: 'Product Reviews', icon: 'pi pi-comments' }

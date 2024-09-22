@@ -3,14 +3,25 @@
         <section class="section">
             <div class="container-fluid pt-3">
                 <div class="row">
-                    <div class="text-900 font-medium text-xl mb-3">Featured Products</div>
+                    <div class="text-900 font-medium text-xl mb-3">Featured Menus</div>
                     <div>
                         <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
                             <div class="field mb-4 col-12 md:col-6">
-                                <Button @click="open_create_shop_modal()" label="Featured Products" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                                <Button @click="open_create_shop_modal()" label="Featured Menus" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
-                           
+                            <div class="field mb-4 col-12 md:col-6">
+                                <TabMenu :model="shop_brand_list">
+                                    <template #item="{ item, props }">
+                                        <a v-ripple v-bind="props.action" class="flex align-items-center gap-2"  @click='selectShop(item.id)'>
+                                            <img  :src="`${item.logo}`" style="width: 32px" />
+                                            <span class="font-bold">{{ item.name }}</span>
+                                           
+                                        </a>
+                                    </template>
+                                </TabMenu>
+                                <Toast />
+                            </div>
                             <div v-if="branches" class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="branches" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
@@ -96,32 +107,58 @@
                 </div>
             </div>
         </section>
-        <Dialog v-model:visible="addLineItem" maximizable modal header="Add Featured Product" position="top" :style="{ width: '55vw' }">
+        <Dialog v-model:visible="addLineItem" maximizable modal header="Add Featured Menu" position="top" :style="{ width: '55vw' }">
             <div class="grid formgrid p-fluid">
+                
+                <div  class="field mb-4 col-12 md:col-6"> 
+                    <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
+                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                </div>
                 <div class="field mb-4 col-12 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select either shop or shop brand to reference</label> 
+                        <label for="company_name" class="font-medium text-900">What do you want to feature</label> 
                         <SelectButton v-model="selected_reference_type" :options="options"  aria-labelledby="basic" />
                     </div>
-                <div v-if="selected_reference_type == 'Shop brand'" class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
-                    <Dropdown v-model="referenced_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                <div v-if="selected_reference_type == 'Category'" class="field mb-4 col-12 md:col-6"> 
+                    <Dropdown v-model="referenced_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                 </div>
-                <div v-else-if="selected_reference_type == 'Shop'" class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Shop </label> 
-                    <Dropdown v-model="referenced_id" :options="shops_list" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
+                <div v-else-if="selected_reference_type == 'Product Brand'"class="field mb-4 col-12 md:col-6"> 
+                    <Dropdown v-model="referenced_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select Product Brand" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                 </div>
-                <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Product </label> 
-                   
-                    <MultiSelect v-model="product_id" :options="products" filter optionLabel="name" optionValue="id" placeholder="Select product"
-                    :maxSelectedLabels="10"  />
-                </div>
-               
-               
-               
             </div>
             <div v-if="editing_shop"><Button @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
-            <div v-else-if="shop_creating"><Button :loading="loading"  @click="addFeaturedProduct()" label="Add Featured Product" icon="pi pi-plus" /></div>
+            <div v-else-if="shop_creating"><Button :loading="loading"  @click="addFeaturedProduct()" label="Save Featured Menu" icon="pi pi-plus" /></div>
             
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
@@ -129,6 +166,8 @@
 </template>
 
 <script setup lang="ts">
+ import axios from "axios";
+ import { SHOPIFY_URL } from "~/services/global.variables";
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useShopBrandsStore } from '~/stores/shopBrands';
@@ -138,7 +177,7 @@ const confirm = useConfirm()
 const shopBrandsStore = useShopBrandsStore();
 const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
-const allCategories = ref([]);
+
 const shop_brand_id = ref();
 const name = ref();
 const address = ref(); 
@@ -157,9 +196,12 @@ const categories_list = ref([]);
 const editing_shop = ref(false)
 const shop_id = ref()
 const branches = ref()
-const product_brands_list = ref()
+const product_brands_list:any = ref()
 const referenced_id = ref()
 const product_id = ref()
+const is_brand:any = ref()
+const allCategories = storeToRefs(shopBrandsStore).allCategories
+
 const is_shop_brand = ref()
 const number_of_categories = ref();
 const addLineItem = ref(false);
@@ -167,7 +209,7 @@ definePageMeta({
         middleware: ["auth"]
 });
 
-const options = ref(['Shop brand', 'Shop']);
+const options = ref(['Category', 'Product Brand']);
 const items = ref([
     
 ]);
@@ -280,24 +322,30 @@ const selectShop = async (shopIDD:any) => {
   
 }
 const getShopsForBrand = (brandId:any) => {
+  console.log('brandid',brandId)
   branches.value = null
   //@ts-ignore
-  let branchess = shop_brand_list.value.find(brand => brand.id === brandId);
-  branches.value = branchess?.shops
-  console.log('branches',branchess)
+  let result = shopBrandsStore.getFeaturedMenus(brandId)
+ 
+  console.log('re',result)
 }
 const open_create_shop_modal = ()=>{
     addLineItem.value = true
     shop_creating.value= true
 }
 onMounted(async () => {
-     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
+    await shopBrandsStore.get_product_brands().then((data:any) => {
+        product_brands_list.value = data.data.data.data;
+        console.log('dfg',product_brands_list.value)
+    });
+    const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
         
     });
-    await shopBrandsStore.get_product_brands().then((data:any) => {
-        product_brands_list.value = data.data.data.data;
-    });
+    await shopBrandsStore.fetchAllCategories().then((data:any)=>{
+            allCategories.value.push(...data.data.categories)
+        })
+   
     await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
         })
@@ -312,33 +360,46 @@ onMounted(async () => {
 });
 
 const addFeaturedProduct = async () => {
-    if(selected_reference_type.value == 'Shop brand'){
-        is_shop_brand.value = true
+    if(selected_reference_type.value == 'Product Brand'){
+        is_brand.value = true
     }
     else{
-        is_shop_brand.value = false
+        is_brand.value = false
     }
     loading.value = true
-    const data = {
-        is_shop_brand: is_shop_brand.value,
-        product_id: product_id.value,
-        referenced_id: referenced_id.value
-    };
-    const result = await shopBrandsStore.addFeaturedProducts(data);
-    console.log('result',result.data.success)
+   
+    const url = `${SHOPIFY_URL}/api/featured-menus`;
+    const formData = new FormData();
+      formData.append('shop_brand_id', shop_brand_id.value);
+      formData.append('referenced_id', referenced_id.value);
+      formData.append('is_brand', is_brand.value);
 
-    if (result.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Featured Product Successfully Added', life: 3000 });
+      try {
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Accept': '*/*'
+          },
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Featured Menu Created Successfully', life: 3000 });
         loading.value = false
-        addLineItem.value = false;
-        const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands;
-        
-    });
-    } else {
-        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
+        await shopBrandsStore.getAllProducts().then((data:any)=>{
+            categories_list.value = data.data.data.products
+        })
+    
+        addLineItem.value = false
+        // let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
+        //     shop_brand_list.value = data.data.data.data.shopbrands
+        // })
+      } catch (error:any) {
+        console.log('error', error)
+       
+        toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
         loading.value = false
-    }
+      }
+     
+  
+
 };
 
 const onPage = async (event: any) => {
