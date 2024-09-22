@@ -37,48 +37,22 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No shops found.
+                                        No Featured Menus found.
                                     </template>
                                     <template #loading>
                                         Loading categories data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Shop Name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Category/Product Brand name " style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.name }}
+                                            {{ data.referenceable.name }}
                                         </template>
                                     </Column>
                                 
-                                    <Column frozen field="description" header="Store Code" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.store_code}}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Address" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.address }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Contact Person" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_person }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Contact Number" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_number }}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="Contact Email" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.contact_email}}
-                                        </template>
-                                    </Column>
-                                    <Column frozen field="category.name" header="City" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.city }}
-                                        </template>
-                                    </Column>
-                                
+                                   
+                                   
+                                   
+                                    
+                                    
                                     <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data?.created_at ? formatDate(data?.created_at) : "NOT SET" }}
@@ -86,7 +60,8 @@
                                     </Column>
                                     <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
                                         <template #body="{data}">
-                                            <SplitButton label="Actions" :model="actions({data})"  />
+                                            <Button  icon="pi pi-pencil" severity="info"  text rounded aria-label="Cancel" />
+                                        <Button  icon="pi pi-trash" severity="danger"  text rounded aria-label="Cancel" />
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -321,13 +296,14 @@ const selectShop = async (shopIDD:any) => {
   await getShopsForBrand(shopIDD)
   
 }
-const getShopsForBrand = (brandId:any) => {
+const getShopsForBrand = async(brandId:any) => {
   console.log('brandid',brandId)
   branches.value = null
   //@ts-ignore
-  let result = shopBrandsStore.getFeaturedMenus(brandId)
+  let result = await shopBrandsStore.getFeaturedMenus(brandId)
  
-  console.log('re',result)
+  console.log('re',result?.data?.data)
+  branches.value = result.data.data
 }
 const open_create_shop_modal = ()=>{
     addLineItem.value = true
