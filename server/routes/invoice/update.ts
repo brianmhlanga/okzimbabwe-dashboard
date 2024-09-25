@@ -2,19 +2,19 @@ import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
-    const {data:{id, order_status_id}} = await readBody(event);
+    const {data:{status, orderId}} = await readBody(event);
     
     
     let data = JSON.stringify({
-        "order_status_id":  order_status_id
-       
+        "orderId": orderId,
+        "status": status
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         
         
     });
     var config = {
         method: 'POST',
-        url: `${SHOPIFY_URL}/api/orders/edit/${id}`,
+        url: `${SHOPIFY_URL}/api/orders/status`,
         headers: {
             'Content-Type': 'application/json',
             

@@ -308,6 +308,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async create_order_stage (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/order_stages/create',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async create_order_status (info:any){
             var data = JSON.stringify({
                 "data": info,

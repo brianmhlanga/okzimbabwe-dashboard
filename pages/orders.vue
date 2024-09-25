@@ -161,7 +161,7 @@
                                 </DataTable>
                                 <Dialog v-model:visible="change_order_status" modal header="Change Order Status" :style="{ width: '50rem' }">
                             <span class="p-text-secondary block mb-5">Order Number #{{ order_ref }}</span>
-                            <Dropdown v-model="selectedOrderStatus" :options="order_statuses" optionLabel="name" optionValue="id" placeholder="Select Status" class="w-full md:w-12 mb-6" />
+                            <Dropdown v-model="selectedOrderStatus" :options="order_statuses" optionLabel="name" optionValue="name" placeholder="Select Status" class="w-full md:w-12 mb-6" />
                             <div class="flex justify-content-end gap-2">
                                 <Button type="button" label="Cancel" severity="secondary" @click="change_order_status = false"></Button>
                                 <Button :loading="loading1" type="button" label="Save" @click="updateOrderStatus()"></Button>
@@ -372,8 +372,8 @@ const getSeverity = (over_budget:any) => {
      const updateOrderStatus = async () => {
     loading1.value = true
     let data = {
-        order_status_id: selectedOrderStatus.value,
-        id: order_id.value
+        status: selectedOrderStatus.value,
+        orderId: order_id.value
     }
     let result = await shopBrandsStore.updateStatus(data).then(async(data:any) => {
         console.log('ddd',data.data.success)

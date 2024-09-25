@@ -90,6 +90,8 @@ const mainMenuItems = ref([
             navigateTo('/orders'); } },
             { label: 'Order Statuses', icon: 'pi pi-plus-circle',command:()=>{
                 navigateTo('/order_status'); } },
+            { label: 'Order Stages', icon: 'pi pi-plus-circle',command:()=>{
+            navigateTo('/order_stage'); } },
            
             
            
