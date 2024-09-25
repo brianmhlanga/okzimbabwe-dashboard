@@ -17,9 +17,14 @@
                                         <span class="text-xl text-900 font-bold">Order Stages</span>
                                     </div>
                                 </template>
-                                <Column field="name" header="Status name">
+                                <Column field="name" header="Stage name">
                                     <template #body="slotProps">
-                                        {{slotProps.data.name}}
+                                        {{slotProps.data.stage}}
+                                    </template>
+                                </Column>
+                                <Column field="name" header="Deliery option">
+                                    <template #body="slotProps">
+                                        {{slotProps.data.delivery_option}}
                                     </template>
                                 </Column>
                                 <Column header="Date Created">
@@ -93,7 +98,7 @@
          middleware: ["auth"]
  });
  onMounted(async () => {
-    let result = await shopBrandsStore.get_order_status().then((data:any) => {
+    let result = await shopBrandsStore.get_order_stages().then((data:any) => {
          order_list.value = data.data.data.data
      })
  });
