@@ -10,7 +10,6 @@
                             <div class="field mb-4 col-12 md:col-6">
                                 <Button @click="addLineItem = true" label="Create Product" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary/>
                             </div>
-                            
                             <div class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="categories_list" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"

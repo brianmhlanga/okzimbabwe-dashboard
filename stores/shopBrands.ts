@@ -2016,7 +2016,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             }
         
             // Uncomment this line if you want to filter parent categories
-            
+            this.parentCategories = this.allCategories.filter(category => category.is_parent == 1)
         
             console.log('All Categories:', this.allCategories);
             console.log('Parent Categories:', this.parentCategories);
