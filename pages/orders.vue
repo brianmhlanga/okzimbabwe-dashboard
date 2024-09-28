@@ -7,7 +7,9 @@
                     <div>
                         <div class="card p-4">
                         <div class="grid formgrid p-fluid">
-                            <div v-if="role == 'Supervisor'"class="field mb-4 col-12 md:col-12"> 
+                            
+                            <div v-if="role == 'Supervisor'" class="field mb-4 col-12 md:col-12"> 
+                                
                                 <DataTable :value="filteredOrders" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
                             dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
                             >
@@ -37,7 +39,7 @@
                                             {{data.customer_name}}
                                         </template>
                                     </Column>
-                                   >
+                                   
                                     <Column  frozen field="name" header="Delivery Address" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{getCityAndAddress(data.delivery_address)}}
