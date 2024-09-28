@@ -92,7 +92,23 @@
                     </div>
                     <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Select parent  </label> 
-                        <Dropdown v-model="parent_category_id" :options="parentCategories" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
+                            <Dropdown v-model="parent_category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                     </div>
         
                 </div>
@@ -114,7 +130,23 @@
                     </div>
                     <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Select parent  </label> 
-                        <Dropdown v-model="parent_category_id" :options="parentCategories" optionLabel="name" optionValue="id" placeholder="Select  parent" checkmark :highlightOnSelect="false"  />
+                        <Dropdown v-model="parent_category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex align-items-center">
+                                
+                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                     </div>
         
                 </div>
@@ -131,9 +163,10 @@
      const confirm = useConfirm();
      import { FilterMatchMode } from 'primevue/api';
      const shopBrandsStore = useShopBrandsStore()
+     const allCategories = storeToRefs(shopBrandsStore).allCategories
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
      console.log('vbhjnk',parentCategories.value)
-     const allCategories = ref([])
+     
      const name = ref('')
      const is_parent = ref('')
      const id = ref()
@@ -255,7 +288,7 @@ const deleteShopBrand = (category_id) => {
             console.log('categories list',categories_list.value)
         })
         await shopBrandsStore.fetchAllCategories().then((data)=>{
-            allCategories.value.push(...data.data.categories)
+           
         })
         //  let result = await shopBrandsStore.getAllShopBrands().then((data) => {
         //      console.log("dgfa",data.data.data.data.shopbrands)
