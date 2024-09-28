@@ -422,9 +422,8 @@ console.log('categories',categories.value)
     
      const onPage = (event:any) => {
         let current_page = event.page + 1
-        let result =  shopBrandsStore.getProductsPagination(current_page).then((data:any) => {
-            
-            categories_list.value = data.data.data.products
+        let result =  shopBrandsStore.getOrdersPagination(current_page).then((data:any) => {
+            orders.value = data.data.data.orders
             console.log('hbj',data.data.data.categories.length)
             number_of_categories.value = data.data.data.categories.length
         })

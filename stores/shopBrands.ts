@@ -1709,7 +1709,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
        async getOrders() {
         let url = new URL(`${SHOPIFY_URL}/api/orders`)
         const params:any = {
-            per_page: "100",
+            per_page: "10",
         };
         Object.keys(params).forEach((key) =>
             url.searchParams.append(key, params[key])
@@ -1741,10 +1741,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
        return result;
    },
+   async getOrdersPagination(page:any) {
+    let url = new URL(`${SHOPIFY_URL}/api/orders?page=${page}`)
+      const token = useCookie('token').value || ""
+    var config:any = {
+    method: 'GET',
+    url: url,
+    headers: { 
+        "Authorization": `Bearer ${token}`,
+        'Accept': '/',
+        'Cache-Control': 'no-cache',
+        
+    },
+    
+}; 
+const result = await axios(config).then(function (response) { 
+    console.log(JSON.stringify(response.data));
+    return {
+        data: response.data,
+        success: true
+    }
+}).catch(function (error) {
+    console.log(error);
+    return {
+        success: false
+    }
+});
+
+return result;
+},
    async getShopOrders(user_shop:any) {
     let url = new URL(`${SHOPIFY_URL}/api/orders/shop/${user_shop}`)
     const params:any = {
-        per_page: "100",
+        per_page: "10",
     };
     Object.keys(params).forEach((key) =>
         url.searchParams.append(key, params[key])
