@@ -78,7 +78,7 @@
                                            :rows="10"
                                            :totalRecords="120">
                                 </Paginator>
-                            </div> -->
+                            </div> 
                         </div>                    
                     </div>
                     </div>

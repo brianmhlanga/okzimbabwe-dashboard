@@ -131,11 +131,7 @@
                                             {{getCityAndAddress(data.delivery_address)}}
                                         </template>
                                     </Column>
-                                    <Column  frozen field="name" header="Order Status" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            <Tag :value="data.status?.name" :severity="getSeverity(data.status.name)"></Tag>
-                                        </template>
-                                    </Column>
+                                  
                                     <Column frozen  field="description" header="Total Amount" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{data.total_incl_tax}}
