@@ -276,6 +276,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async create_minimum_order (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/minimum_order/create',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
         async createProductBrand (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -464,6 +494,36 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var config = {
                 method: 'post',
                 url: '/invoice/update',
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            const result: any = await axios(config).then(function (response) {
+                return {
+                    data: response.data,
+                    success: true
+                 }
+            })
+            .catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                 }
+            });
+            return result;
+
+        },
+        async update_minimum_order (info:any){
+            var data = JSON.stringify({
+                "data": info,
+            });
+            const token = useCookie('token').value || ""
+            var config = {
+                method: 'post',
+                url: '/minimum_order/update',
                 headers: {
                     "Authorization": `Bearer ${token}`, 
                     'Content-Type': 'application/json'
@@ -1552,6 +1612,42 @@ async getAllProductBrandss() {
     },
     async get_order_stages() {
         let url = new URL(`${SHOPIFY_URL}/api/order-stages`)
+        const params:any = {
+        
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+        method: 'GET',
+        url: url,
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            'Accept': '/',
+            'Cache-Control': 'no-cache',
+            
+        },
+        
+    }; 
+    const result = await axios(config).then(function (response) { 
+        console.log(JSON.stringify(response.data));
+        return {
+            data: response.data,
+            success: true
+        }
+    }).catch(function (error) {
+        console.log(error);
+        return {
+            success: false
+        }
+    });
+
+    return result;
+    },
+    async get_minimum_order() {
+        let url = new URL(`${SHOPIFY_URL}/api/minimum-orders`)
         const params:any = {
         
             per_page: "10",

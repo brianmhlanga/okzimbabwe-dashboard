@@ -88,6 +88,8 @@ const mainMenuItems = ref([
         items: [
         { label: 'Orders', icon: 'pi pi-plus-circle',command:()=>{
             navigateTo('/orders'); } },
+            { label: 'Minimum Order Settings', icon: 'pi pi-cog',command:()=>{
+                navigateTo('/minimum_order'); } },
             { label: 'Order Statuses', icon: 'pi pi-plus-circle',command:()=>{
                 navigateTo('/order_status'); } },
             { label: 'Order Stages', icon: 'pi pi-plus-circle',command:()=>{
