@@ -125,10 +125,15 @@
                                             {{data.customer_name}}
                                         </template>
                                     </Column>
-                                   >
+                                   
                                     <Column  frozen field="name" header="Delivery Address" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{getCityAndAddress(data.delivery_address)}}
+                                        </template>
+                                    </Column>
+                                    <Column  frozen field="name" header="Order Status" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data.status ? data.status.name : 'Ordered'}}
                                         </template>
                                     </Column>
                                   
