@@ -11,7 +11,7 @@
                                 <Button @click="addLineItem = true" label="Add Supplier" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
                             </div>
                              <div class="field mb-4 col-12 md:col-12"> 
-                                <DataTable :value="categories_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
+                                <DataTable :value="supplier_list" ref="dt" class="p-datatable-customers" showGridlines :rows="10"
                                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll">
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -25,14 +25,14 @@
                                         </div>
                                     </template>
                                     <template #empty>
-                                        No categories found.
+                                        No suppliers found.
                                     </template>
                                     <template #loading>
-                                        Loading categories data. Please wait.
+                                        Loading suppliers data. Please wait.
                                     </template>
-                                    <Column frozen field="name" header="Category name" style="min-width:12rem">
+                                    <Column frozen field="name" header="Suppler Code" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.name }}
+                                            {{ data.supplier_code}}
                                         </template>
                                     </Column>
                                 
@@ -41,11 +41,32 @@
                                             {{ data.iso_code }}
                                         </template>
                                     </Column> -->
-                                    <Column frozen field="category.name" header="Parent Category" style="min-width:12rem">
+                                    <Column frozen field="category.name" header="Supplier name" style="min-width:12rem">
                                         <template #body="{data}">
-                                            {{ data.is_parent? true:false }}
+                                            {{ data.name }}
                                         </template>
-                                    </Column> -->
+                                    </Column> 
+                                    <Column frozen field="category.name" header="Supplier email" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data ? data.email : 'Not Set' }}
+                                        </template>
+                                    </Column> 
+                         
+                                    <Column frozen field="category.name" header="Supplier address" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data ? data.address : 'Not Set' }}
+                                        </template>
+                                    </Column> 
+                                    <Column frozen field="category.name" header="Supplier phone" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{data ? data.phone : 'Not Set' }}
+                                        </template>
+                                    </Column> 
+                                    <Column frozen field="category.name" header="Supplier logo" style="min-width:12rem">
+                                        <template #body="{data}">
+                                            {{ data ? data.logo : 'Not Set'}}
+                                        </template>
+                                    </Column> 
                                 
                                     <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
@@ -76,81 +97,67 @@
                 </div>
             </div>
         </section>
-        <Dialog v-model:visible="addLineItem" maximizable modal header="Create Category" position="top" :style="{ width: '55vw' }">
+        <Dialog v-model:visible="addLineItem" maximizable modal header="Create Supplier" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Category name</label> 
+                        <label  for="company_name" class="font-medium text-900">Supplier name</label> 
                         <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Is it a sub category</label> 
-                        <SelectButton v-model="category_type" :options="options"  aria-labelledby="basic" />
+                        <label for="company_name" class="font-medium text-900">Supplier Code </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Is it Active</label> 
-                        <SelectButton v-model="active_status" :options="options" aria-labelledby="basic" />
+                        <label for="company_name" class="font-medium text-900">Supplier Address </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
-                    <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select parent  </label> 
-                            <Dropdown v-model="parent_category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex align-items-center">
-                                
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                        </Dropdown>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Supplier Email </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Supplier Phone </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
+                    </div>
+                    
+                    <div class="field mb-4 col-12 md:col-6"> 
+                       <label for="company_name" class="font-medium text-900">Shop  logo</label> 
+                       <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                   </div>
         
                 </div>
-                <Button :loading="loading" @click="createCategory()" label="Create Category" icon="pi pi-plus" />
+                <Button :loading="loading" @click="createCategory()" label="Create Supplier" icon="pi pi-plus" />
         </Dialog>
-        <Dialog v-model:visible="open_category_modal" maximizable modal header="Update Category" position="top" :style="{ width: '55vw' }">
-                <div class="grid formgrid p-fluid">
+        <Dialog v-model:visible="open_category_modal" maximizable modal header="Update Supplier" position="top" :style="{ width: '55vw' }">
+            <div class="grid formgrid p-fluid">
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label  for="company_name" class="font-medium text-900">Category name</label> 
+                        <label  for="company_name" class="font-medium text-900">Supplier name</label> 
                         <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Is it a sub category</label> 
-                        <SelectButton v-model="category_type" :options="options"  aria-labelledby="basic" />
+                        <label for="company_name" class="font-medium text-900">Supplier Code </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Is it Active</label> 
-                        <SelectButton v-model="active_status" :options="options" aria-labelledby="basic" />
+                        <label for="company_name" class="font-medium text-900">Supplier Address </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
-                    <div v-if="category_type =='Yes'" class="field mb-4 col-6 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select parent  </label> 
-                        <Dropdown v-model="parent_category_id" :options="allCategories" filter optionLabel="name" optionValue="id" placeholder="Select  category" >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex align-items-center">
-                                
-                                    <div>{{ allCategories.find(brand => brand.id === slotProps.value)?.name }}</div>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                        </Dropdown>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Supplier Email </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
                     </div>
+                    <div class="field mb-4 col-6 md:col-6"> 
+                        <label for="company_name" class="font-medium text-900">Supplier Phone </label> 
+                        <InputText class="form-control" type="text"  v-model="name"/>
+                    </div>
+                    
+                    <div class="field mb-4 col-12 md:col-6"> 
+                       <label for="company_name" class="font-medium text-900">Shop  logo</label> 
+                       <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                   </div>
         
                 </div>
-                <Button :loading="loading" @click="updateCategory()" label="Update Category" icon="pi pi-plus" />
+                <Button :loading="loading" @click="updateCategory()" label="Update Supplier" icon="pi pi-plus" />
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
  
@@ -176,6 +183,7 @@
      const  open_category_modal = ref(false)
      const parent_category_id = ref('')
      const toast = useToast()
+     const supplier_list = ref()
      const shop_brand_list = ref()
      const category_type = ref('Yes')
      const active_status = ref('Yes')
@@ -249,28 +257,9 @@ const deleteShopBrand = (category_id) => {
 }
 
 
-     const checking_category_type = ()=>{
      
-        if(category_type.value == 'Yes'){
-            is_sub_parent.value = true
-            is_parent.value = false
-            console.log('simba',is_sub_parent.value)
-        }
-        else{
-            is_sub_parent.value = false
-            is_parent.value = true
-            parent_category_id.value = 5
-        }
-     }
 
-     const checking_active_status = ()=>{
-        if (active_status.value == 'Yes') {
-            is_active.value = true
-        }
-        else {
-            is_active.value = false
-        }
-     }
+    
     
      const refresh_data = ()=>{
         name.value = ''
@@ -283,178 +272,43 @@ const deleteShopBrand = (category_id) => {
 
      
      onMounted(async () => {
-        await shopBrandsStore.getAllCategories().then((data)=>{
-            categories_list.value = data.data.data.categories
-            console.log('categories list',categories_list.value)
+        await shopBrandsStore.getAllSuppliers().then((data)=>{
+            supplier_list.value = data.data.data.suppliers
+            console.log('categories list',supplier_list.value)
         })
-        await shopBrandsStore.fetchAllCategories().then((data)=>{
-           
-        })
-        //  let result = await shopBrandsStore.getAllShopBrands().then((data) => {
-        //      console.log("dgfa",data.data.data.data.shopbrands)
-        //      shop_brand_list.value = data.data.data.data.shopbrands
-        //  })
+      
+    
      
      });
 
      const updateCategory = async () =>{
-        checking_category_type()
-        checking_active_status()
-        if (is_parent.value == true) {
-            
-            let data = {
-                id: id.value,
-                name: name.value,
-                is_parent: is_parent.value,
-                is_sub_parent: is_sub_parent.value,
-                is_active: is_active.value,
-         
-            }
-            loading.value = true
-            let result = await shopBrandsStore.updateCategory(data)
-            console.log('my result',result)
- 
-            if (result.data.success) {
-                toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
-                loading.value = false
-                await shopBrandsStore.getAllCategories().then((data)=>{
-                    categories_list.value = data.data.data.categories
-                    console.log('categories list',categories_list.value)
-                })
-                open_category_modal.value = false
-                refresh_data()
-            }
-        
-            else {
-                toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-                loading.value = false
-            }
-        } 
-        
-        else {
-            loading.value = true
-            let data = {
-                id: id.value,
-                name: name.value,
-                is_parent: is_parent.value,
-                is_sub_parent: is_sub_parent.value,
-                is_active: is_active.value,
-                parent_category_id: parent_category_id.value 
-            }
-    
-           
-         let result = await shopBrandsStore.updateCategory(data)
-         console.log('my result',result)
- 
-         if (result.data.success) {
-             toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
-             loading.value = false
-             open_category_modal.value = false
-             await shopBrandsStore.getAllCategories().then((data)=>{
-                categories_list.value = data.data.data.categories
-                console.log('categories list',categories_list.value)
-            })
-             refresh_data()
-         }
-
-         else {
-             toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-             loading.value = false
-         }
-
-        }
       
+        
+       
         
          
      }
      const createCategory = async () =>{
-        checking_category_type()
-        checking_active_status()
-        if (is_parent.value == true) {
-            
-            let data = {
-                name: name.value,
-                is_parent: is_parent.value,
-                is_sub_parent: is_sub_parent.value,
-                is_active: is_active.value,
-         
-            }
-            loading.value = true
-            let result = await shopBrandsStore.createCategory(data)
-            console.log('my result',result)
- 
-            if (result.data.success) {
-                toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
-                loading.value = false
-                addLineItem.value = false
-                await shopBrandsStore.getAllCategories().then((data)=>{
-                    categories_list.value = data.data.data.categories
-                    console.log('categories list',categories_list.value)
-                })
-                refresh_data()
-            }
-        
-            else {
-                toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-                loading.value = false
-            }
-        } 
-        
-        else {
-            loading.value = true
-            let data = {
-                name: name.value,
-                is_parent: is_parent.value,
-                is_sub_parent: is_sub_parent.value,
-                is_active: is_active.value,
-                parent_category_id: parent_category_id.value 
-            }
+       
     
-           
-         let result = await shopBrandsStore.createCategory(data)
-         console.log('my result',result)
- 
-         if (result.data.success) {
-             toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
-             loading.value = false
-             addLineItem.value = false
-             await shopBrandsStore.getAllCategories().then((data)=>{
-                categories_list.value = data.data.data.categories
-                console.log('categories list',categories_list.value)
-            })
-             refresh_data()
-         }
-
-         else {
-             toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
-             loading.value = false
-         }
-
-        }
-      
+        
+     
         
          
      }
     
      const onPage = (event) => {
         let current_page = event.page + 1
-        let result =  shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+        let result =  shopBrandsStore.getSupplierPagination(current_page).then((data) => {
             
-            categories_list.value =  data.data.data.categories
-            console.log('hbj',data.data.data.categories.length)
-            number_of_categories.value = data.data.data.categories.length
+            supplier_list.value =  data.data.data.suppliers
+            console.log('hbj',data.data.data.suppliers)
+            // number_of_categories.value = data.data.data.categories.length
         })
 
     }
      
-    const items = [
-        {
-            label: 'Add Price',
-            command: () => {
-                add_product.value = true
-            }
-        }
-    ];
+   
 
     const formatDate = (value) => {
         const date = new Date(value);
