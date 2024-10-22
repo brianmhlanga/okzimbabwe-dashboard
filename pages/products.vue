@@ -148,6 +148,10 @@
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
                         <InputText class="form-control" type="text"  v-model="product_code"/>
                     </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Vat</label> 
+                        <Dropdown v-model="vat" :options="vat_options"  placeholder="Select vat" class="w-full md:w-12 mb-6" />
+                    </div>
                     
                 </div>
                 <Button :loading="loading" @click="createProduct()" label="Create Product" icon="pi pi-plus" />
@@ -218,6 +222,10 @@
                         <label  for="company_name" class="font-medium text-900">Product Code</label> 
                         <InputText class="form-control" type="text"  v-model="product_code"/>
                     </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Vat</label> 
+                        <Dropdown v-model="vat" :options="vat_options"  placeholder="Select vat" class="w-full md:w-12 mb-6" />
+                    </div>
                     
                 </div>
                 <Button :loading="loading" @click="updateProduct()" label="Update Product" icon="pi pi-plus" />
@@ -283,6 +291,8 @@
      const brandPrices:any = ref([]);
      const options = ref([ 'Yes', 'No']);
      const selectedProduct = ref()
+     const vat = ref()
+     const vat_options = ref([true, false]);
      const add_price = ref(false)
      const product_brands_list = ref()
      definePageMeta({
@@ -373,6 +383,7 @@
       description.value = product.data.description
       category_id.value = product.data.category_id
       product_code.value = product.data.product_code
+      vat.value = product.data.vat
       selectedProductId.value = product.data.id
       product_brand_id.value = product.data.product_brand_id
       categories.value = product.data.categories.map(category => {
@@ -467,6 +478,7 @@ console.log('categories',categories.value)
         product_code.value = "" 
         categories.value = ''
         imageFiles.value = []
+        vat.value = ''
 
     }
 
@@ -511,6 +523,7 @@ console.log('categories',categories.value)
       formData.append('category_id', category_id.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
+      formData.append('vat', vat.value);
     
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
@@ -557,6 +570,7 @@ console.log('categories',categories.value)
       formData.append('category_id', category_id.value);
       formData.append('product_code', product_code.value);
       formData.append('product_brand_id', product_brand_id.value);
+      formData.append('vat', vat.value);
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
   })
