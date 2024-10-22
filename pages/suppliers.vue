@@ -105,19 +105,19 @@
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Code </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="supplier_code"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Address </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="address"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Email </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="email"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Phone </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="phone"/>
                     </div>
                     
                     <div class="field mb-4 col-12 md:col-6"> 
@@ -126,7 +126,7 @@
                    </div>
         
                 </div>
-                <Button :loading="loading" @click="createCategory()" label="Create Supplier" icon="pi pi-plus" />
+                <Button :loading="loading" @click="createSupplier()" label="Create Supplier" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="open_category_modal" maximizable modal header="Update Supplier" position="top" :style="{ width: '55vw' }">
             <div class="grid formgrid p-fluid">
@@ -164,8 +164,10 @@
     </NuxtLayout>
  </template>
  <script setup lang>
+    import axios from "axios";
       import { storeToRefs } from "pinia";
      import { useShopBrandsStore } from "~/stores/shopBrands";
+     import { SHOPIFY_URL } from "~/services/global.variables";
      import Swal from 'sweetalert2'
      const confirm = useConfirm();
      import { FilterMatchMode } from 'primevue/api';
@@ -177,7 +179,10 @@
      const name = ref('')
      const is_parent = ref('')
      const id = ref()
-     const is_sub_parent = ref('')
+     const supplier_code = ref('')
+     const address = ref('')
+     const email = ref('')
+     const phone = ref()
      const is_active = ref('')
      const loading = ref(false)
      const  open_category_modal = ref(false)
@@ -318,11 +323,16 @@ if (file && acceptedTypes.includes(file.type)) {
     logoFile.value = null;
 }
 };
-const createShopBrand = async () => {
+const createSupplier = async () => {
     loading.value = true
     const url = `${SHOPIFY_URL}/api/suppliers`;
     const formData = new FormData();
     formData.append('name', name.value);
+    formData.append('supplier_code', supplier_code.value);
+    formData.append('address', address.value);
+    formData.append('email', email.value);
+    formData.append('phone', phone.value);
+
     if (logoFile.value) {
     formData.append('logo', logoFile.value, logoFile.value.name);
     }
@@ -333,15 +343,16 @@ const createShopBrand = async () => {
         'Accept': '*/*'
         },
     });
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Supplier Created Successfully', life: 3000 });
     loading.value = false
     addLineItem.value = false
-    let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands
+    let result = await shopBrandsStore.getAllSuppliers().then((data) => {
+        supplier_list.value = data.data.data.suppliers
     })
-    } catch (error:any) {
+    } catch (error) {
+    console.log('ERROR',error)
     loading.value = false
-    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
+    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response, life: 3000 });
     }
 };
      
