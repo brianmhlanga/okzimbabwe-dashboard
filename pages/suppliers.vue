@@ -136,19 +136,19 @@
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Code </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="supplier_code"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Address </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="address"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Email </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="email"/>
                     </div>
                     <div class="field mb-4 col-6 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Supplier Phone </label> 
-                        <InputText class="form-control" type="text"  v-model="name"/>
+                        <InputText class="form-control" type="text"  v-model="phone"/>
                     </div>
                     
                     <div class="field mb-4 col-12 md:col-6"> 
@@ -157,7 +157,7 @@
                    </div>
         
                 </div>
-                <Button :loading="loading" @click="updateCategory()" label="Update Supplier" icon="pi pi-plus" />
+                <Button :loading="loading" @click="updateSupplier()" label="Update Supplier" icon="pi pi-plus" />
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
  
@@ -222,9 +222,11 @@
     open_category_modal.value = true
     id.value = data.id
     name.value = data.name
-    is_active.value = data.is_active
-    is_parent.value = data.is_parent
-    is_sub_parent.value = data.is_sub_parent
+    supplier_code.value = data.supplier_code
+    phone.value = data.phone
+    email.value = data.email
+    address.value = data.address
+
     console.log('category',data)
 }
 
@@ -287,21 +289,6 @@ const deleteShopBrand = (category_id) => {
      
      });
 
-     const updateCategory = async () =>{
-      
-        
-       
-        
-         
-     }
-     const createCategory = async () =>{
-       
-    
-        
-     
-        
-         
-     }
     
      const onPage = (event) => {
         let current_page = event.page + 1
@@ -313,15 +300,15 @@ const deleteShopBrand = (category_id) => {
         })
 
     }
-    const handleFileChange = (event) => {
-const file = event.target.files[0];
-const acceptedTypes = ['image/jpeg', 'image/png'];
-if (file && acceptedTypes.includes(file.type)) {
-    logoFile.value = file;
-} else {
-    toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
-    logoFile.value = null;
-}
+ const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const acceptedTypes = ['image/jpeg', 'image/png'];
+        if (file && acceptedTypes.includes(file.type)) {
+        logoFile.value = file;
+        } else {
+        toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
+        logoFile.value = null;
+        }
 };
 const createSupplier = async () => {
     loading.value = true
@@ -355,6 +342,40 @@ const createSupplier = async () => {
     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response, life: 3000 });
     }
 };
+
+const updateSupplier=  async()=>{
+    
+    loading.value = true
+    const url = `${SHOPIFY_URL}/api/suppliers/${id.value}`;
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('supplier_code', supplier_code.value);
+    formData.append('address', address.value);
+    formData.append('email', email.value);
+    formData.append('phone', phone.value);
+
+    if (logoFile.value) {
+    formData.append('logo', logoFile.value, logoFile.value.name);
+    }
+    try {
+    const response = await axios.post(url, formData, {
+        headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': '*/*'
+        },
+    });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Supplier Updated Successfully', life: 3000 });
+    loading.value = false
+    addLineItem.value = false
+    let result = await shopBrandsStore.getAllSuppliers().then((data) => {
+        supplier_list.value = data.data.data.suppliers
+    })
+    } catch (error) {
+    console.log('ERROR',error)
+    loading.value = false
+    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response, life: 3000 });
+    }
+}
      
    
 
