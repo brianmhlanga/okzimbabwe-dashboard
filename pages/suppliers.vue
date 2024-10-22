@@ -185,6 +185,7 @@
      const toast = useToast()
      const supplier_list = ref()
      const shop_brand_list = ref()
+     const logoFile = ref()
      const category_type = ref('Yes')
      const active_status = ref('Yes')
      const categories_list = ref()
@@ -307,6 +308,42 @@ const deleteShopBrand = (category_id) => {
         })
 
     }
+    const handleFileChange = (event) => {
+const file = event.target.files[0];
+const acceptedTypes = ['image/jpeg', 'image/png'];
+if (file && acceptedTypes.includes(file.type)) {
+    logoFile.value = file;
+} else {
+    toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
+    logoFile.value = null;
+}
+};
+const createShopBrand = async () => {
+    loading.value = true
+    const url = `${SHOPIFY_URL}/api/suppliers`;
+    const formData = new FormData();
+    formData.append('name', name.value);
+    if (logoFile.value) {
+    formData.append('logo', logoFile.value, logoFile.value.name);
+    }
+    try {
+    const response = await axios.post(url, formData, {
+        headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': '*/*'
+        },
+    });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+    loading.value = false
+    addLineItem.value = false
+    let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
+        shop_brand_list.value = data.data.data.data.shopbrands
+    })
+    } catch (error:any) {
+    loading.value = false
+    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
+    }
+};
      
    
 

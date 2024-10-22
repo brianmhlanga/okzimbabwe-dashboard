@@ -114,6 +114,16 @@ const mainMenuItems = ref([
         ]
     },
     {
+        label: 'Suppliers',
+        icon: 'pi pi-users',
+        items: [
+            { label: 'Supplier', icon: 'pi pi-list',command:()=>{
+                navigateTo('/suppliers');} },
+            ,
+            
+        ]
+    },
+    {
         label: 'Influencer',
         icon: 'pi pi-users',
         items: [
