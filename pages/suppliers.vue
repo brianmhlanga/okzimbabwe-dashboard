@@ -230,10 +230,10 @@
     console.log('category',data)
 }
 
-const deleteShopBrand = (category_id) => {
-    console.log('shop_id',category_id)
+const deleteShopBrand = (supplier_id) => {
+    console.log('shop_id',supplier_id)
     let data = {
-    "id": category_id
+    "id": supplier_id
     }
     
     confirm.require({
@@ -245,13 +245,14 @@ const deleteShopBrand = (category_id) => {
     rejectClass: 'p-button-secondary p-button-outlined',
     acceptClass: 'p-button-danger',
     accept: async() => {
-        let result = await shopBrandsStore.deleteCategory(data)
+        let result = await shopBrandsStore.deleteSupplier(data)
         if (result.data.success){
         toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-        await shopBrandsStore.getAllCategories().then((data)=>{
-            categories_list.value = data.data.data.categories
-            console.log('categories list',categories_list.value)
+        await shopBrandsStore.getAllSuppliers().then((data)=>{
+            supplier_list.value = data.data.data.suppliers
+            console.log('categories list',supplier_list.value)
         })
+    
     
         }
         else{
