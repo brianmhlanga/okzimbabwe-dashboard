@@ -271,11 +271,13 @@ const deleteShopBrand = (supplier_id) => {
     
     
      const refresh_data = ()=>{
+        
         name.value = ''
-        is_parent.value = ''
-        is_sub_parent.value = "",
-        is_active.value = "",
-        parent_category_id.value = "" 
+        supplier_code.value = ''
+        phone.value = ''
+        email.value = ''
+        address.value = ''
+        logoFile.value = ''
     }
 
 
@@ -334,6 +336,7 @@ const createSupplier = async () => {
     toast.add({ severity: 'success', summary: 'Success', detail: 'Supplier Created Successfully', life: 3000 });
     loading.value = false
     addLineItem.value = false
+    refresh_data()
     let result = await shopBrandsStore.getAllSuppliers().then((data) => {
         supplier_list.value = data.data.data.suppliers
     })
@@ -368,6 +371,7 @@ const updateSupplier=  async()=>{
     toast.add({ severity: 'success', summary: 'Success', detail: 'Supplier Updated Successfully', life: 3000 });
     loading.value = false
     addLineItem.value = false
+    refresh_data()
     let result = await shopBrandsStore.getAllSuppliers().then((data) => {
         supplier_list.value = data.data.data.suppliers
     })
