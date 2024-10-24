@@ -26,7 +26,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
     actions: {
         async createShopBrand(info:any) {
             console.log("zzzzzzzzzzzzzzzzzzzzzzz", info);
-          
+            
             // Prepare the FormData object
             const formData = new FormData();
             formData.append('name', info.name); // Assuming `info.name` contains the shop brand name
@@ -34,46 +34,46 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             
             // Define the configuration for the axios request
             const config = {
-              method: 'post',
-              url: '/shopBrands/create',
-              headers: {
+                method: 'post',
+                url: '/shopBrands/create',
+                headers: {
                 'Accept': 'application/json',
                 'Cache-Control': 'no-cache',
                 'Content-Type': 'multipart/form-data',
-              },
-              data: JSON.stringify(formData),
+                },
+                data: JSON.stringify(formData),
             };
-          
+            
             // Make the axios request
             const result = await axios(config)
-              .then(function (response) {
+                .then(function (response) {
                 console.log(JSON.stringify(response.data));
                 return {
-                  data: response.data,
-                  success: true,
+                    data: response.data,
+                    success: true,
                 };
-              })
-              .catch(function (error) {
+                })
+                .catch(function (error) {
                 console.log(error);
                 return {
-                  success: false,
+                    success: false,
                 };
-              });
-          
+                });
+            
             return result;
-          },
+            },
         async getAllShopBrands() {
-             const token = useCookie('token').value || ""
-             var config = {
+                const token = useCookie('token').value || ""
+                var config = {
                 method: 'post',
                 url: '/shopBrands/getAllShopBrands',
                 headers: { 
                     "Authorization": `Bearer ${token}`,
                     'Accept': '/',
                     'Cache-Control': 'no-cache',
-                   
+                    
                 },
-               
+                
             }; 
             const result = await axios(config).then(function (response) { 
                 console.log(JSON.stringify(response.data));
@@ -87,39 +87,39 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     success: false
                 }
             });
-   
+
             return result;
         },
         async getAllProductBrands() {
             const token = useCookie('token').value || ""
             var config = {
-               method: 'get',
-               url: '/api/product-brands',
-               headers: { 
-                   "Authorization": `Bearer ${token}`,
-                   'Accept': '/',
-                   'Cache-Control': 'no-cache',
-                  
-               },
-              
-           }; 
-           const result = await axios(config).then(function (response) { 
-               console.log(JSON.stringify(response.data));
-               return {
-                   data: response.data,
-                   success: true
-               }
-           }).catch(function (error) {
-               console.log(error);
-               return {
-                   success: false
-               }
-           });
-  
-           return result;
-       },
-       
-        
+                method: 'get',
+                url: '/api/product-brands',
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+
+            return result;
+        },
+            
+                
         async updateShopBrand() {
             
             const data = {
@@ -128,7 +128,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 logo: this.logo,
                 
             },
-             config = {
+                config = {
                 method: 'post',
                 url: '/shopBrands/updateShopBrands',
                 data: data,
@@ -137,9 +137,9 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     'Cache-Control': 'no-cache',
                     'Content-Type': 'application/json'
                 },
-               
+                
             }; 
-    
+
             const result = await axios(config).then(function (response) {
                 console.log(JSON.stringify(response.data));
                 return {
@@ -152,14 +152,14 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     success: false
                 }
             });
-   
+
             return result;
         },
         async removeShopBrand() {
             const data = {
                 id: this.id,    
             },
-             config = {
+                config = {
                 method: 'post',
                 url: '/shopBrands/deleteShopBrand',
                 data: data,
@@ -168,9 +168,9 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     'Cache-Control': 'no-cache',
                     'Content-Type': 'application/json'
                 },
-               
+                
             }; 
-    
+
             const result = await axios(config).then(function (response) {
                 console.log(JSON.stringify(response.data));
                 return {
@@ -183,14 +183,14 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                     success: false
                 }
             });
-   
+
             return result;
         },
         async createCategory (info:any){
             var data = JSON.stringify({
                 "data": info,
             });
-             const token = useCookie('token').value || ""
+                const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/Catergories/create',
@@ -205,13 +205,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -220,7 +220,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
-             const token = useCookie('token').value || ""
+                const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/Catergories/update',
@@ -235,13 +235,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -265,13 +265,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -295,13 +295,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -325,13 +325,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -355,13 +355,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -385,13 +385,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -415,13 +415,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -445,13 +445,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -475,13 +475,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -505,13 +505,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -535,13 +535,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -550,7 +550,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
-             const token = useCookie('token').value || ""
+                const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/inventory/create',
@@ -565,13 +565,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -580,7 +580,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
-               const token = useCookie('token').value || ""
+                const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/auth/signup',
@@ -595,13 +595,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -623,13 +623,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             
             console.log('simba',this.full_name)
@@ -641,7 +641,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
-          const token = useCookie('token').value || ""
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/featuredProducts/add_featured_product',
@@ -656,13 +656,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -686,13 +686,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -716,13 +716,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -746,13 +746,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -776,13 +776,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -806,13 +806,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -836,13 +836,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -866,13 +866,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -896,13 +896,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -926,13 +926,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -956,13 +956,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -986,13 +986,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1016,13 +1016,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1046,13 +1046,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1076,13 +1076,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1106,13 +1106,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1136,13 +1136,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1166,13 +1166,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1196,13 +1196,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1226,13 +1226,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1256,13 +1256,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1286,13 +1286,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1316,13 +1316,13 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
@@ -1346,54 +1346,54 @@ export const useShopBrandsStore = defineStore('shopBrands', {
                 return {
                     data: response.data,
                     success: true
-                 }
+                    }
             })
             .catch(function (error) {
                 console.log(error);
                 return {
                     success: false
-                 }
+                    }
             });
             return result;
 
         },
-        
+                
         async getAllCategories() {
-            let url = new URL(`${SHOPIFY_URL}/api/categories`)
-            const params:any = {
-                per_page: "10",
-            };
-            Object.keys(params).forEach((key) =>
-                url.searchParams.append(key, params[key])
-            );
-            const token = useCookie('token').value || ""
-            var config:any = {
-               method: 'GET',
-               url: url,
-               headers: { 
-                 "Authorization": `Bearer ${token}`,
-                   'Accept': '/',
-                   'Cache-Control': 'no-cache',
-                  
-               },
-              
-           }; 
-           const result = await axios(config).then(function (response) { 
-               console.log(JSON.stringify(response.data));
-               return {
-                   data: response.data,
-                   success: true
-               }
-           }).catch(function (error) {
-               console.log(error);
-               return {
-                   success: false
-               }
-           });
-  
-           return result;
-       },
-       async getFeaturedMenus(id:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/categories`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async getFeaturedMenus(id:any) {
         let url = new URL(`${SHOPIFY_URL}/api/featured-menus/${id}`)
         const params:any = {
             per_page: "10",
@@ -1403,32 +1403,32 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
-             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
-       async getAllDiscounts() {
+        return result;
+        },
+        async getAllDiscounts() {
         let url = new URL(`${SHOPIFY_URL}/api/discounts`)
         const params:any = {
             per_page: "10",
@@ -1438,240 +1438,240 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
-             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
-   async getAllRoles() {
-    let url = new URL(`${SHOPIFY_URL}/api/roles`)
-    const params:any = {
-        per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
-       method: 'GET',
-       url: url,
-       headers: { 
-         "Authorization": `Bearer ${token}`,
-           'Accept': '/',
-           'Cache-Control': 'no-cache',
-          
-       },
-      
-   }; 
-   const result = await axios(config).then(function (response) { 
-       console.log(JSON.stringify(response.data));
-       return {
-           data: response.data,
-           success: true
-       }
-   }).catch(function (error) {
-       console.log(error);
-       return {
-           success: false
-       }
-   });
+        return result;
+        },
+        async getAllRoles() {
+        let url = new URL(`${SHOPIFY_URL}/api/roles`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-   return result;
-},
-async getAllProductBrandss() {
-    let url = new URL(`${SHOPIFY_URL}/api/product-brands`)
-    const params:any = {
-        per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
-       method: 'GET',
-       url: url,
-       headers: { 
-         "Authorization": `Bearer ${token}`,
-           'Accept': '/',
-           'Cache-Control': 'no-cache',
-          
-       },
-      
-   }; 
-   const result = await axios(config).then(function (response) { 
-       console.log(JSON.stringify(response.data));
-       return {
-           data: response.data,
-           success: true
-       }
-   }).catch(function (error) {
-       console.log(error);
-       return {
-           success: false
-       }
-   });
+        return result;
+        },
+        async getAllProductBrandss() {
+            let url = new URL(`${SHOPIFY_URL}/api/product-brands`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-   return result;
-},
-async getAllSuppliers() {
-    let url = new URL(`${SHOPIFY_URL}/api/suppliers`)
-    const params:any = {
-        per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
-       method: 'GET',
-       url: url,
-       headers: { 
-         "Authorization": `Bearer ${token}`,
-           'Accept': '/',
-           'Cache-Control': 'no-cache',
-          
-       },
-      
-   }; 
-   const result = await axios(config).then(function (response) { 
-       console.log(JSON.stringify(response.data));
-       return {
-           data: response.data,
-           success: true
-       }
-   }).catch(function (error) {
-       console.log(error);
-       return {
-           success: false
-       }
-   });
+        return result;
+        },
+        async getAllSuppliers() {
+            let url = new URL(`${SHOPIFY_URL}/api/suppliers`)
+            const params:any = {
+                per_page: "10",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-   return result;
-},
-async getSupplierPagination(page:any) {
-    let url = new URL(`${SHOPIFY_URL}/api/suppliers?page=${page}`)
-    const token = useCookie('token').value || ""
-    var config:any = {
-    method: 'GET',
-    url: url,
-    headers: {
-        "Authorization": `Bearer ${token}`,
-        'Accept': '/',
-        'Cache-Control': 'no-cache',
-        
-    },
-    
-}; 
-const result = await axios(config).then(function (response) { 
-    console.log(JSON.stringify(response.data));
-    return {
-        data: response.data,
-        success: true
-    }
-}).catch(function (error) {
-    console.log(error);
-    return {
-        success: false
-    }
-});
-
-return result;
-},
-    async get_all_discount_types() {
-    let url = new URL(`${SHOPIFY_URL}/api/discount-types`)
-    const params:any = {
-        per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
+        return result;
+        },
+        async getSupplierPagination(page:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/suppliers?page=${page}`)
+        const token = useCookie('token').value || ""
+        var config:any = {
         method: 'GET',
         url: url,
-        headers: { 
+        headers: {
             "Authorization": `Bearer ${token}`,
             'Accept': '/',
             'Cache-Control': 'no-cache',
             
         },
-        
-    }; 
-    const result = await axios(config).then(function (response) { 
+
+        }; 
+        const result = await axios(config).then(function (response) { 
         console.log(JSON.stringify(response.data));
         return {
             data: response.data,
             success: true
         }
-    }).catch(function (error) {
+        }).catch(function (error) {
         console.log(error);
         return {
             success: false
         }
-    });
+        });
 
-    return result;
-},
-   async get_shop_currencies(id:any) {
-    let url = new URL(`${SHOPIFY_URL}/api/shop-currencies`)
-    const params:any = {
+        return result;
+        },
+        async get_all_discount_types() {
+        let url = new URL(`${SHOPIFY_URL}/api/discount-types`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async get_shop_currencies(id:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/shop-currencies`)
+        const params:any = {
         shop_brand_id: id,
         per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
+        };
+        Object.keys(params).forEach((key) =>
         url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
-       method: 'GET',
-       url: url,
-       headers: { 
-         "Authorization": `Bearer ${token}`,
-           'Accept': '/',
-           'Cache-Control': 'no-cache',
-          
-       },
-      
-   }; 
-   const result = await axios(config).then(function (response) { 
-       console.log(JSON.stringify(response.data));
-       return {
-           data: response.data,
-           success: true
-       }
-   }).catch(function (error) {
-       console.log(error);
-       return {
-           success: false
-       }
-   });
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+        method: 'GET',
+        url: url,
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            'Accept': '/',
+            'Cache-Control': 'no-cache',
+            
+        },
 
-   return result;
-},
-    async get_order_status() {
+        }; 
+        const result = await axios(config).then(function (response) { 
+        console.log(JSON.stringify(response.data));
+        return {
+            data: response.data,
+            success: true
+        }
+        }).catch(function (error) {
+        console.log(error);
+        return {
+            success: false
+        }
+        });
+
+        return result;
+        },
+        async get_order_status() {
         let url = new URL(`${SHOPIFY_URL}/api/order-statuses`)
         const params:any = {
-        
+
             per_page: "10",
         };
         Object.keys(params).forEach((key) =>
@@ -1687,27 +1687,27 @@ return result;
             'Cache-Control': 'no-cache',
             
         },
-        
-    }; 
-    const result = await axios(config).then(function (response) { 
+
+        }; 
+        const result = await axios(config).then(function (response) { 
         console.log(JSON.stringify(response.data));
         return {
             data: response.data,
             success: true
         }
-    }).catch(function (error) {
+        }).catch(function (error) {
         console.log(error);
         return {
             success: false
         }
-    });
+        });
 
-    return result;
-    },
-    async get_order_stages() {
+        return result;
+        },
+        async get_order_stages() {
         let url = new URL(`${SHOPIFY_URL}/api/order-stages`)
         const params:any = {
-        
+
             per_page: "10",
         };
         Object.keys(params).forEach((key) =>
@@ -1723,27 +1723,27 @@ return result;
             'Cache-Control': 'no-cache',
             
         },
-        
-    }; 
-    const result = await axios(config).then(function (response) { 
+
+        }; 
+        const result = await axios(config).then(function (response) { 
         console.log(JSON.stringify(response.data));
         return {
             data: response.data,
             success: true
         }
-    }).catch(function (error) {
+        }).catch(function (error) {
         console.log(error);
         return {
             success: false
         }
-    });
+        });
 
-    return result;
-    },
-    async get_minimum_order() {
+        return result;
+        },
+        async get_minimum_order() {
         let url = new URL(`${SHOPIFY_URL}/api/minimum-orders`)
         const params:any = {
-        
+
             per_page: "10",
         };
         Object.keys(params).forEach((key) =>
@@ -1759,24 +1759,24 @@ return result;
             'Cache-Control': 'no-cache',
             
         },
-        
-    }; 
-    const result = await axios(config).then(function (response) { 
+
+        }; 
+        const result = await axios(config).then(function (response) { 
         console.log(JSON.stringify(response.data));
         return {
             data: response.data,
             success: true
         }
-    }).catch(function (error) {
+        }).catch(function (error) {
         console.log(error);
         return {
             success: false
         }
-    });
+        });
 
-    return result;
-    },
-       async get_product_brands() {
+        return result;
+        },
+        async get_product_brands() {
         let url = new URL(`${SHOPIFY_URL}/api/product-brands`)
         const params:any = {
             per_page: "70",
@@ -1786,70 +1786,70 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
-             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
-
-       return result;
-   },
-   async fetchAllProductBrands() {
-    let page = 1;
-    let per_page = 10;
-    let hasMorePages = true;
-    let url:any = `${SHOPIFY_URL}/api/product-brands`;
-    const token = useCookie('token').value || ""
-    var config:any = {
-        method: 'GET',
-        headers: {
-            "Authorization": `Bearer ${token}`, 
-            'Accept': '/',
-            'Cache-Control': 'no-cache',
-        },
-    };
-
-    this.product_brands = []; // Initialize allCategories array
-
-    while (hasMorePages) {
-        try {
-            config.url = `${url}?page=${page}&per_page=${per_page}`;
-            const response = await axios(config);
-            console.log('mbilimbi23', response.data.data);
-            this.product_brands.push(...response.data.data.data);
-            console.log('product_brands',this.product_brands)
-            if (page >= response.data.data.totalPages) {
-                hasMorePages = false;
-            } else {
-                page++;
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
             }
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            hasMorePages = false;
-        }
-    }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-    // Uncomment this line if you want to filter parent categories
-    
-},
-       async get_all_featured_products(id:any,shop_brand:any) {
+        return result;
+        },
+        async fetchAllProductBrands() {
+        let page = 1;
+        let per_page = 10;
+        let hasMorePages = true;
+        let url:any = `${SHOPIFY_URL}/api/product-brands`;
+        const token = useCookie('token').value || ""
+        var config:any = {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`, 
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+            },
+        };
+
+        this.product_brands = []; // Initialize allCategories array
+
+        while (hasMorePages) {
+            try {
+                config.url = `${url}?page=${page}&per_page=${per_page}`;
+                const response = await axios(config);
+                console.log('mbilimbi23', response.data.data);
+                this.product_brands.push(...response.data.data.data);
+                console.log('product_brands',this.product_brands)
+                if (page >= response.data.data.totalPages) {
+                    hasMorePages = false;
+                } else {
+                    page++;
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                hasMorePages = false;
+            }
+        }
+
+        // Uncomment this line if you want to filter parent categories
+
+        },
+        async get_all_featured_products(id:any,shop_brand:any) {
         let url = new URL(`${SHOPIFY_URL}/api/featured-products/${id}?is_shop_brand=${shop_brand}`)
         const params:any = {
             per_page: "10",
@@ -1859,32 +1859,32 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
+            method: 'GET',
+            url: url,
+            headers: { 
             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
-       async getInventory(id:any) {
+        return result;
+        },
+        async getInventory(id:any) {
         let url = new URL(`${SHOPIFY_URL}/api/inventory?shop_id=${id}`)
         const params:any = {
             per_page: "10",
@@ -1894,31 +1894,31 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: {
-               "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+            method: 'GET',
+            url: url,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
+        return result;
+        },
         async getCategoriesPagination(page:any) {
             let url = new URL(`${SHOPIFY_URL}/api/categories?page=${page}`)
             const token = useCookie('token').value || ""
@@ -1985,34 +1985,34 @@ return result;
             Object.keys(params).forEach((key) =>
                 url.searchParams.append(key, params[key])
             );
-              const token = useCookie('token').value || ""
+                const token = useCookie('token').value || ""
             var config:any = {
-               method: 'GET',
-               url: url,
-               headers: {
+                method: 'GET',
+                url: url,
+                headers: {
                 "Authorization": `Bearer ${token}`, 
-                   'Accept': '/',
-                   'Cache-Control': 'no-cache',
-                  
-               },
-              
-           }; 
-           const result = await axios(config).then(function (response) { 
-               console.log(JSON.stringify(response.data));
-               return {
-                   data: response.data,
-                   success: true
-               }
-           }).catch(function (error) {
-               console.log(error);
-               return {
-                   success: false
-               }
-           });
-  
-           return result;
-       },
-        
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+
+            return result;
+        },
+                
         async getAllProducts() {
             let url = new URL(`${SHOPIFY_URL}/api/products`)
             const params:any = {
@@ -2023,32 +2023,32 @@ return result;
             );
             const token = useCookie('token').value || ""
             var config:any = {
-               method: 'GET',
-               url: url,
-               headers: { 
+                method: 'GET',
+                url: url,
+                headers: { 
                 "Authorization": `Bearer ${token}`,
-                   'Accept': '/',
-                   'Cache-Control': 'no-cache',
-                  
-               },
-              
-           }; 
-           const result = await axios(config).then(function (response) { 
-               console.log(JSON.stringify(response.data));
-               return {
-                   data: response.data,
-                   success: true
-               }
-           }).catch(function (error) {
-               console.log(error);
-               return {
-                   success: false
-               }
-           });
-  
-           return result;
-       },
-       async getOrders() {
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+
+            return result;
+        },
+        async getOrders() {
         let url = new URL(`${SHOPIFY_URL}/api/orders`)
         const params:any = {
             per_page: "10",
@@ -2058,96 +2058,125 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
+            method: 'GET',
+            url: url,
+            headers: { 
             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
-   async getOrdersPagination(page:any) {
-    let url = new URL(`${SHOPIFY_URL}/api/orders?page=${page}`)
-      const token = useCookie('token').value || ""
-    var config:any = {
-    method: 'GET',
-    url: url,
-    headers: { 
-        "Authorization": `Bearer ${token}`,
-        'Accept': '/',
-        'Cache-Control': 'no-cache',
-        
-    },
-    
-}; 
-const result = await axios(config).then(function (response) { 
-    console.log(JSON.stringify(response.data));
-    return {
-        data: response.data,
-        success: true
-    }
-}).catch(function (error) {
-    console.log(error);
-    return {
-        success: false
-    }
-});
+        return result;
+        },
+        async getOrdersPagination(page:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/orders?page=${page}`)
+            const token = useCookie('token').value || ""
+        var config:any = {
+        method: 'GET',
+        url: url,
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            'Accept': '/',
+            'Cache-Control': 'no-cache',
+            
+        },
 
-return result;
-},
-   async getShopOrders(user_shop:any) {
-    let url = new URL(`${SHOPIFY_URL}/api/orders/shop/${user_shop}`)
-    const params:any = {
-        per_page: "10",
-    };
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-    const token = useCookie('token').value || ""
-    var config:any = {
-       method: 'GET',
-       url: url,
-       headers: { 
-        "Authorization": `Bearer ${token}`,
-           'Accept': '/',
-           'Cache-Control': 'no-cache',
-          
-       },
-      
-   }; 
-   const result = await axios(config).then(function (response) { 
-       console.log(JSON.stringify(response.data));
-       return {
-           data: response.data,
-           success: true
-       }
-   }).catch(function (error) {
-       console.log(error);
-       return {
-           success: false
-       }
-   });
+        }; 
+        const result = await axios(config).then(function (response) { 
+        console.log(JSON.stringify(response.data));
+        return {
+            data: response.data,
+            success: true
+        }
+        }).catch(function (error) {
+        console.log(error);
+        return {
+            success: false
+        }
+        });
 
-   return result;
-},
-       async getUsers() {
+        return result;
+        },
+        async searchProducts(searchParam:any) {
+            let url = new URL(`${SHOPIFY_URL}/api/products/search?search=${searchParam}`)
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async getShopOrders(user_shop:any) {
+        let url = new URL(`${SHOPIFY_URL}/api/orders/shop/${user_shop}`)
+        const params:any = {
+            per_page: "10",
+        };
+        Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+        );
+        const token = useCookie('token').value || ""
+        var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+            "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async getUsers() {
         let url = new URL(`${SHOPIFY_URL}/api/users`)
         const params:any = {
             per_page: "100",
@@ -2157,30 +2186,30 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
+            method: 'GET',
+            url: url,
+            headers: { 
             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
+        return result;
         },
         async getShoppingCart() {
             let url = new URL(`${SHOPIFY_URL}/api/carts`)
@@ -2192,34 +2221,34 @@ return result;
             );
             const token = useCookie('token').value || ""
             var config:any = {
-               method: 'GET',
-               url: url,
-               headers: { 
+                method: 'GET',
+                url: url,
+                headers: { 
                 "Authorization": `Bearer ${token}`,
-                   'Accept': '/',
-                   'Cache-Control': 'no-cache',
-                  
-               },
-              
-           }; 
-           const result = await axios(config).then(function (response) { 
-               console.log(JSON.stringify(response.data));
-               return {
-                   data: response.data,
-                   success: true
-               }
-           }).catch(function (error) {
-               console.log(error);
-               return {
-                   success: false
-               }
-           });
-    
-           return result;
-            },
-       async getProductsPagination(page:any) {
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+
+            return result;
+        },
+        async getProductsPagination(page:any) {
         let url = new URL(`${SHOPIFY_URL}/api/products?page=${page}`)
-          const token = useCookie('token').value || ""
+            const token = useCookie('token').value || ""
         var config:any = {
         method: 'GET',
         url: url,
@@ -2229,24 +2258,24 @@ return result;
             'Cache-Control': 'no-cache',
             
         },
-        
-    }; 
-    const result = await axios(config).then(function (response) { 
+
+        }; 
+        const result = await axios(config).then(function (response) { 
         console.log(JSON.stringify(response.data));
         return {
             data: response.data,
             success: true
         }
-    }).catch(function (error) {
+        }).catch(function (error) {
         console.log(error);
         return {
             success: false
         }
-    });
+        });
 
-    return result;
-    },
-       async getAllCurrencies() {
+        return result;
+        },
+        async getAllCurrencies() {
         let url = new URL(`${SHOPIFY_URL}/api/currencies`)
         const params:any = {
             per_page: "10",
@@ -2256,31 +2285,31 @@ return result;
         );
         const token = useCookie('token').value || ""
         var config:any = {
-           method: 'GET',
-           url: url,
-           headers: { 
+            method: 'GET',
+            url: url,
+            headers: { 
             "Authorization": `Bearer ${token}`,
-               'Accept': '/',
-               'Cache-Control': 'no-cache',
-              
-           },
-          
-       }; 
-       const result = await axios(config).then(function (response) { 
-           console.log(JSON.stringify(response.data));
-           return {
-               data: response.data,
-               success: true
-           }
-       }).catch(function (error) {
-           console.log(error);
-           return {
-               success: false
-           }
-       });
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
 
-       return result;
-   },
+        return result;
+        },
         async getAllAdverts() {
         let url = new URL(`${SHOPIFY_URL}/api/adverts`)
         const params:any = {
@@ -2348,9 +2377,9 @@ return result;
                     success: false
                 }
             });
-    
+
             return result;
-            },
+        },
         async fetchAllCategories() {
             let page = 1;
             let per_page = 10;
@@ -2365,16 +2394,16 @@ return result;
                     'Cache-Control': 'no-cache',
                 },
             };
-        
+
             this.allCategories = []; // Initialize allCategories array
-        
+
             while (hasMorePages) {
                 try {
                     config.url = `${url}?page=${page}&per_page=${per_page}`;
                     const response = await axios(config);
                     console.log('mbilimbi', response.data.data);
                     this.allCategories.push(...response.data.data.categories);
-        
+
                     if (page >= response.data.data.totalPages) {
                         hasMorePages = false;
                     } else {
@@ -2385,10 +2414,10 @@ return result;
                     hasMorePages = false;
                 }
             }
-        
+
             // Uncomment this line if you want to filter parent categories
             this.parentCategories = this.allCategories.filter(category => category.is_parent == 1)
-        
+
             console.log('All Categories:', this.allCategories);
             console.log('Parent Categories:', this.parentCategories);
         },
@@ -2406,16 +2435,16 @@ return result;
                     'Cache-Control': 'no-cache',
                 },
             };
-        
+
             this.products = []; // Initialize allCategories array
-        
+
             while (hasMorePages) {
                 try {
                     config.url = `${url}?page=${page}&per_page=${per_page}`;
                     const response = await axios(config);
                     console.log('mbilimbi', response.data.data);
                     this.products.push(...response.data.data.products);
-        
+
                     if (page >= response.data.data.totalPages) {
                         hasMorePages = false;
                     } else {
@@ -2426,12 +2455,12 @@ return result;
                     hasMorePages = false;
                 }
             }
-        
+
             // Uncomment this line if you want to filter parent categories
             
-        
+
             console.log('All Products:', this.products);
-           
+            
         },
     }
 });

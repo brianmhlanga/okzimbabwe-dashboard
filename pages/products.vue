@@ -18,10 +18,10 @@
                                         <div class="flex justify-content-between">
                                             
                                             <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()"/>
-                                            <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
+                                            <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV()" />
                                             <IconField iconPosition="left" >
                                                 <InputIcon class="pi pi-search" > </InputIcon>
-                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                                <InputText v-model="searchParams" placeholder="Keyword Search" @input="searchProducts()" />
                                             </IconField>
                                         </div>
                                     </template>
@@ -268,6 +268,9 @@
      console.log('vbhjnk',parentCategories.value)
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const product_brands = storeToRefs(shopBrandsStore).product_brands
+     const exportCSV = () => {
+        dt.value.exportCSV();
+    };
     
      const name = ref('')
      const product_modal = ref()
@@ -277,6 +280,7 @@
      const is_active = ref('')
      const category_id = ref('')
      const product_code = ref()
+     const searchParams:any = ref() 
      const price = ref()
      const categories:any = ref([])
      const toast = useToast()
@@ -330,7 +334,7 @@
     console.log('mbililimbi',)
     return cleanedString[0]
   } catch (error) {
-    console.error('Error parsing images JSON:', error);
+
   }
   return null; // Return null if parsing fails or no images are found
 };
@@ -370,11 +374,7 @@
         await shopBrandsStore.fetchAllCategories().then((data:any)=>{
             allCategories.value.push(...data.data.categories)
         })
-        //  let result = await shopBrandsStore.getAllShopBrands().then((data) => {
-        //      console.log("dgfa",data.data.data.data.shopbrands)
-        //      shop_brand_list.value = data.data.data.data.shopbrands
-        //  })
-        console.log('prrrr',product_brands.value)
+        
      });
      
      const showProduct = async(product:any) => {
@@ -393,7 +393,7 @@
 console.log('categories',categories.value)
       product_modal.value = true
      
-}
+    }
     
      const onPage = (event:any) => {
         let current_page = event.page + 1
@@ -405,7 +405,6 @@ console.log('categories',categories.value)
         })
 
     }
-     
     const deleteProduct = (product:any) => {
         loading.value = true
       let data = {
@@ -438,7 +437,7 @@ console.log('categories',categories.value)
             toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
         } 
     });
-}
+    }
     const addPrice = async () =>{
        
         loading.value = true
@@ -464,13 +463,8 @@ console.log('categories',categories.value)
                 toast.add({severity:'warn', summary: 'Failed', detail:'Creation Failed', life: 3000});
                 loading.value = false
             }
-        } 
-        
-       
-           
-         
-         
-        const refresh_data = ()=>{
+    }     
+    const refresh_data = ()=>{
         name.value = ''
         description.value = ''
         category_id.value = "",
@@ -481,12 +475,7 @@ console.log('categories',categories.value)
         vat.value = ''
 
     }
-
-        
-         
-     
-
-    const formatDate = (value) => {
+    const formatDate = (value:any) => {
         const date = new Date(value);
         const options = {
             year: 'numeric',
@@ -500,7 +489,6 @@ console.log('categories',categories.value)
         //@ts-ignore
         return date.toLocaleString('en-US', options);
     };
-  
     const handleFileChange = (event:any) => {
     const file = event.target.files[0];
     const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
@@ -604,6 +592,11 @@ console.log('categories',categories.value)
         toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
       }
     };
+    const searchProducts = async()=>{
+        await shopBrandsStore.searchProducts(searchParams.value).then((data)=>{
+            categories_list.value = data.data.data.products
+        })
+    }
 
 
     
