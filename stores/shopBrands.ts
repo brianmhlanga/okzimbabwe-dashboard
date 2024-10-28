@@ -2141,6 +2141,93 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+        async searchSupplier(searchParam:any) {
+            let url = new URL(`${SHOPIFY_URL}/api/suppliers/search/find?search=${searchParam}`)
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async searchCategory(searchParam:any) {
+            let url = new URL(`${SHOPIFY_URL}/api/categories/search/find?search=${searchParam}`)
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
+        async searchProductBrands(searchParam:any) {
+            let url = new URL(`${SHOPIFY_URL}/api/product-brands/search/find?search=${searchParam}`)
+            const token = useCookie('token').value || ""
+            var config:any = {
+            method: 'GET',
+            url: url,
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                'Accept': '/',
+                'Cache-Control': 'no-cache',
+                
+            },
+            
+        }; 
+        const result = await axios(config).then(function (response) { 
+            console.log(JSON.stringify(response.data));
+            return {
+                data: response.data,
+                success: true
+            }
+        }).catch(function (error) {
+            console.log(error);
+            return {
+                success: false
+            }
+        });
+
+        return result;
+        },
         async getShopOrders(user_shop:any) {
         let url = new URL(`${SHOPIFY_URL}/api/orders/shop/${user_shop}`)
         const params:any = {

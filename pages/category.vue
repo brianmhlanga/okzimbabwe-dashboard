@@ -20,7 +20,7 @@
                                             <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
                                             <IconField iconPosition="left">
                                                 <InputIcon class="pi pi-search"></InputIcon>
-                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                                <InputText v-model="searchParams" placeholder="Keyword Search" @input="searchCategory()" />
                                             </IconField>
                                         </div>
                                     </template>
@@ -36,16 +36,12 @@
                                         </template>
                                     </Column>
                                 
-                                    <!-- <!-- <Column frozen field="description" header="Currency Iso Code" style="min-width:12rem">
-                                        <template #body="{data}">
-                                            {{ data.iso_code }}
-                                        </template>
-                                    </Column> -->
+                                    
                                     <Column frozen field="category.name" header="Parent Category" style="min-width:12rem">
                                         <template #body="{data}">
                                             {{ data.is_parent? true:false }}
                                         </template>
-                                    </Column> -->
+                                    </Column> 
                                 
                                     <Column frozen field="created_at" header="Date Created" style="min-width:12rem">
                                         <template #body="{data}">
@@ -176,6 +172,7 @@
      const  open_category_modal = ref(false)
      const parent_category_id = ref('')
      const toast = useToast()
+     const searchParams = ref()
      const shop_brand_list = ref()
      const category_type = ref('Yes')
      const active_status = ref('Yes')
@@ -470,6 +467,11 @@ const deleteShopBrand = (category_id) => {
         //@ts-ignore
         return date.toLocaleString('en-US', options);
     };
+    const searchCategory = async()=>{
+        await shopBrandsStore.searchCategory(searchParams.value).then((data)=>{
+            categories_list.value = data.data.data.categories
+        })
+    }
   
  </script>
  <style>

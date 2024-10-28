@@ -21,7 +21,7 @@
                                             <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
                                             <IconField iconPosition="left">
                                                 <InputIcon class="pi pi-search"></InputIcon>
-                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                                <InputText v-model="searchParams" placeholder="Keyword Search" @input="searchProductBrands()"/>
                                             </IconField>
                                         </div>
                                     </template>
@@ -111,6 +111,7 @@
  const loading = ref(false)
  const open_shop_brand_modal = ref(false)
  const toast = useToast()
+ const searchParams = ref()
  const shop_brand_list = ref()
  const product_brands_list = ref()
  const shop_id = ref()
@@ -251,6 +252,10 @@ const editProductBrand = async () => {
     };
     return date.toLocaleString('en-US', options);
 };
- 
+const searchProductBrands = async()=>{
+        await shopBrandsStore.searchProductBrands(searchParams.value).then((data)=>{
+            product_brands_list.value = data.data.data.data
+        })
+    }
  
  </script>

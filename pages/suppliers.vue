@@ -20,7 +20,7 @@
                                             <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
                                             <IconField iconPosition="left">
                                                 <InputIcon class="pi pi-search"></InputIcon>
-                                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                                                <InputText v-model="searchParams" placeholder="Keyword Search" @input="searchSupplier()" />
                                             </IconField>
                                         </div>
                                     </template>
@@ -184,6 +184,7 @@
      const email = ref('')
      const phone = ref()
      const is_active = ref('')
+     const searchParams = ref()
      const loading = ref(false)
      const  open_category_modal = ref(false)
      const parent_category_id = ref('')
@@ -398,6 +399,12 @@ const updateSupplier=  async()=>{
         //@ts-ignore
         return date.toLocaleString('en-US', options);
     };
+
+    const searchSupplier = async()=>{
+        await shopBrandsStore.searchSupplier(searchParams.value).then((data)=>{
+            supplier_list.value = data.data.data.suppliers
+        })
+    }
   
  </script>
  <style>
