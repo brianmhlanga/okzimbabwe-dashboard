@@ -53,6 +53,18 @@
                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
                    </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Menu Font Color Code</label> 
+                       <input class="form-control" type="text"  v-model="menu_font_color">
+                   </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Theme Color</label> 
+                       <input class="form-control" type="text"  v-model="theme_color">
+                   </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Button Color</label> 
+                       <input class="form-control" type="text"  v-model="button_color">
+                   </div>
                </div>
                <Button :loading="loading" @click="createShopBrand()" label="Create shop brand" icon="pi pi-plus" />
        </Dialog>
@@ -65,6 +77,18 @@
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
                        <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                   </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Menu Font Color Code</label> 
+                       <input class="form-control" type="text"  v-model="menu_font_color">
+                   </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Theme Color</label> 
+                       <input class="form-control" type="text"  v-model="theme_color">
+                   </div>
+                   <div class="field mb-4 col-12 md:col-6"> 
+                       <label  for="company_name" class="font-medium text-900">Button Color</label> 
+                       <input class="form-control" type="text"  v-model="button_color">
                    </div>
                </div>
                <Button :loading="loading" @click="updateShopBrand()" label="Create shop brand" icon="pi pi-plus" />
@@ -86,6 +110,10 @@ const open_shop_brand_modal = ref(false)
 const toast = useToast()
 const shop_brand_list = ref()
 const shop_id = ref()
+const menu_font_color = ref()
+const theme_color = ref()
+const button_color = ref()
+
 const addLineItem = ref(false)
 const logoFile = ref()
 definePageMeta({
@@ -96,6 +124,15 @@ onMounted(async () => {
         shop_brand_list.value = data.data.data.data.shopbrands
     })
 });
+
+const refresh_data = ()=>{
+    name.value = ''
+    button_color.value = ''
+    theme_color.value = "",
+    menu_font_color.value = "",
+    logoFile.value = []
+}
+
 const handleFileChange = (event:any) => {
 const file = event.target.files[0];
 const acceptedTypes = ['image/jpeg', 'image/png'];
@@ -111,6 +148,9 @@ const createShopBrand = async () => {
     const url = `${SHOPIFY_URL}/api/shop-brands`;
     const formData = new FormData();
     formData.append('name', name.value);
+    formData.append('menu_font_color', menu_font_color.value);
+    formData.append('theme_color', theme_color.value);
+    formData.append('button_color', button_color.value);
     if (logoFile.value) {
     formData.append('logo', logoFile.value, logoFile.value.name);
     }
@@ -127,6 +167,7 @@ const createShopBrand = async () => {
     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         shop_brand_list.value = data.data.data.data.shopbrands
     })
+    refresh_data()
     } catch (error:any) {
     loading.value = false
     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
@@ -137,6 +178,9 @@ const shopBrandModal = (data:any)=>{
     shop_id.value = data.id
     name.value = data.name
     logoFile.value = data.logo
+    button_color.value = data.button_color
+    theme_color.value = data.theme_color
+    menu_font_color.value = data.menu_font_color
     console.log('my brand id',data.id)
 }
 const updateShopBrand = async ()=>{
@@ -144,6 +188,9 @@ const updateShopBrand = async ()=>{
     const url = `${SHOPIFY_URL}/api/shop-brands/${shop_id.value}`;
     const formData = new FormData();
     formData.append('name', name.value);
+    formData.append('menu_font_color', menu_font_color.value);
+    formData.append('theme_color', theme_color.value);
+    formData.append('button_color', button_color.value);
     if (logoFile.value) {
     formData.append('logo', logoFile.value, logoFile.value.name);
     }
@@ -160,6 +207,7 @@ const updateShopBrand = async ()=>{
     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         shop_brand_list.value = data.data.data.data.shopbrands
     })
+    refresh_data()
     } catch (error:any) {
     loading.value = false
     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
