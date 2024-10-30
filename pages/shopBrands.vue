@@ -195,7 +195,7 @@ const shopBrandModal = (data:any)=>{
 }
 const updateShopBrand = async ()=>{
    
-    const url = `${SHOPIFY_URL}/api/shop-brands/${shop_id.value}`;
+    const url = `${SHOPIFY_URL}/api/shop-brands/edit/${shop_id.value}`;
     const formData = new FormData();
     formData.append('name', name.value);
     formData.append('menu_font_color', menu_font_color.value);
