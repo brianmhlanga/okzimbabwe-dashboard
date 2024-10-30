@@ -576,7 +576,7 @@ console.log('categories',categories.value)
             'Accept': '*/*'
           },
         });
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Product  Successfully Updated', life: 3000 });
         loading.value = false
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
