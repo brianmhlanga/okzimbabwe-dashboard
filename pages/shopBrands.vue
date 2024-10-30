@@ -23,6 +23,16 @@
                                         {{slotProps.data.name}}
                                     </template>
                                 </Column>
+                                <Column field="name" header="Shop brand theme color">
+                                    <template #body="slotProps">
+                                        {{slotProps.data.theme_color}}
+                                    </template>
+                                </Column>
+                                <Column field="name" header="Shop brand button color">
+                                    <template #body="slotProps">
+                                        {{slotProps.data.button_color}}
+                                    </template>
+                                </Column>
                                 <Column header="Shop brand logo">
                                     <template #body="slotProps">
                                         <img :src="`${slotProps.data.logo}`"  class="w-6rem border-round" />
