@@ -71,7 +71,7 @@
                                         default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
                                     }"
                                     :rows="10"
-                                    :totalRecords="120">
+                                    :totalRecords= totalProducts>
                                 </Paginator>
                             </div>
                            </div>                    
@@ -263,6 +263,7 @@
      import { FilterMatchMode } from 'primevue/api';
      import { useConfirm } from "primevue/useconfirm";
     const confirm = useConfirm();
+    const totalProducts = ref()
      const shopBrandsStore = useShopBrandsStore()
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
      console.log('vbhjnk',parentCategories.value)
@@ -360,6 +361,7 @@
      onMounted(async () => {
         await shopBrandsStore.getAllProducts().then((data:any)=>{
             categories_list.value = data.data.data.products
+            totalProducts.value = data.data.data.totalItemCount
         })
         shopBrandsStore.fetchAllProductBrands()
         
