@@ -61,7 +61,7 @@
                    </div>
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
-                       <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                       <input type="file" accept=".png, .jpg, .jpeg, .svg"  @change="handleFileChange">
                    </div>
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label  for="company_name" class="font-medium text-900">Menu Font Color Code</label> 
@@ -76,9 +76,9 @@
                        <input class="form-control" type="text"  v-model="button_color">
                    </div>
                </div>
-               <Button :loading="loading" @click="createShopBrand()" label="Create shop brand" icon="pi pi-plus" />
+               <Button :loading="loading" @click="createShopBrand()" label="Create Shop Brand" icon="pi pi-plus" />
        </Dialog>
-       <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Create Shop Brand" position="top" :style="{ width: '55vw' }">
+       <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Update Shop Brand" position="top" :style="{ width: '55vw' }">
                <div class="grid formgrid p-fluid">
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label  for="company_name" class="font-medium text-900">Shop brand name</label> 
@@ -86,7 +86,7 @@
                    </div>
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label for="company_name" class="font-medium text-900">Shop brand logo</label> 
-                       <input type="file" accept="image/jpeg, image/png" @change="handleFileChange">
+                       <input type="file" accept=".png, .jpg, .jpeg, .svg"  @change="handleFileChange">
                    </div>
                    <div class="field mb-4 col-12 md:col-6"> 
                        <label  for="company_name" class="font-medium text-900">Menu Font Color Code</label> 
@@ -101,7 +101,7 @@
                        <input class="form-control" type="text"  v-model="button_color">
                    </div>
                </div>
-               <Button :loading="loading" @click="updateShopBrand()" label="Create shop brand" icon="pi pi-plus" />
+               <Button :loading="loading" @click="updateShopBrand()" label="Update Shop Brand" icon="pi pi-plus" />
        </Dialog>
        <ConfirmDialog></ConfirmDialog>
    </NuxtLayout>
@@ -145,7 +145,7 @@ const refresh_data = ()=>{
 
 const handleFileChange = (event:any) => {
 const file = event.target.files[0];
-const acceptedTypes = ['image/jpeg', 'image/png'];
+const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml'];
 if (file && acceptedTypes.includes(file.type)) {
     logoFile.value = file;
 } else {
