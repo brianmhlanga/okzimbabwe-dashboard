@@ -3,60 +3,30 @@
         <section class="section">
             <div class="container-fluid pt-3">
                 <div class="row">
-                    <div class="text-900 font-medium text-xl mb-3">Set Shop Default Currency</div>
+                    <div class="text-900 font-medium text-xl mb-3">Shop Currencies</div>
                     <div>
                         <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
                            
-                            
+                            <div class="field mb-4 col-12 md:col-3">
+                                <Button @click="navigateTo('/currency_dashboard')" label="Currencies Home" icon="pi pi-arrow-left" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                            </div>
                         <div  class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
-                    <Dropdown v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                    <Dropdown @change="getShopCurrencies()" v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
                 </div>
-                
-                <div  class="field mb-4 col-12 md:col-6" ><Button :loading="loading" @click="getFeaturedProduct()" label="Get Shop Currencies" icon="pi pi-plus" /></div>
                 <div class="border-right-1 col-12 md:col-6 surface-border" style="width: 1px; height: 50%;"></div>
                 <div v-if="shop_curriences" class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Currency</label> 
-                    <Dropdown v-model="shop_brand_id" :options="shop_curriences" optionLabel="currency.name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                    <Dropdown v-model="shop_currency_id" :options="shop_curriences" optionLabel="currency.name" optionValue="id" placeholder="Select Currency" checkmark :highlightOnSelect="false" />
                 </div>
-                <div class="field mb-4 col-12 md:col-6" v-if="shop_curriences"><Button :loading="loading1" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
-
-                    
-                           
-                             
+                <div class="field mb-4 col-12 md:col-6" v-if="shop_curriences"><Button :disabled="!shop_currency_id || !shop_brand_id" :loading="loading1" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
                         </div>                    
                     </div>
                     </div>
                 </div>
             </div>
         </section>
-        <Dialog v-model:visible="addLineItem" maximizable modal header="Add Featured Product" position="top" :style="{ width: '55vw' }">
-            <div class="grid formgrid p-fluid">
-                <div class="field mb-4 col-12 md:col-6"> 
-                        <label for="company_name" class="font-medium text-900">Select either shop or shop brand to reference</label> 
-                        <SelectButton v-model="selected_reference_type" :options="options"  aria-labelledby="basic" />
-                    </div>
-                <div v-if="selected_reference_type == 'Shop brand'" class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
-                    <Dropdown v-model="referenced_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
-                </div>
-                <div v-else-if="selected_reference_type == 'Shop'" class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Shop </label> 
-                    <Dropdown v-model="referenced_id" :options="shops_list" optionLabel="name" optionValue="id" placeholder="Select shop" checkmark :highlightOnSelect="false" />
-                </div>
-                <div class="field mb-4 col-12 md:col-6"> 
-                    <label for="company_name" class="font-medium text-900">Select Product </label> 
-                    <Dropdown v-model="product_id" :options="categories_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
-                </div>
-               
-               
-               
-            </div>
-            <div v-if="editing_shop"><Button @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
-            <div v-else-if="shop_creating"><Button @click="addFeaturedProduct()" label="Add Featured Product" icon="pi pi-plus" /></div>
-            
-        </Dialog>
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
 </template>
@@ -73,6 +43,7 @@ const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
 const allCategories:any = ref([]);
 const shop_brand_id = ref();
+const shop_currency_id = ref()
 const name = ref();
 const address = ref(); 
 const shop_brand_list = ref();
@@ -253,7 +224,7 @@ onMounted(async () => {
     });
 });
 
-const getFeaturedProduct = async () => {
+const getShopCurrencies = async () => {
    
       loading.value = true
     
@@ -277,10 +248,8 @@ const getFeaturedProduct = async () => {
 const create_default_currency = async () => {
    loading1.value = true
     const data = {
-        shop_brand_id: shop_brand_id.value
+        shop_currency_id: shop_currency_id.value
     }
-    
-   console.log('is shop brand',shop_brand.value)
    const result:any = await shopBrandsStore.shop_default_currency(data);
   
    

@@ -2,11 +2,11 @@ import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
-    const {data:{shop_brand_id}} = await readBody(event);
+    const {data:{shop_currency_id}} = await readBody(event);
     
     var config = {
         method: 'POST',
-        url: `${SHOPIFY_URL}/api/shop-currencies/default/${shop_brand_id}`,
+        url: `${SHOPIFY_URL}/api/shop-currencies/default/${shop_currency_id}`,
         headers: {
             'Content-Type': 'application/json',
             
