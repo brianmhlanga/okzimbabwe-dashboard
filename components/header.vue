@@ -39,7 +39,7 @@
                 <div class="d-flex align-items-center">
                    
                     <div class="dropdown nxl-h-item nxl-header-language d-none d-sm-flex">
-                        <SplitButton :label=name :model="items" @click="save" style="border-radius: 15px;" severity="info"></SplitButton>
+                        <SplitButton class="split" :label=name :model="items"   severity="info"></SplitButton>
                     </div>
                     
                 </div>
@@ -49,9 +49,12 @@
     </header>
 </template>
 <script setup lang="ts">
+import SplitButton from 'primevue/splitbutton';
+const authStore:any = useAuthStore()
 const formattedDateTime = ref()
+const toast = useToast()
 const country = ref()
-const name = useCookie('username');
+const name:any = useCookie('username');
 const getDate = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -86,7 +89,17 @@ onMounted(async() => {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 })
-
+const logout = async()=>{
+    await authStore.logout()
+}
+const items = [
+    {
+        label: 'Log Out',
+        command: async () => {
+           await logout();
+        }
+    },
+];
 </script>
 <style>
 a.btn.btn-light-brand {
@@ -124,6 +137,10 @@ a.btn.btn-light-brand {
     border-radius: 50%;
     font-size: 1.2rem; /* Adjust size as needed */
     font-weight: bold;
+}
+.split{
+    border-radius: 10%;
+        background-color: #3454d1 !important;
 }
 
 </style>
