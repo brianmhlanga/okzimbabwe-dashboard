@@ -16,6 +16,7 @@ export default defineEventHandler(async (event)=>{
         "contact_email": contact_email
         
     });
+    console.log('data',data)
     var config = {
         method: 'POST',
         url: `${SHOPIFY_URL}/api/shops/edit/${id}`,
@@ -36,7 +37,7 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log(error);
+        console.log('my error',error.message);
         
       
         return {    
