@@ -7,8 +7,13 @@
                     <div>
                         <div class="card p-4 ml-3 mr-10">
                         <div class="grid formgrid p-fluid">
-                            <div class="field mb-4 col-12 md:col-6">
+                            <div class="flex">
+                            <div class="field mb-4 col-12 md:col-3">
+                                <Button @click="navigateTo('/currency_dashboard')" label="Currencies Home" icon="pi pi-arrow-left" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                            </div>
+                            <div class="field mb-4 col-12 md:col-3">
                                 <Button @click="addLineItem = true" label="Add Shop Brand Currency" icon="pi pi-plus" class="p-button p-component p-button-secondary p-button-outlined w-auto" secondary />
+                            </div>
                             </div>
                             
                         </div>                    
@@ -29,7 +34,8 @@
                     </div>
                     <div class="field mb-4 col-12 md:col-6"> 
                         <label  for="company_name" class="font-medium text-900">Conversion Rate</label> 
-                        <InputText class="form-control" type="text"  v-model="conversion_rate"/>
+                        <InputText class="form-control" type="number"  v-model="conversion_rate"/>
+                        <small>Input conversion rate as an integer e.g if rate is 1:40 against base currency input 40</small>
                     </div>
                     
         

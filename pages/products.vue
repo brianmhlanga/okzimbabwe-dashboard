@@ -604,5 +604,7 @@ console.log('categories',categories.value)
     
  </script>
  <style>
-   
+   span.p-input-icon.pi.pi-search {
+    display: none !important;
+}
 </style>
