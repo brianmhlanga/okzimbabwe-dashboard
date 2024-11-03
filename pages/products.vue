@@ -12,7 +12,7 @@
                             </div>
                             <div class="field mb-4 col-12 md:col-12"> 
                                 <DataTable :value="categories_list" ref="dt"  class="p-datatable-customers" showGridlines :rows="10"
-                            dataKey="id" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
+                            dataKey="i" v-model:filters="filters" filterDisplay="menu" :loading="loading" responsiveLayout="scroll"
                             >
                                     <template #header>
                                         <div class="flex justify-content-between">
@@ -270,6 +270,7 @@
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const product_brands = storeToRefs(shopBrandsStore).product_brands
      const exportCSV = () => {
+        console.log('ghh',dt.value)
         dt.value.exportCSV();
     };
     
