@@ -3,7 +3,7 @@
         <section class="section">
             <div class="container-fluid pt-3">
                 <div class="row">
-                    <div class="text-900 font-medium text-xl mb-3">Shop Currencies</div>
+                    <div class="text-900 font-medium text-xl mb-3">Default Currency</div>
                     <div>
                         <div class="card p-4 ">
                         <div class="grid formgrid p-fluid">
@@ -14,11 +14,13 @@
                         <div  class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Shop Brand </label> 
                     <Dropdown @change="getShopCurrencies()" v-model="shop_brand_id" :options="shop_brand_list" optionLabel="name" optionValue="id" placeholder="Select brand" checkmark :highlightOnSelect="false" />
+                    <small>Select Shop Brand to view its assigned currencies</small>
                 </div>
                 <div class="border-right-1 col-12 md:col-6 surface-border" style="width: 1px; height: 50%;"></div>
                 <div v-if="shop_curriences" class="field mb-4 col-12 md:col-6"> 
                     <label for="company_name" class="font-medium text-900">Select Currency</label> 
                     <Dropdown v-model="shop_currency_id" :options="shop_curriences" optionLabel="currency.name" optionValue="id" placeholder="Select Currency" checkmark :highlightOnSelect="false" />
+                    <small>Select Currency that you want to make default currency</small>
                 </div>
                 <div class="field mb-4 col-12 md:col-6" v-if="shop_curriences"><Button :disabled="!shop_currency_id || !shop_brand_id" :loading="loading1" @click="create_default_currency()" label="Set Default Currency" icon="pi pi-plus" /></div>
                         </div>                    
@@ -32,180 +34,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
 import { useShopBrandsStore } from '~/stores/shopBrands';
-import { FilterMatchMode } from 'primevue/api';
-import { useConfirm } from "primevue/useconfirm";
-const confirm = useConfirm()
 const shopBrandsStore = useShopBrandsStore();
-const { parentCategories } = storeToRefs(shopBrandsStore);
 const toast = useToast()
 const allCategories:any = ref([]);
 const shop_brand_id = ref();
 const shop_currency_id = ref()
-const name = ref();
-const address = ref(); 
 const shop_brand_list = ref();
-const city = ref();
-const store_code = ref();
-const contact_person = ref();
-const selected_reference_type = ref()
 const shops_list:any = ref([])
-const contact_number = ref();
-const contact_email = ref();
-const shop_creating = ref(false)
 const categories_list = ref([]);
-const editing_shop = ref(false)
-const shop_id = ref()
-const branches = ref()
 const shop_brand = ref()
-const referenced_id = ref()
-const product_id = ref()
-const is_shop_brand = ref()
 const shop_curriences = ref()
 const loading = ref(false)
 const loading1 = ref(false)
-const featured_product_list:any = ref([])
 const number_of_categories = ref();
 const addLineItem = ref(false);
-const options = ref(['Shop brand', 'Shop']);
-const option1 = ['true','false']
 definePageMeta({
         middleware: ["auth"]
 });
-const items = ref([
-    
-]);
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
 
-const dt = ref();
 
-const initFilters = () => {
-    filters.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    };
-};
 
-const clearFilter1 = () => {
-    initFilters();
-};
-const actions = (shop_data:any) => [
-      {
-        label: 'Update Shop',
-        command: () => showShop(shop_data)
-      },
-      {
-        label: 'Delete Shop',
-        command: () => deleteShop(shop_data)
-      },
-      
-      // Add more actions if needed
-    ];
-    const deleteShop = (shop_data:any) => {
-      let data = {
-        "id": shop_data.data.id
-      }
-      console.log('my data',data.id)
-      
-      confirm.require({
-        message: 'Do you want to delete this record?',
-        header: 'Danger Zone',
-        icon: 'pi pi-info-circle',
-        rejectLabel: 'Cancel',
-        acceptLabel: 'Delete',
-        rejectClass: 'p-button-secondary p-button-outlined',
-        acceptClass: 'p-button-danger',
-        accept: async() => {
-            let result = await shopBrandsStore.deleteShop(data)
-            if (result.data.success){
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-            const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands;
-        
-    });
-            }
-            else{
-                toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });
-            }
-        },
-        reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        } 
-    });
-}
-const showShop = async(shop_data:any) => {
-     shop_id.value = shop_data.data.id
-      name.value = shop_data.data.name
-       shop_brand_id.value = shop_data.data.name,
-    
-        address.value = shop_data.data.address,
-        city.value = shop_data.data.city,
-        store_code.value = shop_data.data.store_code,
-        contact_person.value = shop_data.data.contact_person,
-        contact_number.value = shop_data.data.contact_number,
-        contact_email.value = shop_data.data.contact_email
-      editing_shop.value = true
-      addLineItem.value = true
-     
-}
-const getParsedImages = (images: string) => {
-  try {
-    const parsedImages = JSON.parse(images);
-    const cleanedString = JSON.parse(parsedImages.replace(/\\/g, ''));
-    return cleanedString[0]
-  } catch (error) {
-    console.error('Error parsing images JSON:', error);
-  }
-  return null; // Return null if parsing fails or no images are found
-};
 
-const updateShop = async () => {
-    const data = {
-        id: shop_id.value,
-        shop_brand_id: shop_brand_id.value,
-        name: name.value,
-        address: address.value,
-        city: city.value,
-        store_code: store_code.value,
-        contact_person: contact_person.value,
-        contact_number: contact_number.value,
-        contact_email: contact_email.value,
-    };
-    const result = await shopBrandsStore.updateShop(data);
-    console.log('result',result.data.success)
-
-    if (result.data.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Successfully Updated', life: 3000 });
-        const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands;
-        
-    });
-    addLineItem.value = false;
-    editing_shop.value = false
-    } else {
-        toast.add({ severity: 'warn', summary: 'Failed', detail: 'Updating Failed', life: 3000 });
-    }
-};
-const selectShop = async (shopIDD:any) => {
-  
- console.log(',y id',shopIDD)
-  await getShopsForBrand(shopIDD)
-  
-}
-const getShopsForBrand = (brandId:any) => {
-  branches.value = null
-  //@ts-ignore
-  let branchess = shop_brand_list.value.find(brand => brand.id === brandId);
-  branches.value = branchess?.shops
-  console.log('branches',branchess)
-}
-const open_create_shop_modal = ()=>{
-    addLineItem.value = true
-    shop_creating.value= true
-}
 onMounted(async () => {
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
