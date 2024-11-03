@@ -248,8 +248,7 @@ const actions = (shop_data:any) => [
 const showShop = async(shop_data:any) => {
      shop_id.value = shop_data.data.id
       name.value = shop_data.data.name
-       shop_brand_id.value = shop_data.data.name,
-    
+        shop_brand_id.value = shop_data.data.shop_brand_id,
         address.value = shop_data.data.address,
         city.value = shop_data.data.city,
         store_code.value = shop_data.data.store_code,

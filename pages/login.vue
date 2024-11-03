@@ -29,23 +29,10 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <button :loading="loading"  type="submit" class="btn btn-lg btn-primary w-100">Login</button>
+                                <Button :loading="loading"label="Login" type="submit" class="btn btn-lg btn-primary w-100"/>
                             </div>
                         </form>
-                        <div class="w-100 mt-5 text-center mx-auto">
-                            <div class="mb-4 border-bottom position-relative"><span class="small py-1 px-3 text-uppercase text-muted bg-white position-absolute translate-middle">or</span></div>
-                            <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a href="javascript:void(0);" class="btn btn-light-brand flex-fill" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Login with Facebook">
-                                    <i class="feather-facebook"></i>
-                                </a>
-                                <a href="javascript:void(0);" class="btn btn-light-brand flex-fill" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Login with Twitter">
-                                    <i class="feather-twitter"></i>
-                                </a>
-                                <a href="javascript:void(0);" class="btn btn-light-brand flex-fill" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Login with Github">
-                                    <i class="feather-github text"></i>
-                                </a>
-                            </div>
-                        </div>
+                   
                       
                     </div>
                 </div>
@@ -55,6 +42,8 @@
     </NuxtLayout>
 </template>
 <script setup lang="ts">
+import Button from 'primevue/button';
+
 const authStore:any = useAuthStore()
 const email = ref()
 const loading = ref(false)
@@ -69,14 +58,14 @@ const signIn = async () => {
   }
   
   let result = await authStore.login(info).then((data:any) => {
-    console.log("dshdshj",data.data.message)
-    if(data.data.login.data.token) {
+    console.log("dshdshj",data.data)
+    if(data.data.success) {
       toast.add({ severity: 'success', summary: 'Success', detail: 'Succesfull Signed In', life: 3000 });
       navigateTo('/')
       loading.value = false
     }
     else {
-      toast.add({ severity: 'warn', summary: 'Sign In Failed', detail:               data.data.message, life: 3000 });
+      toast.add({ severity: 'warn', summary: 'Sign In Failed', detail: data.data.message, life: 3000 });
       loading.value = false
     }
   })

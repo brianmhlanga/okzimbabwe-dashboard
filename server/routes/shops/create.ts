@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SHOPIFY_URL} from "~~/services/global.variables";
+import {SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
     const {data:{shop_brand_id,name,address,city,store_code,contact_person,contact_number,contact_email}} = await readBody(event);
@@ -36,12 +36,12 @@ export default defineEventHandler(async (event)=>{
             
         };
     }) .catch(async (error)=>{
-        console.log(error);
+        console.log('sss',error.message);
         
       
         return {    
             success: false,
-            error: error.message
+            error: error
         } 
     });
     

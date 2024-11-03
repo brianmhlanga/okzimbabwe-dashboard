@@ -194,7 +194,7 @@ const shopBrandModal = (data:any)=>{
     console.log('my brand id',data.id)
 }
 const updateShopBrand = async ()=>{
-   
+    loading.value = true
     const url = `${SHOPIFY_URL}/api/shop-brands/edit/${shop_id.value}`;
     const formData = new FormData();
     formData.append('name', name.value);
@@ -213,6 +213,7 @@ const updateShopBrand = async ()=>{
     });
     toast.add({ severity: 'success', summary: 'Success', detail: 'Shop Brand Created Successfully', life: 3000 });
     loading.value = false
+   
     addLineItem.value = false
     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         shop_brand_list.value = data.data.data.data.shopbrands

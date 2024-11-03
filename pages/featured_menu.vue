@@ -113,11 +113,11 @@
                         </Dropdown>
                 </div>
                 <div v-else-if="selected_reference_type == 'Product Brand'"class="field mb-4 col-12 md:col-6"> 
-                    <Dropdown v-model="referenced_id" :options="product_brands_list" filter optionLabel="name" optionValue="id" placeholder="Select Product Brand" >
+                    <Dropdown v-model="referenced_id" :options="product_brands" filter optionLabel="name" optionValue="id" placeholder="Select Product Brand" >
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex align-items-center">
                                 
-                                    <div>{{ product_brands_list.find(brand => brand.id === slotProps.value)?.name }}</div>
+                                    <div>{{ product_brands.find(brand => brand.id === slotProps.value)?.name }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -167,6 +167,7 @@ const contact_number = ref();
 const contact_email = ref();
 const loading = ref(false)
 const shop_creating = ref(false)
+const product_brands = storeToRefs(shopBrandsStore).product_brands
 const categories_list = ref([]);
 const editing_shop = ref(false)
 const shop_id = ref()
@@ -300,9 +301,9 @@ const getShopsForBrand = async(brandId:any) => {
   console.log('brandid',brandId)
   branches.value = null
   //@ts-ignore
-  let result = await shopBrandsStore.getFeaturedMenus(brandId)
+  let result:any = await shopBrandsStore.getFeaturedMenus(brandId)
  
-  console.log('re',result?.data?.data)
+ 
   branches.value = result.data.data
 }
 const open_create_shop_modal = ()=>{
@@ -314,6 +315,7 @@ onMounted(async () => {
         product_brands_list.value = data.data.data.data;
         console.log('dfg',product_brands_list.value)
     });
+    shopBrandsStore.fetchAllProductBrands()
     const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
         shop_brand_list.value = data.data.data.data.shopbrands;
         
@@ -380,7 +382,7 @@ const addFeaturedProduct = async () => {
 
 const onPage = async (event: any) => {
     const current_page = event.page + 1;
-    const result = await shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+    const result = await shopBrandsStore.getCategoriesPagination(current_page).then((data:any) => {
         categories_list.value = data.data.data.categories;
         number_of_categories.value = data.data.data.categories.length;
     });
