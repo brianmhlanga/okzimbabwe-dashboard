@@ -40,7 +40,7 @@
                                         No Featured Menus found.
                                     </template>
                                     <template #loading>
-                                        Loading categories data. Please wait.
+                                        Loading Featured Menus data. Please wait.
                                     </template>
                                     <Column frozen field="name" header="Category/Product Brand name " style="min-width:12rem">
                                         <template #body="{data}">
@@ -61,7 +61,7 @@
                                     <Column frozen  field="created_at" header="Actions" style="min-width:12rem">
                                         <template #body="{data}">
                                             <Button  icon="pi pi-pencil" severity="info"  text rounded aria-label="Cancel" />
-                                        <Button  icon="pi pi-trash" severity="danger"  text rounded aria-label="Cancel" />
+                                        <Button  icon="pi pi-trash" severity="danger" @click="deleteShop(data.id)" text rounded aria-label="Cancel" />
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -218,9 +218,9 @@ const actions = (shop_data:any) => [
     ];
     const deleteShop = (shop_data:any) => {
       let data = {
-        "id": shop_data.data.id
+        "id": shop_data
       }
-      console.log('my data',data.id)
+      console.log('my data',shop_data)
       
       confirm.require({
         message: 'Do you want to delete this record?',
@@ -376,7 +376,7 @@ const addFeaturedProduct = async () => {
         loading.value = false
       }
      
-  
+  ``
 
 };
 
