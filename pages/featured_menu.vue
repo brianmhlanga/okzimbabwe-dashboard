@@ -231,13 +231,10 @@ const actions = (shop_data:any) => [
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptClass: 'p-button-danger',
         accept: async() => {
-            let result = await shopBrandsStore.deleteShop(data)
+            let result = await shopBrandsStore.deleteFeaturedMenu(data)
             if (result.data.success){
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-            const result = await shopBrandsStore.getAllShopBrands().then((data: any) => {
-        shop_brand_list.value = data.data.data.data.shopbrands;
-        
-    });
+       
             }
             else{
                 toast.add({ severity: 'warn', summary: 'Failed', detail: 'Deletion Failed', life: 3000 });

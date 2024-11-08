@@ -186,6 +186,7 @@ const clearFilter1 = () => {
 
 onMounted(async () => {
     await shopBrandsStore.getAllCurrencies().then((data:any)=>{
+        console.log('currencies',data.data)
             all_currencies.value = data.data.data.currencies
         })
     await shopBrandsStore.getAllShops().then((data:any)=>{
@@ -266,6 +267,7 @@ const editCurrency = async () => {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Currency Successfully Added', life: 3000 });
         loading.value = false;
         await shopBrandsStore.getAllCurrencies().then((data:any)=>{
+            console.log('ss',data.data)
             all_currencies.value = data.data.data.currencies
         })
         update_visibility.value = false;
