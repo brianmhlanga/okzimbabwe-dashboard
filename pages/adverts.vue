@@ -104,7 +104,7 @@
                         <Calendar v-model="end_date" />
                     </div>
                 </div>
-                <Button  :loading="loading" @click="createShopBrand()" label="Create Advert" icon="pi pi-plus" />
+                <Button  :loading="loading" @click="createAdvert()" label="Create Advert" icon="pi pi-plus" />
         </Dialog>
         <Dialog v-model:visible="open_shop_brand_modal" maximizable modal header="Update Advert" position="top" :style="{ width: '55vw' }">
                 <div class="grid formgrid p-fluid">
@@ -138,7 +138,7 @@
                     </div>
                     <div class="field mb-4 col-12 md:col-6"> 
                         <label for="company_name" class="font-medium text-900">Adverts Banner/Image</label> 
-                        <input type="file" accept="image/jpeg, image/png ,image/jpg" @change="handleFileChange">
+                        <input type="file" accept=".png, .jpg, .jpeg, .svg"  @change="handleFileChange">
                     </div>
                     <div  class="field mb-4 col-12 md:col-12"> 
                         <label for="company_name" class="font-medium text-900">Advert Duration</label> 
@@ -209,15 +209,15 @@
  });
 
  const handleFileChange = (event:any) => {
-    const file = event.target.files[0];
-    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
-    if (file && acceptedTypes.includes(file.type)) {
-        logoFile.value = file;
-    } else {
-        toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
-        logoFile.value = null;
-    }
- };
+const file = event.target.files[0];
+const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml'];
+if (file && acceptedTypes.includes(file.type)) {
+    logoFile.value = file;
+} else {
+    toast.add({ severity: 'info', summary: 'Wrong File Type', detail: 'Upload PNG or JPEG', life: 3000 });
+    logoFile.value = null;
+}
+};
 
  function formatDate(date:any) {
     let my_date = new Date(date)
@@ -226,47 +226,76 @@
     let day = String(my_date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
- const createShopBrand = async () => {
-     loading.value = true
-   
-     const url = `${SHOPIFY_URL}/api/adverts`;
-     const formData = new FormData();
-     formData.append('name', name.value);
-     formData.append('display_position', display_position.value)
-     formData.append('shop_brand_id', shop_brand_id.value)
-     formData.append('product_id', product_id.value)
-     formData.append('category_id', category_id.value)
-     formData.append('description', description.value)
-     formData.append('redirect_url', redirect.value)
-     formData.append('type', type.value)
-     formData.append('start_date',formatDate(start_date.value))
-     formData.append('end_date',formatDate(end_date.value))
-     if (logoFile.value) {
-     formData.append('file', logoFile.value, logoFile.value.name);
-     }
-     console.log('formdata',formData)
-     try {
-     const response = await axios.post(url, formData, {
-         headers: {
-         'Content-Type': 'multipart/form-data',
-         'Accept': '*/*'
-         },
-     });
-     toast.add({ severity: 'success', summary: 'Success', detail: 'Advert Created Successfully', life: 3000 });
-      await shopBrandsStore.getAllAdverts().then((data:any)=>{
-        console.log('my adverts',data.data.data.adverts)
-        advert_list.value = data.data.data.adverts
-    })
-    refresh_data()
-     loading.value = false
-     addLineItem.value = false
-     
-     } catch (error:any) {
-     loading.value = false
-     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
-     }
-     refresh_data()
- };
+const createAdvert = async () => {
+  loading.value = true;
+
+  const url = `${SHOPIFY_URL}/api/adverts`;
+  const formData = new FormData();
+  
+  // Append only if the value exists
+  if (name.value) {
+    formData.append('name', name.value);
+  }
+  if (display_position.value) {
+    formData.append('display_position', display_position.value);
+  }
+  if (shop_brand_id.value) {
+    formData.append('shop_brand_id', shop_brand_id.value);
+  }
+  if (product_id.value) {
+    formData.append('product_id', product_id.value);
+  }
+  if (category_id.value) {
+    formData.append('category_id', category_id.value);
+  }
+  if (description.value) {
+    formData.append('description', description.value);
+  }
+  if (redirect.value) {
+    formData.append('redirect_url', redirect.value);
+  }
+  if (type.value) {
+    formData.append('type', type.value);
+  }
+  if (start_date.value) {
+    formData.append('start_date', formatDate(start_date.value));
+  }
+  if (end_date.value) {
+    formData.append('end_date', formatDate(end_date.value));
+  }
+  
+  if (logoFile.value) {
+    formData.append('file', logoFile.value, logoFile.value.name);
+   }
+
+  console.log('formdata', formData);
+
+  try {
+    const response = await axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': '*/*',
+      },
+    });
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Advert Created Successfully', life: 3000 });
+    
+    await shopBrandsStore.getAllAdverts().then((data) => {
+    //@ts-ignore
+      advert_list.value = data.data.data.adverts;
+    });
+    
+    refresh_data();
+    loading.value = false;
+    addLineItem.value = false;
+
+  } catch (error:any) {
+    loading.value = false;
+    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
+  }
+
+  refresh_data();
+};
+
 
  const update_advert = async ()=>{
     loading.value = true
@@ -309,7 +338,7 @@
    loading.value = false
    toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error.response.data, life: 3000 });
    }
-   refresh_data()
+   
  }
 
  const shopBrandModal = (data:any)=>{
