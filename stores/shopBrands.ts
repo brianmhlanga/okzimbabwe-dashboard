@@ -1,10 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
-import type getAllProducts from "~/server/routes/Products/getAllProducts";
-import type signup from "~/server/routes/auth/signup";
-import type discount_type from "~/server/routes/discounts/discount_type";
-import type shop_default_currency from "~/server/routes/currencies/shop_default_currency";
+
 
 
 
@@ -13,6 +10,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
         name: "",
         full_name: "",
         logo: "",
+        id:null,
         allCategories: [] as any[],
         product_brands: [] as any[],
         products: [] as any[],
