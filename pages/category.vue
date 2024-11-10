@@ -17,7 +17,6 @@
                                         <div class="flex justify-content-between">
                                            
                                             <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter1()" />
-                                            <Button icon="pi pi-external-link" label="Table Export" @click="exportCSV($event)" />
                                             <IconField iconPosition="left">
                                                 <InputIcon class="pi pi-search"></InputIcon>
                                                 <InputText v-model="searchParams" placeholder="Keyword Search" @input="searchCategory()" />
@@ -152,7 +151,7 @@
  
     </NuxtLayout>
  </template>
- <script setup lang>
+ <script setup lang="ts">
       import { storeToRefs } from "pinia";
      import { useShopBrandsStore } from "~/stores/shopBrands";
      import Swal from 'sweetalert2'
@@ -161,16 +160,15 @@
      const shopBrandsStore = useShopBrandsStore()
      const allCategories = storeToRefs(shopBrandsStore).allCategories
      const parentCategories = storeToRefs(shopBrandsStore).parentCategories
-     console.log('vbhjnk',parentCategories.value)
-     
      const name = ref('')
-     const is_parent = ref('')
+     const is_parent = ref()
      const id = ref()
-     const is_sub_parent = ref('')
-     const is_active = ref('')
+     const is_sub_parent = ref()
+     const is_active = ref()
+     const token = useCookie('token')
      const loading = ref(false)
      const  open_category_modal = ref(false)
-     const parent_category_id = ref('')
+     const parent_category_id = ref()
      const toast = useToast()
      const searchParams = ref()
      const shop_brand_list = ref()
@@ -201,7 +199,7 @@
         initFilters();
     };
 
-    const shopBrandModal = (data)=>{
+    const shopBrandModal = (data:any)=>{
     open_category_modal.value = true
     id.value = data.id
     name.value = data.name
@@ -211,7 +209,7 @@
     console.log('category',data)
 }
 
-const deleteShopBrand = (category_id) => {
+const deleteShopBrand = (category_id:any) => {
     console.log('shop_id',category_id)
     let data = {
     "id": category_id
@@ -229,9 +227,8 @@ const deleteShopBrand = (category_id) => {
         let result = await shopBrandsStore.deleteCategory(data)
         if (result.data.success){
         toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-        await shopBrandsStore.getAllCategories().then((data)=>{
-            categories_list.value = data.data.data.categories
-            console.log('categories list',categories_list.value)
+        await shopBrandsStore.getAllCategories().then((data:any)=>{
+            categories_list.value = data?.data?.data?.categories
         })
     
         }
@@ -280,9 +277,8 @@ const deleteShopBrand = (category_id) => {
 
      
      onMounted(async () => {
-        await shopBrandsStore.getAllCategories().then((data)=>{
-            categories_list.value = data.data.data.categories
-            console.log('categories list',categories_list.value)
+        await shopBrandsStore.getAllCategories().then((data:any)=>{
+            categories_list.value = data?.data?.data?.categories
         })
         await shopBrandsStore.fetchAllCategories().then((data)=>{
            
@@ -314,9 +310,8 @@ const deleteShopBrand = (category_id) => {
             if (result.data.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
                 loading.value = false
-                await shopBrandsStore.getAllCategories().then((data)=>{
-                    categories_list.value = data.data.data.categories
-                    console.log('categories list',categories_list.value)
+                await shopBrandsStore.getAllCategories().then((data:any)=>{
+                    categories_list.value = data?.data?.data?.categories
                 })
                 open_category_modal.value = false
                 refresh_data()
@@ -347,9 +342,8 @@ const deleteShopBrand = (category_id) => {
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
              loading.value = false
              open_category_modal.value = false
-             await shopBrandsStore.getAllCategories().then((data)=>{
-                categories_list.value = data.data.data.categories
-                console.log('categories list',categories_list.value)
+             await shopBrandsStore.getAllCategories().then((data:any)=>{
+                categories_list.value = data?.data?.data?.categories
             })
              refresh_data()
          }
@@ -373,19 +367,19 @@ const deleteShopBrand = (category_id) => {
                 name: name.value,
                 is_parent: is_parent.value,
                 is_sub_parent: is_sub_parent.value,
+                token: token.value,
                 is_active: is_active.value,
          
             }
             loading.value = true
             let result = await shopBrandsStore.createCategory(data)
-            console.log('my result',result)
  
             if (result.data.success) {
                 toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
                 loading.value = false
                 addLineItem.value = false
-                await shopBrandsStore.getAllCategories().then((data)=>{
-                    categories_list.value = data.data.data.categories
+                await shopBrandsStore.getAllCategories().then((data:any)=>{
+                    categories_list.value = data?.data?.data?.categories
                     console.log('categories list',categories_list.value)
                 })
                 refresh_data()
@@ -404,6 +398,7 @@ const deleteShopBrand = (category_id) => {
                 is_parent: is_parent.value,
                 is_sub_parent: is_sub_parent.value,
                 is_active: is_active.value,
+                token: token.value,
                 parent_category_id: parent_category_id.value 
             }
     
@@ -415,9 +410,8 @@ const deleteShopBrand = (category_id) => {
              toast.add({severity:'success', summary: 'Success', detail:'Category Succesfully Created', life: 3000});
              loading.value = false
              addLineItem.value = false
-             await shopBrandsStore.getAllCategories().then((data)=>{
-                categories_list.value = data.data.data.categories
-                console.log('categories list',categories_list.value)
+             await shopBrandsStore.getAllCategories().then((data:any)=>{
+                categories_list.value = data?.data?.data?.categories
             })
              refresh_data()
          }
@@ -433,27 +427,18 @@ const deleteShopBrand = (category_id) => {
          
      }
     
-     const onPage = (event) => {
+     const onPage = (event:any) => {
         let current_page = event.page + 1
-        let result =  shopBrandsStore.getCategoriesPagination(current_page).then((data) => {
+        let result =  shopBrandsStore.getCategoriesPagination(current_page).then((data:any) => {
             
-            categories_list.value =  data.data.data.categories
-            console.log('hbj',data.data.data.categories.length)
+            categories_list.value =  data?.data?.data?.categories
             number_of_categories.value = data.data.data.categories.length
         })
 
     }
-     
-    const items = [
-        {
-            label: 'Add Price',
-            command: () => {
-                add_product.value = true
-            }
-        }
-    ];
+  
 
-    const formatDate = (value) => {
+    const formatDate = (value:any) => {
         const date = new Date(value);
         const options = {
             year: 'numeric',
@@ -468,12 +453,9 @@ const deleteShopBrand = (category_id) => {
         return date.toLocaleString('en-US', options);
     };
     const searchCategory = async()=>{
-        await shopBrandsStore.searchCategory(searchParams.value).then((data)=>{
-            categories_list.value = data.data.data.categories
+        await shopBrandsStore.searchCategory(searchParams.value).then((data:any)=>{
+            categories_list.value = data?.data?.data?.categories
         })
     }
   
  </script>
- <style>
-   
-</style>
