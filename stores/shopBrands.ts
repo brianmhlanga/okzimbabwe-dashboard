@@ -188,7 +188,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             var data = JSON.stringify({
                 "data": info,
             });
-                const token = useCookie('token').value || ""
+            const token = useCookie('token').value || ""
             var config = {
                 method: 'post',
                 url: '/Catergories/create',

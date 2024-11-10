@@ -161,6 +161,7 @@ const city = ref();
 const store_code = ref();
 const products = storeToRefs(shopBrandsStore).products
 const contact_person = ref();
+const token = useCookie('token')
 const selected_reference_type = ref()
 const shops_list:any = ref([])
 const contact_number = ref();
@@ -353,6 +354,7 @@ const addFeaturedProduct = async () => {
         const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token.value}`, 
             'Accept': '*/*'
           },
         });

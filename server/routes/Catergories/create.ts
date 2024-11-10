@@ -12,6 +12,7 @@ export default defineEventHandler(async (event)=>{
         "parent_category_id": parent_category_id
         
     });
+    console.log('tken',token)
     var config = {
         method: 'POST',
         url: `${SHOPIFY_URL}/api/categories`,

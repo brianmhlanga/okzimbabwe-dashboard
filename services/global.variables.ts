@@ -1,1 +1,1 @@
-export const SHOPIFY_URL = 'https://api.hakikasystems.co.zw' 
+export const SHOPIFY_URL = 'https://backoffice-uat.okshopeasy.com' 

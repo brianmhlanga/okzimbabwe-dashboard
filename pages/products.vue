@@ -282,6 +282,7 @@
      const is_active = ref('')
      const category_id = ref('')
      const product_code = ref()
+     const token = useCookie('token')
      const searchParams:any = ref() 
      const price = ref()
      const categories:any = ref([])
@@ -530,6 +531,7 @@ console.log('categories',categories.value)
         const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token.value}`, 
             'Accept': '*/*'
           },
         });
@@ -576,6 +578,7 @@ console.log('categories',categories.value)
         const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token.value}`, 
             'Accept': '*/*'
           },
         });

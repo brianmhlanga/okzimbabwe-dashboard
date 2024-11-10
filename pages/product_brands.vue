@@ -113,6 +113,7 @@
  const toast = useToast()
  const searchParams = ref()
  const shop_brand_list = ref()
+ const token = useCookie('token')
  const product_brands_list = ref()
  const shop_id = ref()
  const addLineItem = ref(false)
@@ -145,6 +146,7 @@ const clearFilter1 = () => {
  const createProductBrand = async () => {
     const data = {
         name: name.value,
+        token: token.value
        
     };
     loading.value = true
