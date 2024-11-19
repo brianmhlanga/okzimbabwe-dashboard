@@ -521,7 +521,7 @@ console.log('categories',categories.value)
       formData.append('category_id', category_id.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
-      formData.append('vat','1');
+      formData.append('vat',1);
       formData.append('unit_of_measure', unit_of_measure.value);
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
@@ -569,7 +569,7 @@ console.log('categories',categories.value)
       formData.append('category_id', category_id.value);
       formData.append('product_code', product_code.value);
       formData.append('product_brand_id', product_brand_id.value);
-      formData.append('vat', vat.value);
+      formData.append('vat',1);
       formData.append('unit_of_measure', unit_of_measure.value);
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
