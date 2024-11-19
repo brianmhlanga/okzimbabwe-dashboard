@@ -149,6 +149,10 @@
                         <InputText class="form-control" type="text"  v-model="product_code"/>
                     </div>
                     <div class="field mb-4 col-12 md:col-12"> 
+                        <label  for="company_name" class="font-medium text-900">Unit of Measure</label> 
+                        <InputText class="form-control" type="text"  v-model="unit_of_measure"/>
+                    </div>
+                    <div class="field mb-4 col-12 md:col-12"> 
                         <label  for="company_name" class="font-medium text-900">Vat</label> 
                         <Dropdown v-model="vat" :options="vat_options"  placeholder="Select vat" class="w-full md:w-12 mb-6" />
                     </div>
@@ -299,6 +303,7 @@
      const options = ref([ 'Yes', 'No']);
      const selectedProduct = ref()
      const vat = ref()
+     const unit_of_measure  = ref()
      const vat_options = ref([true, false]);
      const add_price = ref(false)
      const product_brands_list = ref()
@@ -387,6 +392,7 @@
       description.value = product.data.description
       category_id.value = product.data.category_id
       product_code.value = product.data.product_code
+      unit_of_measure.value = product.data.unit_of_measure
       vat.value = product.data.vat
       selectedProductId.value = product.data.id
       product_brand_id.value = product.data.product_brand_id
@@ -515,8 +521,8 @@ console.log('categories',categories.value)
       formData.append('category_id', category_id.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('product_code', product_code.value);
-      formData.append('vat', vat.value);
-    
+      formData.append('vat','1');
+      formData.append('unit_of_measure', unit_of_measure.value);
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
   })
@@ -564,6 +570,7 @@ console.log('categories',categories.value)
       formData.append('product_code', product_code.value);
       formData.append('product_brand_id', product_brand_id.value);
       formData.append('vat', vat.value);
+      formData.append('unit_of_measure', unit_of_measure.value);
       categories.value.forEach((file, index) => {
     formData.append(`categories[${index}]`, file);
   })
