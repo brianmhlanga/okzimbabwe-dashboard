@@ -212,7 +212,8 @@
 const deleteShopBrand = (category_id:any) => {
     console.log('shop_id',category_id)
     let data = {
-    "id": category_id
+    "id": category_id,
+    'token': token.value
     }
     
     confirm.require({
