@@ -4,7 +4,6 @@
            <div class="container-fluid pt-3">
                <div class="row">
                 <div class="text-900 font-medium text-xl mb-3">Shop Brands</div>
-                 
                    <div>
                    <div class="card p-4 m-3 ">
                        <div class="grid formgrid p-fluid">
@@ -122,13 +121,14 @@ const shop_brand_list = ref()
 const shop_id = ref()
 const menu_font_color = ref()
 const theme_color = ref()
+const token = useCookie('token')
 const button_color = ref()
-
 const addLineItem = ref(false)
 const logoFile = ref()
 definePageMeta({
         middleware: ["auth"]
 });
+
 onMounted(async () => {
     let result = await shopBrandsStore.getAllShopBrands().then((data:any) => {
         shop_brand_list.value = data.data.data.data.shopbrands
@@ -153,6 +153,7 @@ if (file && acceptedTypes.includes(file.type)) {
     logoFile.value = null;
 }
 };
+
 const createShopBrand = async () => {
     loading.value = true
     const url = `${SHOPIFY_URL}/api/shop-brands`;
@@ -168,6 +169,7 @@ const createShopBrand = async () => {
     const response = await axios.post(url, formData, {
         headers: {
         'Content-Type': 'multipart/form-data',
+        "Authorization": `Bearer ${token.value}`, 
         'Accept': '*/*'
         },
     });
@@ -193,6 +195,7 @@ const shopBrandModal = (data:any)=>{
     menu_font_color.value = data.menu_font_color
     console.log('my brand id',data.id)
 }
+
 const updateShopBrand = async ()=>{
     loading.value = true
     const url = `${SHOPIFY_URL}/api/shop-brands/edit/${shop_id.value}`;
@@ -208,6 +211,7 @@ const updateShopBrand = async ()=>{
     const response = await axios.post(url, formData, {
         headers: {
         'Content-Type': 'multipart/form-data',
+        "Authorization": `Bearer ${token.value}`, 
         'Accept': '*/*'
         },
     });
@@ -228,7 +232,8 @@ const updateShopBrand = async ()=>{
 const deleteShopBrand = (shop_brand_id:any) => {
     console.log('shop_id',shop_brand_id)
     let data = {
-    "id": shop_brand_id
+    "id": shop_brand_id,
+    'token': token.value
     }
     
     confirm.require({

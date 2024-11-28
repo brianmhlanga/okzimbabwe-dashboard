@@ -144,7 +144,6 @@
             </div>
             <div v-if="editing_shop"><Button :loading="loading" @click="updateShop()" label="Update Shop" icon="pi pi-plus" /></div>
             <div v-else-if="shop_creating"><Button :loading="loading" @click="createShop()" label="Add Shop" icon="pi pi-plus" /></div>
-            
         </Dialog>
         <ConfirmDialog></ConfirmDialog>
     </NuxtLayout>
@@ -163,6 +162,7 @@ const toast = useToast()
 const allCategories = ref([]);
 const loading = ref(false)
 const shop_brand_id = ref();
+const token = useCookie('token')
 const name = ref();
 const address = ref();
 const shop_brand_list = ref();
@@ -180,6 +180,7 @@ const branches = ref()
 const number_of_categories = ref();
 const addLineItem = ref(false);
 const options = ref(['Yes', 'No']);
+
 definePageMeta({
         middleware: ["auth"]
 });
@@ -215,10 +216,10 @@ const actions = (shop_data:any) => [
     ];
     const deleteShop = (shop_data:any) => {
       let data = {
-        "id": shop_data.data.id
+        "id": shop_data.data.id,
+        "token": token.value
       }
       console.log('my data',data.id)
-      
       confirm.require({
         message: 'Do you want to delete this record?',
         header: 'Danger Zone',
@@ -246,8 +247,8 @@ const actions = (shop_data:any) => [
     });
 }
 const showShop = async(shop_data:any) => {
-     shop_id.value = shop_data.data.id
-      name.value = shop_data.data.name
+        shop_id.value = shop_data.data.id
+        name.value = shop_data.data.name
         shop_brand_id.value = shop_data.data.shop_brand_id,
         address.value = shop_data.data.address,
         city.value = shop_data.data.city,
@@ -255,8 +256,8 @@ const showShop = async(shop_data:any) => {
         contact_person.value = shop_data.data.contact_person,
         contact_number.value = shop_data.data.contact_number,
         contact_email.value = shop_data.data.contact_email
-      editing_shop.value = true
-      addLineItem.value = true
+        editing_shop.value = true
+        addLineItem.value = true
      
 }
 
@@ -272,6 +273,7 @@ const updateShop = async () => {
         contact_person: contact_person.value,
         contact_number: contact_number.value,
         contact_email: contact_email.value,
+        token: token.value
     };
     const result = await shopBrandsStore.updateShop(data);
     console.log('result',result.data.success)
@@ -335,6 +337,7 @@ const createShop = async () => {
         contact_person: contact_person.value,
         contact_number: contact_number.value,
         contact_email: contact_email.value,
+        token: token.value
     };
     const result = await shopBrandsStore.createShop(data);
     console.log('result',result.data.success)

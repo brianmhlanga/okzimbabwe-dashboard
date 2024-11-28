@@ -453,6 +453,7 @@ console.log('categories',categories.value)
         loading.value = true
             
             let data = {
+                token: token.value,
                 product_id : selectedProductId.value,
                 shop_brand_id : shop_brand_list.value.map(brand => brand.id),
                 price: brandPrices.value.map(price=> (price))
