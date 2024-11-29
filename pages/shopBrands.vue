@@ -193,7 +193,7 @@ const shopBrandModal = (data:any)=>{
     button_color.value = data.button_color
     theme_color.value = data.theme_color
     menu_font_color.value = data.menu_font_color
-    console.log('my brand id',data.id)
+   
 }
 
 const updateShopBrand = async ()=>{
@@ -230,7 +230,7 @@ const updateShopBrand = async ()=>{
 }
 
 const deleteShopBrand = (shop_brand_id:any) => {
-    console.log('shop_id',shop_brand_id)
+    
     let data = {
     "id": shop_brand_id,
     'token': token.value

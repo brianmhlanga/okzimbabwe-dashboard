@@ -139,7 +139,7 @@ const clearFilter1 = () => {
  onMounted(async () => {
      let result = await shopBrandsStore.getAllProductBrandss().then((data:any) => {
          product_brands_list.value = data.data.data.data
-         console.log('pro',product_brands_list.value)
+       
      })
  });
 
@@ -151,7 +151,7 @@ const clearFilter1 = () => {
     };
     loading.value = true
     const result = await shopBrandsStore.createProductBrand(data);
-    console.log('resultvggucuhhh',result.data.success)
+   
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product Brand Successfully Created', life: 3000 });
@@ -159,7 +159,7 @@ const clearFilter1 = () => {
         addLineItem.value = false;
         const result = await shopBrandsStore.getAllProductBrandss().then((data:any) => {
          product_brands_list.value = data.data.data.data
-         console.log('pro',product_brands_list.value)
+       
      })
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
@@ -170,12 +170,13 @@ const editProductBrand = async () => {
     const data = {
         id: shop_id.value,
         name: name.value,
-        is_active: true
+        is_active: true,
+        token: token.value
        
     };
     loading.value = true
     const result = await shopBrandsStore.editProductBrand(data);
-    console.log('resultvggucuhhh',result.data.success)
+    
 
     if (result.data.success) {
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product Brand Successfully Updated', life: 3000 });
@@ -183,7 +184,7 @@ const editProductBrand = async () => {
         addLineItem.value = false;
         let result = await shopBrandsStore.getAllProductBrandss().then((data:any) => {
          product_brands_list.value = data.data.data.data
-         console.log('pro',product_brands_list.value)
+        
      })
     } else {
         toast.add({ severity: 'warn', summary: 'Failed', detail: 'Creation Failed', life: 3000 });
@@ -195,14 +196,15 @@ const editProductBrand = async () => {
      shop_id.value = data.id
      name.value = data.name
      
-     console.log('my brand id',data.id)
+     
  }
 
  
  const deleteShopBrand = (shop_brand_id:any) => {
-     console.log('shop_id',shop_brand_id)
+    
      let data = {
-     "id": shop_brand_id
+     "id": shop_brand_id,
+     token: token.value
      }
      
      confirm.require({
@@ -219,7 +221,7 @@ const editProductBrand = async () => {
          toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
          let result = await shopBrandsStore.getAllProductBrandss().then((data:any) => {
             product_brands_list.value = data.data.data.data
-            console.log('pro',product_brands_list.value)
+          
         })
         
          }

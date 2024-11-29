@@ -299,11 +299,11 @@ const confirm = useConfirm();
 const totalProducts = ref()
 const shopBrandsStore = useShopBrandsStore()
 const parentCategories = storeToRefs(shopBrandsStore).parentCategories
-console.log('vbhjnk',parentCategories.value)
+
 const allCategories = storeToRefs(shopBrandsStore).allCategories
 const product_brands = storeToRefs(shopBrandsStore).product_brands
 const exportCSV = () => {
-console.log('ghh',dt.value)
+
 dt.value.exportCSV();
 };
     
@@ -360,7 +360,7 @@ const items = (product:any) => [
 const getProduct = (product:any) => {
     selectedProduct.value = product.data.name;
     selectedProductId.value = product.data.id
-    console.log(selectedProduct.value)
+    
     add_price.value = true;
 };
     
@@ -368,7 +368,7 @@ const getParsedImages = (images: string) => {
     try {
         const parsedImages = JSON.parse(images);
         const cleanedString = JSON.parse(parsedImages.replace(/\\/g, ''));
-        console.log('mbililimbi',)
+       
         return cleanedString[0]
     } catch (error) {
 
@@ -408,7 +408,7 @@ await shopBrandsStore.get_product_brands().then((data:any)=>{
 await shopBrandsStore.getAllShopBrands().then((data:any)=>{
     shop_brand_list.value = data.data.data.data.shopbrands
     shop_brand_list.value.forEach(() => brandPrices.value.push(""));
-    console.log(data.data.data.data.shopbrands)
+   
 })
 await shopBrandsStore.fetchAllCategories().then((data:any)=>{
     allCategories.value.push(...data.data.categories)
@@ -417,7 +417,7 @@ await shopBrandsStore.fetchAllCategories().then((data:any)=>{
 });
      
 const showProduct = async(product:any) => {
-console.log('Product',product)
+
 name.value = product.data.name;
 description.value = product.data.description
 category_id.value = product.data.category_id
@@ -430,7 +430,7 @@ categories.value = product.data.categories.map(category => {
 return category.id
 
 });
-console.log('categories',categories.value)
+
 product_modal.value = true
 
 }
@@ -440,7 +440,7 @@ let current_page = event.page + 1
 let result =  shopBrandsStore.getProductsPagination(current_page).then((data:any) => {
     
     categories_list.value = data.data.data.products
-    console.log('hbj',data.data.data.categories.length)
+   
     number_of_categories.value = data.data.data.categories.length
 })
 
@@ -491,7 +491,7 @@ const addPrice = async () =>{
         
         }
         let result = await shopBrandsStore.createPrice(data)
-        console.log('my result',result.success)
+       
         
 
         if (result.success) {
@@ -541,7 +541,7 @@ if (file && acceptedTypes.includes(file.type)) {
 }
 };
 const createProduct = async () => {
-    console.log('simba',categories.value)
+   
     loading.value = true
     
     const url = `${SHOPIFY_URL}/api/products`;
@@ -557,7 +557,7 @@ const createProduct = async () => {
     categories.value.forEach((file, index) => {
 formData.append(`categories[${index}]`, file);
 })
-    console.log('form',formData)
+   
 
     if (imageFiles.value) {
     imageFiles.value.forEach((file, index) => {
@@ -583,14 +583,14 @@ formData.append(`images[${index}]`, file);
     //     shop_brand_list.value = data.data.data.data.shopbrands
     // })
     } catch (error:any) {
-    console.log('error', error)
+  
     
     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
     loading.value = false
     }
 };
 const updateProduct = async () => {
-    console.log('simba')
+ 
     loading.value = true
     
     const url = `${SHOPIFY_URL}/api/products/edit/${selectedProductId.value}`;
@@ -605,7 +605,7 @@ const updateProduct = async () => {
     categories.value.forEach((file, index) => {
 formData.append(`categories[${index}]`, file);
 })
-    console.log('form',formData)
+    
 
     if (imageFiles.value) {
     imageFiles.value.forEach((file, index) => {
@@ -631,7 +631,7 @@ formData.append(`images[${index}]`, file);
     //     shop_brand_list.value = data.data.data.data.shopbrands
     // })
     } catch (error:any) {
-    console.log('error', error)
+   
     loading.value = false
     toast.add({ severity: 'error', summary: 'Error uploading shop brand', detail: error, life: 3000 });
     }
