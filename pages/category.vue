@@ -299,6 +299,7 @@ const deleteShopBrand = (category_id:any) => {
             let data = {
                 id: id.value,
                 name: name.value,
+                token: token.value,
                 is_parent: is_parent.value,
                 is_sub_parent: is_sub_parent.value,
                 is_active: is_active.value,
@@ -329,6 +330,7 @@ const deleteShopBrand = (category_id:any) => {
             let data = {
                 id: id.value,
                 name: name.value,
+                token: token.value,
                 is_parent: is_parent.value,
                 is_sub_parent: is_sub_parent.value,
                 is_active: is_active.value,

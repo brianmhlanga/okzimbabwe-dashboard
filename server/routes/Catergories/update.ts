@@ -2,7 +2,7 @@ import axios from "axios";
 import { SHOPIFY_URL} from "~~/services/global.variables";
 
 export default defineEventHandler(async (event)=>{
-    const {data:{id,name,is_parent,is_sub_parent,is_active,parent_category_id}} = await readBody(event);
+    const {data:{id,name,is_parent,is_sub_parent,is_active,parent_category_id,token}} = await readBody(event);
     
     
     let data = JSON.stringify({
@@ -18,6 +18,7 @@ export default defineEventHandler(async (event)=>{
         url: `${SHOPIFY_URL}/api/categories/edit/${id}`,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
             
         },
         data: data
