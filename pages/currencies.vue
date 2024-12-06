@@ -143,6 +143,7 @@ const address = ref();
 const shop_brand_list = ref();
 const product_id = ref()
 const symbol = ref()
+const token = useCookie('token')
 const currency_id = ref()
 const quantity = ref()
 const update_visibility = ref(false)
@@ -213,7 +214,8 @@ onMounted(async () => {
 
 const deleteCurrency = (currency:any) => {
       let data = {
-        "id": currency.data.id
+        "id": currency.data.id,
+        'token': token.value
       }
       
       confirm.require({
@@ -254,6 +256,7 @@ const editCurrency = async () => {
     loading.value = true;
     const data = {
         id: currency_id.value,
+        'token': token.value,
         name : name.value,
         iso_code :iso_code.value,
         symbol : symbol.value
@@ -283,6 +286,7 @@ const addCurrency = async () => {
     loading.value = true;
     const data = {
         name : name.value,
+        'token': token.value,
         iso_code :iso_code.value,
         symbol : symbol.value
         

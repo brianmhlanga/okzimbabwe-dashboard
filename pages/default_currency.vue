@@ -41,6 +41,7 @@
  const shopBrandsStore = useShopBrandsStore()
  const id = ref()
  const logo = ref()
+ const token = useCookie('token')
  const loading = ref(false)
  const open_shop_brand_modal = ref(false)
  const toast = useToast()
@@ -67,6 +68,7 @@
         loading.value = true
         let data = {
             id: id.value,
+            token: token.value
             
         }
             let result = await shopBrandsStore.defaultCurrency(data)

@@ -59,6 +59,7 @@
      const is_parent = ref('')
      const is_sub_parent = ref('')
      const is_active = ref('')
+     const token = useCookie('token')
      const parent_category_id = ref('')
      const toast = useToast()
      const shop_brand_list = ref()
@@ -126,6 +127,7 @@
         loading.value = true
         let data = {
             shop_id: shop_id.value,
+            token: token.value,
             currency_id: currency_id.value,
             conversion_rate: conversion_rate.value,
         
