@@ -177,8 +177,10 @@ const mainMenuItems = ref([
                 navigateTo('/signup');}},
             { label: 'View Users', icon: 'pi pi-eye' ,command:()=>{
                     navigateTo('/users');}},
-            { label: 'Roles & Permissions', icon: 'pi pi-key' ,command:()=>{
+            { label: 'System Roles', icon: 'pi pi-key' ,command:()=>{
                 navigateTo('/role');} },
+            { label: 'Permissions', icon: 'pi pi-server' ,command:()=>{
+                    navigateTo('/permissions');} },
             { label: 'Access Control', icon: 'pi pi-shield' },
             { label: 'System Logs', icon: 'pi pi-file' },
             { label: 'API Settings', icon: 'pi pi-code' }

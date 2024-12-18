@@ -394,6 +394,60 @@ export const useShopBrandsStore = defineStore('shopBrands', {
             return result;
 
         },
+        async createPermissions(my_params: any) {
+            const url = `${SHOPIFY_URL}/api/permissions`;
+            const token = useCookie('token').value || "";
+            
+            const headers = {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            };
+            
+            const body = {
+              name: my_params?.name,
+            };
+            
+            try {
+              const response = await fetch(url, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(body),
+              });
+              const data = await response.json();
+              return data;
+            } catch (error) {
+              console.error('Error:', error);
+              throw error;
+            }
+          },
+          async createRolePermissions(my_params: any) {
+            const url = `${SHOPIFY_URL}/api/roles/${my_params.id}/sync-permissions`;
+            const token = useCookie('token').value || "";
+            
+            const headers = {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            };
+            
+            const body = {
+                permission_ids: my_params?.permissions,
+            };
+            
+            try {
+              const response = await fetch(url, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(body),
+              });
+              const data = await response.json();
+              return data;
+            } catch (error) {
+              console.error('Error:', error);
+              throw error;
+            }
+          },
         async create_order_stage (info:any){
             var data = JSON.stringify({
                 "data": info,
@@ -1421,6 +1475,7 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+
         async getFeaturedMenus(id:any) {
         let url = new URL(`${SHOPIFY_URL}/api/featured-menus/${id}`)
         const params:any = {
@@ -1456,6 +1511,41 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+        async getRolePermissions(data:any) {
+            let url = new URL(`${SHOPIFY_URL}/api/roles/${data.id}/get-permissionsByRoleId`)
+            // const params:any = {
+            //     per_page: "10",
+            // };
+            // Object.keys(params).forEach((key) =>
+            //     url.searchParams.append(key, params[key])
+            // );
+            const token = useCookie('token').value || ""
+            var config:any = {
+                method: 'GET',
+                url: url,
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+    
+            return result;
+            },
         async getAllDiscounts() {
         let url = new URL(`${SHOPIFY_URL}/api/discounts`)
         const params:any = {
@@ -1526,6 +1616,41 @@ export const useShopBrandsStore = defineStore('shopBrands', {
 
         return result;
         },
+        async getAllPermissions() {
+            let url = new URL(`${SHOPIFY_URL}/api/permissions`);
+            const params:any = {
+                per_page: "100",
+            };
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key])
+            );
+            const token = useCookie('token').value || ""
+            var config:any = {
+                method: 'GET',
+                url: url,
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    'Accept': '/',
+                    'Cache-Control': 'no-cache',
+                    
+                },
+                
+            }; 
+            const result = await axios(config).then(function (response) { 
+                console.log(JSON.stringify(response.data));
+                return {
+                    data: response.data,
+                    success: true
+                }
+            }).catch(function (error) {
+                console.log(error);
+                return {
+                    success: false
+                }
+            });
+    
+            return result;
+            },
         async getAllProductBrandss() {
             let url = new URL(`${SHOPIFY_URL}/api/product-brands`)
             const params:any = {
